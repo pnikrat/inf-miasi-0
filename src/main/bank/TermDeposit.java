@@ -47,7 +47,7 @@ public class TermDeposit implements IProduct {
     public void productWithdrawal(BigDecimal amount) {
         if (termDepositPeriod > 0) {
             associatedAccount.productDeposit(originalAmount);
-            //rozwiaz lokate
+            //TODO: Find a way to destroy TermDeposit Object and eliminate it from BankProducts List
         }
         else {
             BigDecimal amountToWithdraw =

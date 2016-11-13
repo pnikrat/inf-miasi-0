@@ -35,6 +35,8 @@ public class Operation {
         return executionDate;
     }
 
+    public String getDescription() { return description; }
+
     @Override
     public String toString() {
         return "Typ operacji: " + this.description + " Data realizacji: " + this.executionDate.toString();

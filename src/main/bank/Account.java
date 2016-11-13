@@ -21,7 +21,7 @@ public class Account implements IProduct {
         this.ownerId = ownerId;
         balance = new BigDecimal("0.0").setScale(2, BigDecimal.ROUND_HALF_UP);;
         this.creationDate = LocalDate.now();
-        //w konstruktorze rowniez wybrane oprocentowanie
+//        TODO: Add InterestRate to regular Account once Interests are implemented
     }
 
     @Override
@@ -33,6 +33,8 @@ public class Account implements IProduct {
     public List<Operation> getOperationHistory() {
         return operationHistory;
     }
+
+    public BigDecimal getBalance() { return balance; }
 
     @Override
     public void productDeposit(BigDecimal amount) {
@@ -74,8 +76,9 @@ public class Account implements IProduct {
     }
 
     /*
-            @return Returns 1 if operation is valid. For example: Withdrawing 1400 zl from 50zl account is NOT valid
-        */
+        @return Returns 1 if operation is valid. For example: Withdrawing 1400 zl from 50zl account is NOT valid
+        Does NOT YET take into account the possibility of having active DEBIT on Account
+     */
     @Override
     public boolean isBalancePositive(BigDecimal amount) {
         BigDecimal temp = balance.subtract(amount);

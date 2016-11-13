@@ -7,9 +7,8 @@ import java.util.*;
  * Created by student on 05.11.2016.
  */
 public class Bank implements IBank {
-    //public dopoki nie powstana raporty
+    // TODO: Change these to private once reports are implemented
     public List<IProduct> BankProducts = new ArrayList<IProduct>();
-    //public List<Operation> BankOperations = new ArrayList<Operation>();
     public Map<IProduct, List<Operation>> BankOperations = new HashMap<>();
 
     @Override
