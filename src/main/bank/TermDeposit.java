@@ -1,6 +1,11 @@
 package bank;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import bank.Operation.*;
 
 /**
  * Created by student on 05.11.2016.
@@ -12,7 +17,7 @@ public class TermDeposit implements IProduct {
     private Integer termDepositPeriod;
     private BigDecimal interestRate;
     private boolean isTermDepositActive;
-    //dodaj historie operacji
+    private List<Operation> operationHistory = new ArrayList<Operation>();
 
     public TermDeposit(Account associatedAccount, BigDecimal originalAmount, String termDepositNumber) {
         this.associatedAccount = associatedAccount;
@@ -20,11 +25,17 @@ public class TermDeposit implements IProduct {
         productDeposit(originalAmount);
         this.termDepositNumber = termDepositNumber;
         this.isTermDepositActive = true;
+        addOperationToHistory(new Operation(operationType.CREATE_TERM_DEPOSIT, LocalDate.now(), "Zalozenie lokaty"));
     }
 
     @Override
     public String getProductNumber() {
         return termDepositNumber;
+    }
+
+    @Override
+    public List<Operation> getOperationHistory() {
+        return operationHistory;
     }
 
     @Override
@@ -44,6 +55,13 @@ public class TermDeposit implements IProduct {
             associatedAccount.productDeposit(amountToWithdraw);
         }
         isTermDepositActive = false;
+        addOperationToHistory(new Operation(operationType.DESTROY_TERM_DEPOSIT, LocalDate.now(), "Zerwanie lokaty"));
+    }
+
+    @Override
+    public void addOperationToHistory(Operation operation) {
+        operationHistory.add(operation);
+        Collections.sort(operationHistory, new OperationComparator());
     }
 
     @Override

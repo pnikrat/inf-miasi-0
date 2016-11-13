@@ -1,12 +1,14 @@
 package bank;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by student on 05.11.2016.
  */
 public interface IProduct {
     String getProductNumber();
+    List<Operation> getOperationHistory();
 
     void productDeposit(BigDecimal amount);
     void productWithdrawal(BigDecimal amount);
@@ -16,4 +18,6 @@ public interface IProduct {
 
     boolean isBalancePositive(BigDecimal amount);
     String toString();
+
+    void addOperationToHistory(Operation operation);
 }

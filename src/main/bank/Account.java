@@ -3,6 +3,7 @@ package bank;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
+import bank.Operation.*;
 
 /**
  * Created by student on 05.11.2016.
@@ -13,7 +14,7 @@ public class Account implements IProduct {
     private Integer ownerId;
     private BigDecimal interestRate;
     private LocalDate creationDate;
-    public List<Operation> operationHistory = new ArrayList<Operation>();
+    private List<Operation> operationHistory = new ArrayList<Operation>();
 
     public Account(String accountNumber, Integer ownerId) {
         this.accountNumber = accountNumber;
@@ -29,11 +30,14 @@ public class Account implements IProduct {
     }
 
     @Override
+    public List<Operation> getOperationHistory() {
+        return operationHistory;
+    }
+
+    @Override
     public void productDeposit(BigDecimal amount) {
         balance = balance.add(amount);
-        LocalDate today = LocalDate.now();
-        Operation temp = new Operation(Operation.operationType.WPLATA, today, "Wplata");
-        operationHistory.add(temp);
+        addOperationToHistory(new Operation(operationType.DEPOSIT, LocalDate.now(), "Wplata"));
     }
 
     @Override
@@ -41,9 +45,7 @@ public class Account implements IProduct {
         if (!isBalancePositive(amount))
                 return;
         balance = balance.subtract(amount);
-        LocalDate today = LocalDate.now();
-        Operation temp = new Operation(Operation.operationType.WYPLATA, today, "Wyplata");
-        operationHistory.add(temp);
+        addOperationToHistory(new Operation(operationType.WITHDRAW, LocalDate.now(), "Wyplata"));
     }
 
     @Override
@@ -53,9 +55,7 @@ public class Account implements IProduct {
         boolean isAccepted = targetBankProduct.acceptLocalTransfer(amount);
         if (isAccepted) {
             balance = balance.subtract(amount);
-            LocalDate today = LocalDate.now();
-            Operation temp = new Operation(Operation.operationType.PRZELEW, today, "Przelew");
-            operationHistory.add(temp);
+            addOperationToHistory(new Operation(operationType.TRANSFER, LocalDate.now(), "Przelew wykonany"));
         }
         return isAccepted;
     }
@@ -63,14 +63,19 @@ public class Account implements IProduct {
     @Override
     public boolean acceptLocalTransfer(BigDecimal amount) {
         balance = balance.add(amount);
-        LocalDate today = LocalDate.now();
-        //create operation
+        addOperationToHistory(new Operation(operationType.TRANSFER, LocalDate.now(), "Przelew otrzymany"));
         return true;
     }
 
+    @Override
+    public void addOperationToHistory(Operation operation) {
+        operationHistory.add(operation);
+        Collections.sort(operationHistory, new OperationComparator());
+    }
+
     /*
-        @return Returns 1 if operation is valid. For example: Withdrawing 1400 zl from 50zl account is NOT valid
-         */
+            @return Returns 1 if operation is valid. For example: Withdrawing 1400 zl from 50zl account is NOT valid
+        */
     @Override
     public boolean isBalancePositive(BigDecimal amount) {
         BigDecimal temp = balance.subtract(amount);

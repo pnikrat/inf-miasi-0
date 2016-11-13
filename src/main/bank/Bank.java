@@ -9,12 +9,14 @@ import java.util.*;
 public class Bank implements IBank {
     //public dopoki nie powstana raporty
     public List<IProduct> BankProducts = new ArrayList<IProduct>();
-    public List<Operation> BankOperations = new ArrayList<Operation>();
+    //public List<Operation> BankOperations = new ArrayList<Operation>();
+    public Map<IProduct, List<Operation>> BankOperations = new HashMap<>();
 
     @Override
     public void createAccount(String accountNumber, Integer ownerId) {
         Account tempName = new Account(accountNumber, ownerId);
         BankProducts.add(tempName);
+        BankOperations.put(tempName, tempName.getOperationHistory());
     }
 
     @Override
@@ -23,6 +25,7 @@ public class Bank implements IBank {
             return;
         TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, termDepositNumber);
         BankProducts.add(tempName);
+        BankOperations.put(tempName, tempName.getOperationHistory());
     }
 
     @Override
@@ -30,5 +33,6 @@ public class Bank implements IBank {
                              String creditNumber, BigDecimal interestRate) {
         Credit tempName = new Credit(associatedAccount, borrowedAmount, creditNumber, interestRate);
         BankProducts.add(tempName);
+        BankOperations.put(tempName, tempName.getOperationHistory());
     }
 }

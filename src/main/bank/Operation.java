@@ -1,6 +1,7 @@
 package bank;
 
 import java.time.LocalDate;
+import java.util.Comparator;
 import java.util.Date;
 
 /**
@@ -8,10 +9,17 @@ import java.util.Date;
  */
 public class Operation {
     public enum operationType {
-        PRZELEW,
-        WPLATA,
-        WYPLATA,
-        NALICZENIE_ODSETEK
+        TRANSFER,
+        DEPOSIT,
+        WITHDRAW,
+        INTEREST_INCOME,
+        CHANGE_INTEREST,
+        CREATE_TERM_DEPOSIT,
+        DESTROY_TERM_DEPOSIT,
+        TAKE_CREDIT,
+        REPAY_CREDIT,
+        CREATE_DEBIT,
+        CREATE_REPORT
     }
     private operationType type;
     private LocalDate executionDate;
@@ -23,8 +31,13 @@ public class Operation {
         this.executionDate = executionDate;
     }
 
+    public LocalDate getExecutionDate() {
+        return executionDate;
+    }
+
     @Override
     public String toString() {
         return "Typ operacji: " + this.description + " Data realizacji: " + this.executionDate.toString();
     }
 }
+

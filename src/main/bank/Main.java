@@ -30,5 +30,13 @@ public class Main {
         for (IProduct x: mbank.BankProducts) {
             System.out.println(x);
         }
+
+        for (IProduct x : mbank.BankOperations.keySet()) {
+            if (x.getProductNumber().equals("1234 0451 1111 1111 0345 3456")) {
+                for (Operation y : x.getOperationHistory()) {
+                    System.out.println(y);
+                }
+            }
+        }
     }
 }
