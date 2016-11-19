@@ -54,6 +54,7 @@ public class Account implements IProduct {
     public boolean initiateLocalTransfer(IProduct targetBankProduct, BigDecimal amount) {
         if (!isBalancePositive(amount))
             return false;
+        //TODO Do not allow transfer to the same account
         boolean isAccepted = targetBankProduct.acceptLocalTransfer(amount);
         if (isAccepted) {
             balance = balance.subtract(amount);

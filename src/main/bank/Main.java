@@ -13,7 +13,7 @@ public class Main {
 
 
 
-//        TODO: Create tests for Credit and TermDeposit behaviour
+//        TODO: Create tests for TermDeposit behaviour
 //        TODO: Create tests for BankOperations being filled after Products' operations are made
 
 

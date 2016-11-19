@@ -49,7 +49,8 @@ public class AccountTest {
 
     @Test
     public void testOperationHistoryContainsDepositRecord() throws Exception {
-        assertTrue(tester.getOperationHistory().stream().filter(x -> x.getDescription().equals("Wplata")).findFirst().isPresent());
+        assertTrue(tester.getOperationHistory().stream().filter(x -> x.getDescription().equals("Wplata"))
+                .findFirst().isPresent());
     }
 
 }
