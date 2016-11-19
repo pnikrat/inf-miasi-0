@@ -45,6 +45,10 @@ public class TermDeposit implements IProduct {
 
     @Override
     public void productWithdrawal(BigDecimal amount) {
+
+    }
+
+    public void EndTermDeposit() {
         if (termDepositPeriod > 0) {
             associatedAccount.productDeposit(originalAmount);
             //TODO: Find a way to destroy TermDeposit Object and eliminate it from BankProducts List
@@ -54,6 +58,7 @@ public class TermDeposit implements IProduct {
                     originalAmount.multiply((BigDecimal.ONE.add(interestRate)).pow(termDepositPeriod));
             associatedAccount.productDeposit(amountToWithdraw);
         }
+        //withdraw from termDepositBalance
         isTermDepositActive = false;
         addOperationToHistory(new Operation(operationType.DESTROY_TERM_DEPOSIT, LocalDate.now(), "Zerwanie lokaty"));
     }
