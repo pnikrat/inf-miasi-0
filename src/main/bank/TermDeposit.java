@@ -12,21 +12,28 @@ import bank.Operation.*;
  */
 public class TermDeposit implements IProduct {
     private Account associatedAccount;
-    private BigDecimal originalAmount;
     private String termDepositNumber;
-    private Integer termDepositPeriod;
+    private BigDecimal originalAmount;
+    private LocalDate creationDate;
+    private LocalDate endDate;
     private BigDecimal interestRate;
     private boolean isTermDepositActive;
     private List<IOperation> operationHistory = new ArrayList<IOperation>();
 
-    public TermDeposit(Account associatedAccount, BigDecimal originalAmount, String termDepositNumber) {
-        this.associatedAccount = associatedAccount;
-        associatedAccount.productWithdrawal(originalAmount); //TYMCZASOWE
-        productDeposit(originalAmount);
-        this.termDepositNumber = termDepositNumber;
+    public TermDeposit(Account associatedAccount, BigDecimal originalAmount, LocalDate endDate,
+                       String termDepositNumber) {
         this.isTermDepositActive = true;
-        //addOperationToHistory(new Operation(operationType.CREATE_TERM_DEPOSIT, LocalDate.now(), "Zalozenie lokaty"));
+        this.associatedAccount = associatedAccount;
+        this.termDepositNumber = termDepositNumber;
+        this.originalAmount = originalAmount;
+        this.creationDate = LocalDate.now();
+        this.endDate = endDate;
+            // interestRate
+        CreateTermDeposit createOperation = new CreateTermDeposit(associatedAccount, this, originalAmount);
+
     }
+
+    public Account getAssociatedAccount() { return associatedAccount; }
 
     @Override
     public String getProductNumber() {
@@ -43,9 +50,25 @@ public class TermDeposit implements IProduct {
 
     }
 
+    public void setIsTermDepositActive(boolean value) {
+        isTermDepositActive = value;
+    }
+
+    public LocalDate getEndDate() { return endDate; }
+
     @Override
     public List<IOperation> getOperationHistory() {
         return operationHistory;
+    }
+
+    @Override
+    public boolean canDepositMoney() {
+        return false;
+    }
+
+    @Override
+    public boolean canWithdrawMoney() {
+        return false;
     }
 
     @Override
@@ -56,21 +79,6 @@ public class TermDeposit implements IProduct {
     @Override
     public void productWithdrawal(BigDecimal amount) {
 
-    }
-
-    public void EndTermDeposit() {
-        if (termDepositPeriod > 0) {
-            associatedAccount.productDeposit(originalAmount);
-            //TODO: Find a way to destroy TermDeposit Object and eliminate it from BankProducts List
-        }
-        else {
-            BigDecimal amountToWithdraw =
-                    originalAmount.multiply((BigDecimal.ONE.add(interestRate)).pow(termDepositPeriod));
-            associatedAccount.productDeposit(amountToWithdraw);
-        }
-        //withdraw from termDepositBalance
-        isTermDepositActive = false;
-        //addOperationToHistory(new Operation(operationType.DESTROY_TERM_DEPOSIT, LocalDate.now(), "Zerwanie lokaty"));
     }
 
     @Override
@@ -85,18 +93,9 @@ public class TermDeposit implements IProduct {
     }
 
     @Override
-    public boolean initiateLocalTransfer(IProduct targetBankProduct, BigDecimal amount) {
-        return false;
-    }
-
-    @Override
-    public boolean acceptLocalTransfer(BigDecimal amount) {
-        return false;
-    }
-
-    @Override
     public String toString() {
-        return "Lokata ID: " + termDepositNumber + ". Zalozona na kwote: " + originalAmount + "\n"
+        return "Lokata ID: " + termDepositNumber + ". Zalozona dnia: " + creationDate.toString()
+                + " na kwote: " + originalAmount + ". Koniec lokaty dnia: " + endDate.toString() + ".\n"
                 + "Powiazane konto: \n" + associatedAccount.toString();
     }
 }

@@ -11,16 +11,16 @@ import bank.Operation.*;
 public class Account implements IProduct {
     private final String accountNumber;
     private BigDecimal balance;
+    private LocalDate creationDate;
     private Integer ownerId;
     private BigDecimal interestRate;
-    private LocalDate creationDate;
     private List<IOperation> operationHistory = new ArrayList<IOperation>();
 
     public Account(String accountNumber, Integer ownerId) {
         this.accountNumber = accountNumber;
-        this.ownerId = ownerId;
-        balance = new BigDecimal("0.0").setScale(2, BigDecimal.ROUND_HALF_UP);;
+        this.balance = new BigDecimal("0.0").setScale(2, BigDecimal.ROUND_HALF_UP);
         this.creationDate = LocalDate.now();
+        this.ownerId = ownerId;
 //        TODO: Add InterestRate to regular Account once Interests are implemented
     }
 
@@ -57,29 +57,19 @@ public class Account implements IProduct {
     }
 
     @Override
-    public boolean initiateLocalTransfer(IProduct targetBankProduct, BigDecimal amount) {
-        if (!isBalancePositive(amount))
-            return false;
-        //TODO Do not allow transfer to the same account
-        boolean isAccepted = targetBankProduct.acceptLocalTransfer(amount);
-        if (isAccepted) {
-            balance = balance.subtract(amount);
-            //addOperationToHistory(new Operation(operationType.TRANSFER, LocalDate.now(), "Przelew wykonany"));
-        }
-        return isAccepted;
+    public void addOperationToHistory(IOperation operation) {
+        operationHistory.add(operation);
+        Collections.sort(operationHistory, new OperationComparator());
     }
 
     @Override
-    public boolean acceptLocalTransfer(BigDecimal amount) {
-        balance = balance.add(amount);
-        //addOperationToHistory(new Operation(operationType.TRANSFER, LocalDate.now(), "Przelew otrzymany"));
+    public boolean canDepositMoney() {
         return true;
     }
 
     @Override
-    public void addOperationToHistory(IOperation operation) {
-        operationHistory.add(operation);
-        Collections.sort(operationHistory, new OperationComparator());
+    public boolean canWithdrawMoney() {
+        return true;
     }
 
     /*
@@ -89,7 +79,7 @@ public class Account implements IProduct {
     @Override
     public boolean isBalancePositive(BigDecimal amount) {
         BigDecimal temp = balance.subtract(amount);
-        return temp.compareTo(BigDecimal.ZERO) == 1;
+        return temp.compareTo(BigDecimal.ZERO) >= 0;
     }
 
     @Override

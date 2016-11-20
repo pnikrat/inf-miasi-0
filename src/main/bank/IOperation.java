@@ -10,6 +10,9 @@ public interface IOperation {
     * OperationTypeId:
     * 1 - DEPOSIT
     * 2 - WITHDRAW
+    * 3 - TRANSFER
+    * 4 - CREATE_TERM_DEPOSIT
+    * 5 - END_TERM_DEPOSIT
      */
     Integer getOperationTypeId();
     LocalDate getExecutionDate();

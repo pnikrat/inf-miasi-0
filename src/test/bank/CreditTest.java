@@ -38,7 +38,7 @@ public class CreditTest {
     public void testAccountReceivedCreditMoney() throws Exception {
         assertEquals(baseAccountForTester.getBalance(), startingMoneyForBaseAccount.add(testedBorrowedAmount));
     }
-
+/*
     @Test
     public void testCreditIsPaidBackWithExactAmountOfMoney() throws Exception {
         baseAccountForTester.initiateLocalTransfer(tester, testedBorrowedAmount.add(testedInterestRate));
@@ -70,4 +70,5 @@ public class CreditTest {
         assertTrue(tester.getOperationHistory().stream().filter(x -> x.getDescription().equals("Wziecie kredytu"))
                 .findFirst().isPresent());
     }
+*/
 }

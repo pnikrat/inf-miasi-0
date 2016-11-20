@@ -26,9 +26,7 @@ public class AccountTest {
         testNumber = new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP);
         testNumber2 = new BigDecimal("864.56").setScale(2, BigDecimal.ROUND_HALF_UP);
 
-        //tester.productDeposit(testNumber);
         testDepo1 = new Deposit(tester, testNumber);
-        //tester2.productDeposit(testNumber);
         testDepo2 = new Deposit(tester2, testNumber);
     }
 
@@ -46,7 +44,7 @@ public class AccountTest {
 
     @Test
     public void testLocalTransfers() throws Exception {
-        tester.initiateLocalTransfer(tester2, testNumber2);
+        Transfer tempTransfer = new Transfer(tester, tester2, testNumber2);
         assertEquals(635.44, tester.getBalance().doubleValue(), 0.001);
         assertEquals(2364.56, tester2.getBalance().doubleValue(), 0.001);
     }
@@ -54,6 +52,22 @@ public class AccountTest {
     @Test
     public void testOperationHistoryContainsDepositRecord() throws Exception {
         assertTrue(tester.getOperationHistory().stream().filter(x -> x.getOperationTypeId().equals(1))
+                .findFirst().isPresent());
+    }
+
+    @Test
+    public void testOperationHistoryContainsWithdrawRecord() throws Exception {
+        Withdraw tempWithdraw = new Withdraw(tester, testNumber2);
+        assertTrue(tester.getOperationHistory().stream().filter(x -> x.getOperationTypeId().equals(2))
+                .findFirst().isPresent());
+    }
+
+    @Test
+    public void testOperationHistoryContainsTransferRecords() throws Exception {
+        Transfer tempTransfer = new Transfer(tester, tester2, testNumber2);
+        assertTrue(tester.getOperationHistory().stream().filter(x -> x.getOperationTypeId().equals(3))
+                .findFirst().isPresent());
+        assertTrue(tester2.getOperationHistory().stream().filter(x -> x.getOperationTypeId().equals(3))
                 .findFirst().isPresent());
     }
 

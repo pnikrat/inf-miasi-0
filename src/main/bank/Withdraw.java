@@ -12,15 +12,15 @@ public class Withdraw implements IOperation {
     private String description;
 
     public Withdraw(IProduct withdrawTargetProduct, BigDecimal withdrawAmount) {
-        BigDecimal targetProductMoney = withdrawTargetProduct.getBalance();
-        BigDecimal difference = targetProductMoney.subtract(withdrawAmount);
-        if (difference.compareTo(BigDecimal.ZERO) >= 0) {
-            this.executionDate = LocalDate.now();
-            this.description = "OperationID: " + operationTypeId + " " + withdrawTargetProduct.toString();
-            withdrawTargetProduct.setBalance(difference);
-            withdrawTargetProduct.addOperationToHistory(this);
+        if (withdrawTargetProduct instanceof Account) {
+            if (withdrawTargetProduct.isBalancePositive(withdrawAmount)) {
+                this.executionDate = LocalDate.now();
+                this.description = "OperationID: " + operationTypeId + " " + withdrawTargetProduct.toString();
+                withdrawTargetProduct.setBalance(withdrawTargetProduct.getBalance().subtract(withdrawAmount));
+                withdrawTargetProduct.addOperationToHistory(this);
+            }
+            // TODO: Add DEBIT possibility
         }
-        // TODO: Add DEBIT possibility
     }
 
     @Override

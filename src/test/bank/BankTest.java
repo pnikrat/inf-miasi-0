@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
@@ -22,7 +23,8 @@ public class BankTest {
                 new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP), "CRED001",
                 new BigDecimal("3.5").setScale(1, BigDecimal.ROUND_HALF_UP));
         tester.createTermDeposit((Account) tester.BankProducts.get(0),
-                                new BigDecimal("1000.00").setScale(2, BigDecimal.ROUND_HALF_UP), "LOC001");
+                                new BigDecimal("1000.00").setScale(2, BigDecimal.ROUND_HALF_UP),
+                                LocalDate.now(), "LOC001");
     }
 
     @Test

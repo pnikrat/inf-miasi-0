@@ -16,9 +16,8 @@ public interface IProduct {
     void productDeposit(BigDecimal amount);
     void productWithdrawal(BigDecimal amount);
 
-    boolean initiateLocalTransfer(IProduct targetBankProduct, BigDecimal amount);
-    boolean acceptLocalTransfer(BigDecimal amount);
-
+    boolean canDepositMoney();
+    boolean canWithdrawMoney();
     boolean isBalancePositive(BigDecimal amount);
     String toString();
 

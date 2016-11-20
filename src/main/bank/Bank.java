@@ -1,6 +1,7 @@
 package bank;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.*;
 
 /**
@@ -19,12 +20,14 @@ public class Bank implements IBank {
     }
 
     @Override
-    public void createTermDeposit(Account associatedAccount, BigDecimal originalAmount, String termDepositNumber) {
+    public boolean createTermDeposit(Account associatedAccount, BigDecimal originalAmount,
+                                  LocalDate endDate, String termDepositNumber) {
         if (!(associatedAccount.isBalancePositive(originalAmount)))
-            return;
-        TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, termDepositNumber);
+            return false;
+        TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, endDate, termDepositNumber);
         BankProducts.add(tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
+        return true;
     }
 
     @Override

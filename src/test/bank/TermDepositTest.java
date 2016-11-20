@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
@@ -24,7 +25,7 @@ public class TermDepositTest {
         baseAccountForTester.productDeposit(startingMoneyForBaseAccount);
 
         testedTermDepositAmount = new BigDecimal("2000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-        tester = new TermDeposit(baseAccountForTester, testedTermDepositAmount, "LOCO:002");
+        tester = new TermDeposit(baseAccountForTester, testedTermDepositAmount, LocalDate.now(), "LOCO:002");
     }
 
     @Test

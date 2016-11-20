@@ -66,27 +66,19 @@ public class Credit implements IProduct {
     }
 
     @Override
-    public boolean initiateLocalTransfer(IProduct targetBankProduct, BigDecimal amount) {
+    public void addOperationToHistory(IOperation operation) {
+        operationHistory.add(operation);
+        Collections.sort(operationHistory, new OperationComparator());
+    }
+
+    @Override
+    public boolean canWithdrawMoney() {
         return false;
     }
 
     @Override
-    public boolean acceptLocalTransfer(BigDecimal amount) {
-        if (amount.compareTo(amountToPayback) >= 0) {
-            if (amount.compareTo(amountToPayback) == 1) //more money was transferred for credit repayment than needed
-                associatedAccount.productDeposit(amount.subtract(amountToPayback));
-            amountToPayback = BigDecimal.ZERO;
-            isCreditActive = false;
-            //addOperationToHistory(new Operation(operationType.REPAY_CREDIT, LocalDate.now(), "Splata kredytu"));
-            return true;
-        }
-        return false; //not enough money
-    }
-
-    @Override
-    public void addOperationToHistory(IOperation operation) {
-        operationHistory.add(operation);
-        Collections.sort(operationHistory, new OperationComparator());
+    public boolean canDepositMoney() {
+        return false;
     }
 
     @Override
