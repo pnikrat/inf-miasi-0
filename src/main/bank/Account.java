@@ -14,7 +14,7 @@ public class Account implements IProduct {
     private Integer ownerId;
     private BigDecimal interestRate;
     private LocalDate creationDate;
-    private List<Operation> operationHistory = new ArrayList<Operation>();
+    private List<IOperation> operationHistory = new ArrayList<IOperation>();
 
     public Account(String accountNumber, Integer ownerId) {
         this.accountNumber = accountNumber;
@@ -30,16 +30,22 @@ public class Account implements IProduct {
     }
 
     @Override
-    public List<Operation> getOperationHistory() {
-        return operationHistory;
+    public void setBalance(BigDecimal balance) {
+        this.balance = balance;
     }
 
+    @Override
     public BigDecimal getBalance() { return balance; }
+
+    @Override
+    public List<IOperation> getOperationHistory() {
+        return operationHistory;
+    }
 
     @Override
     public void productDeposit(BigDecimal amount) {
         balance = balance.add(amount);
-        addOperationToHistory(new Operation(operationType.DEPOSIT, LocalDate.now(), "Wplata"));
+        //addOperationToHistory(new Operation(operationType.DEPOSIT, LocalDate.now(), "Wplata"));
     }
 
     @Override
@@ -47,7 +53,7 @@ public class Account implements IProduct {
         if (!isBalancePositive(amount))
                 return;
         balance = balance.subtract(amount);
-        addOperationToHistory(new Operation(operationType.WITHDRAW, LocalDate.now(), "Wyplata"));
+        //addOperationToHistory(new Operation(operationType.WITHDRAW, LocalDate.now(), "Wyplata"));
     }
 
     @Override
@@ -58,7 +64,7 @@ public class Account implements IProduct {
         boolean isAccepted = targetBankProduct.acceptLocalTransfer(amount);
         if (isAccepted) {
             balance = balance.subtract(amount);
-            addOperationToHistory(new Operation(operationType.TRANSFER, LocalDate.now(), "Przelew wykonany"));
+            //addOperationToHistory(new Operation(operationType.TRANSFER, LocalDate.now(), "Przelew wykonany"));
         }
         return isAccepted;
     }
@@ -66,12 +72,12 @@ public class Account implements IProduct {
     @Override
     public boolean acceptLocalTransfer(BigDecimal amount) {
         balance = balance.add(amount);
-        addOperationToHistory(new Operation(operationType.TRANSFER, LocalDate.now(), "Przelew otrzymany"));
+        //addOperationToHistory(new Operation(operationType.TRANSFER, LocalDate.now(), "Przelew otrzymany"));
         return true;
     }
 
     @Override
-    public void addOperationToHistory(Operation operation) {
+    public void addOperationToHistory(IOperation operation) {
         operationHistory.add(operation);
         Collections.sort(operationHistory, new OperationComparator());
     }

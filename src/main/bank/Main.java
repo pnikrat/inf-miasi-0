@@ -16,14 +16,5 @@ public class Main {
 //        TODO: Create tests for TermDeposit behaviour
 //        TODO: Create tests for BankOperations being filled after Products' operations are made
 
-
-
-        for (IProduct x : mbank.BankOperations.keySet()) {
-            if (x.getProductNumber().equals("1234 0451 1111 1111 0345 3456")) {
-                for (Operation y : x.getOperationHistory()) {
-                    System.out.println(y);
-                }
-            }
-        }
     }
 }

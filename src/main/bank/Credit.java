@@ -17,7 +17,7 @@ public class Credit implements IProduct {
     private String creditNumber;
     private BigDecimal interestRate;
     private boolean isCreditActive;
-    private List<Operation> operationHistory = new ArrayList<Operation>();
+    private List<IOperation> operationHistory = new ArrayList<IOperation>();
 
     public Credit(Account associatedAccount, BigDecimal borrowedAmount, String creditNumber, BigDecimal interestRate) {
         this.associatedAccount = associatedAccount;
@@ -26,7 +26,7 @@ public class Credit implements IProduct {
         this.creditNumber = creditNumber;
         this.interestRate = interestRate;
         this.isCreditActive = true;
-        addOperationToHistory(new Operation(operationType.TAKE_CREDIT, LocalDate.now(), "Wziecie kredytu"));
+        //addOperationToHistory(new Operation(operationType.TAKE_CREDIT, LocalDate.now(), "Wziecie kredytu"));
         BigDecimal tempNumber = borrowedAmount.add(interestRate);
         this.amountToPayback = tempNumber;
     }
@@ -37,7 +37,17 @@ public class Credit implements IProduct {
     }
 
     @Override
-    public List<Operation> getOperationHistory() {
+    public BigDecimal getBalance() {
+        return amountToPayback;
+    }
+
+    @Override
+    public void setBalance(BigDecimal amount) {
+        //TODO: setBalance & getBalance in Credit and TermDeposit
+    }
+
+    @Override
+    public List<IOperation> getOperationHistory() {
         return operationHistory;
     }
 
@@ -67,14 +77,14 @@ public class Credit implements IProduct {
                 associatedAccount.productDeposit(amount.subtract(amountToPayback));
             amountToPayback = BigDecimal.ZERO;
             isCreditActive = false;
-            addOperationToHistory(new Operation(operationType.REPAY_CREDIT, LocalDate.now(), "Splata kredytu"));
+            //addOperationToHistory(new Operation(operationType.REPAY_CREDIT, LocalDate.now(), "Splata kredytu"));
             return true;
         }
         return false; //not enough money
     }
 
     @Override
-    public void addOperationToHistory(Operation operation) {
+    public void addOperationToHistory(IOperation operation) {
         operationHistory.add(operation);
         Collections.sort(operationHistory, new OperationComparator());
     }

@@ -38,7 +38,8 @@ public class TermDepositTest {
 
     @Test
     public void testCreateTermDepositOperationIsAddedToHistory() throws Exception {
-        assertTrue(tester.getOperationHistory().stream().filter(x -> x.getDescription().equals("Zalozenie lokaty")).findFirst().isPresent());
+        assertTrue(tester.getOperationHistory().stream().filter(x -> x.getDescription().equals("Zalozenie lokaty"))
+                .findFirst().isPresent());
     }
 
 }

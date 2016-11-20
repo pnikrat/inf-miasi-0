@@ -17,7 +17,7 @@ public class TermDeposit implements IProduct {
     private Integer termDepositPeriod;
     private BigDecimal interestRate;
     private boolean isTermDepositActive;
-    private List<Operation> operationHistory = new ArrayList<Operation>();
+    private List<IOperation> operationHistory = new ArrayList<IOperation>();
 
     public TermDeposit(Account associatedAccount, BigDecimal originalAmount, String termDepositNumber) {
         this.associatedAccount = associatedAccount;
@@ -25,7 +25,7 @@ public class TermDeposit implements IProduct {
         productDeposit(originalAmount);
         this.termDepositNumber = termDepositNumber;
         this.isTermDepositActive = true;
-        addOperationToHistory(new Operation(operationType.CREATE_TERM_DEPOSIT, LocalDate.now(), "Zalozenie lokaty"));
+        //addOperationToHistory(new Operation(operationType.CREATE_TERM_DEPOSIT, LocalDate.now(), "Zalozenie lokaty"));
     }
 
     @Override
@@ -34,7 +34,17 @@ public class TermDeposit implements IProduct {
     }
 
     @Override
-    public List<Operation> getOperationHistory() {
+    public BigDecimal getBalance() {
+        return originalAmount;
+    }
+
+    @Override
+    public void setBalance(BigDecimal amount) {
+
+    }
+
+    @Override
+    public List<IOperation> getOperationHistory() {
         return operationHistory;
     }
 
@@ -60,11 +70,11 @@ public class TermDeposit implements IProduct {
         }
         //withdraw from termDepositBalance
         isTermDepositActive = false;
-        addOperationToHistory(new Operation(operationType.DESTROY_TERM_DEPOSIT, LocalDate.now(), "Zerwanie lokaty"));
+        //addOperationToHistory(new Operation(operationType.DESTROY_TERM_DEPOSIT, LocalDate.now(), "Zerwanie lokaty"));
     }
 
     @Override
-    public void addOperationToHistory(Operation operation) {
+    public void addOperationToHistory(IOperation operation) {
         operationHistory.add(operation);
         Collections.sort(operationHistory, new OperationComparator());
     }

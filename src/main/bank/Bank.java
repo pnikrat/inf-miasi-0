@@ -9,7 +9,7 @@ import java.util.*;
 public class Bank implements IBank {
     // TODO: Change these to private once reports are implemented
     public List<IProduct> BankProducts = new ArrayList<IProduct>();
-    public Map<IProduct, List<Operation>> BankOperations = new HashMap<>();
+    public Map<IProduct, List<IOperation>> BankOperations = new HashMap<>();
 
     @Override
     public void createAccount(String accountNumber, Integer ownerId) {

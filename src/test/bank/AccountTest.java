@@ -16,6 +16,8 @@ public class AccountTest {
     private Account tester2;
     private BigDecimal testNumber;
     private BigDecimal testNumber2;
+    private Deposit testDepo1;
+    private Deposit testDepo2;
 
     @Before
     public void setUp() throws  Exception {
@@ -24,19 +26,21 @@ public class AccountTest {
         testNumber = new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP);
         testNumber2 = new BigDecimal("864.56").setScale(2, BigDecimal.ROUND_HALF_UP);
 
-        tester.productDeposit(testNumber);
-        tester2.productDeposit(testNumber);
+        //tester.productDeposit(testNumber);
+        testDepo1 = new Deposit(tester, testNumber);
+        //tester2.productDeposit(testNumber);
+        testDepo2 = new Deposit(tester2, testNumber);
     }
 
     @Test
     public void testProductDeposit() throws Exception {
-        tester.productDeposit(testNumber2);
+        Deposit tempDepo = new Deposit(tester, testNumber2);
         assertEquals(2364.56, tester.getBalance().doubleValue(), 0.001);
     }
 
     @Test
     public void testProductWithdrawal() throws Exception {
-        tester.productWithdrawal(testNumber2);
+        Withdraw tempWithdraw = new Withdraw(tester, testNumber2);
         assertEquals(635.44, tester.getBalance().doubleValue(), 0.001);
     }
 
@@ -49,7 +53,7 @@ public class AccountTest {
 
     @Test
     public void testOperationHistoryContainsDepositRecord() throws Exception {
-        assertTrue(tester.getOperationHistory().stream().filter(x -> x.getDescription().equals("Wplata"))
+        assertTrue(tester.getOperationHistory().stream().filter(x -> x.getOperationTypeId().equals(1))
                 .findFirst().isPresent());
     }
 

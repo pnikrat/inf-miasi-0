@@ -8,8 +8,9 @@ import java.util.List;
  */
 public interface IProduct {
     String getProductNumber();
-    List<Operation> getOperationHistory();
-//  TODO: Should I add GetBalance to this interface?
+    List<IOperation> getOperationHistory();
+    BigDecimal getBalance();
+    void setBalance(BigDecimal amount);
 
 
     void productDeposit(BigDecimal amount);
@@ -21,5 +22,5 @@ public interface IProduct {
     boolean isBalancePositive(BigDecimal amount);
     String toString();
 
-    void addOperationToHistory(Operation operation);
+    void addOperationToHistory(IOperation operation);
 }
