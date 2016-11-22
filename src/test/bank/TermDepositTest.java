@@ -17,7 +17,7 @@ public class TermDepositTest {
     private Account baseAccountForTester;
     private BigDecimal startingMoneyForBaseAccount;
     private BigDecimal testedTermDepositAmount;
-    
+
     @Before
     public void setUp() throws Exception {
         baseAccountForTester = new Account("4557 4562", 91);
