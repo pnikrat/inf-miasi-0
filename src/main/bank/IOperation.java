@@ -13,6 +13,8 @@ public interface IOperation {
     * 3 - TRANSFER
     * 4 - CREATE_TERM_DEPOSIT
     * 5 - END_TERM_DEPOSIT
+    * 6 - CREATE_CREDIT
+    * 7 - REPAY_CREDIT
      */
     Integer getOperationTypeId();
     LocalDate getExecutionDate();

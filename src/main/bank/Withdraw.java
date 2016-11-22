@@ -7,7 +7,7 @@ import java.time.LocalDate;
  * Created by pnikrat on 20.11.16.
  */
 public class Withdraw implements IOperation {
-    private Integer operationTypeId = 2;
+    private final Integer operationTypeId = 2;
     private LocalDate executionDate;
     private String description;
 

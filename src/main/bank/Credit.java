@@ -5,31 +5,38 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import bank.Operation.*;
 
 /**
  * Created by Przemek on 2016-11-13.
  */
 public class Credit implements IProduct {
     private Account associatedAccount;
-    private BigDecimal borrowedAmount;
-    private BigDecimal amountToPayback;
     private String creditNumber;
+    private BigDecimal borrowedAmount;
+    private LocalDate creationDate;
+    //TODO remove amount to payback once interest rate is done
+    private BigDecimal amountToPayback;
+
     private BigDecimal interestRate;
     private boolean isCreditActive;
     private List<IOperation> operationHistory = new ArrayList<IOperation>();
 
     public Credit(Account associatedAccount, BigDecimal borrowedAmount, String creditNumber, BigDecimal interestRate) {
-        this.associatedAccount = associatedAccount;
-        associatedAccount.productDeposit(borrowedAmount);
-        this.borrowedAmount = borrowedAmount;
-        this.creditNumber = creditNumber;
-        this.interestRate = interestRate;
         this.isCreditActive = true;
-        //addOperationToHistory(new Operation(operationType.TAKE_CREDIT, LocalDate.now(), "Wziecie kredytu"));
+        this.associatedAccount = associatedAccount;
+        this.creditNumber = creditNumber;
+        this.borrowedAmount = borrowedAmount;
+        this.creationDate = LocalDate.now();
+        //TODO interest rate change
+        this.interestRate = interestRate;
+
         BigDecimal tempNumber = borrowedAmount.add(interestRate);
         this.amountToPayback = tempNumber;
+
+        CreateCredit createOperation = new CreateCredit(associatedAccount, this, borrowedAmount);
     }
+
+    public Account getAssociatedAccount() { return associatedAccount; }
 
     @Override
     public String getProductNumber() {
@@ -53,6 +60,10 @@ public class Credit implements IProduct {
 
     public boolean getIsCreditActive() {return isCreditActive; }
 
+    public void setIsCreditActive(boolean value) {
+        isCreditActive = value;
+    }
+
     public BigDecimal getAmountToPayback() {return amountToPayback; }
 
     @Override
@@ -69,6 +80,14 @@ public class Credit implements IProduct {
     public void addOperationToHistory(IOperation operation) {
         operationHistory.add(operation);
         Collections.sort(operationHistory, new OperationComparator());
+    }
+
+    public boolean repayCredit() {
+        if(associatedAccount.isBalancePositive(amountToPayback)) {
+            RepayCredit repayOperation = new RepayCredit(this);
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -88,7 +107,7 @@ public class Credit implements IProduct {
 
     @Override
     public String toString() {
-        return "Kredyt ID: " + creditNumber + ". Pozyczona kwota: " + borrowedAmount + "\n"
-                + "Powiazane konto: \n" + associatedAccount.toString();
+        return "Kredyt ID: " + creditNumber + ". Pożyczona kwota: " + borrowedAmount + "\n"
+                + "Powiązane konto: \n" + associatedAccount.toString();
     }
 }

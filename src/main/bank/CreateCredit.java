@@ -4,18 +4,18 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 /**
- * Created by pnikrat on 20.11.16.
+ * Created by Przemek on 2016-11-22.
  */
-public class CreateTermDeposit implements IOperation {
-    private final Integer operationTypeId = 4;
+public class CreateCredit implements IOperation {
+    private final Integer operationTypeId = 6;
     private LocalDate executionDate;
     private String description;
 
-    public CreateTermDeposit(Account associatedAccount, TermDeposit createdTermDeposit, BigDecimal termDepositAmount) {
-        associatedAccount.setBalance(associatedAccount.getBalance().subtract(termDepositAmount));
+    public CreateCredit(Account associatedAccount, Credit createdCredit, BigDecimal creditAmount) {
+        associatedAccount.setBalance(associatedAccount.getBalance().add(creditAmount));
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId
-                            + "\nStworzona lokata: " + createdTermDeposit.toString();
+                + "\nStworzony kredyt: " + createdCredit.toString();
         associatedAccount.addOperationToHistory(this);
     }
 

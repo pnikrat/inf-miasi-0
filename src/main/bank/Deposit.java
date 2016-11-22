@@ -7,7 +7,7 @@ import java.time.LocalDate;
  * Created by pnikrat on 20.11.16.
  */
 public class Deposit implements IOperation {
-    private Integer operationTypeId = 1;
+    private final Integer operationTypeId = 1;
     private LocalDate executionDate;
     private String description;
 

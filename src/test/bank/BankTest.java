@@ -26,7 +26,7 @@ public class BankTest {
                                 new BigDecimal("1000.00").setScale(2, BigDecimal.ROUND_HALF_UP),
                                 LocalDate.now(), "LOC001");
     }
-
+    //        TODO: Create tests for BankOperations being filled after Products' operations are made
     @Test
     public void testBankProductsContainsNewAccount() throws Exception {
         assertTrue(tester.BankProducts.stream().filter(x -> x.getProductNumber().equals("1234")).findFirst().isPresent());

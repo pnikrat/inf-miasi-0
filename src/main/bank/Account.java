@@ -3,7 +3,6 @@ package bank;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.*;
-import bank.Operation.*;
 
 /**
  * Created by student on 05.11.2016.
@@ -84,7 +83,7 @@ public class Account implements IProduct {
 
     @Override
     public String toString() {
-        return "Wlasciciel ID: " + ownerId + "\nNumer rachunku: " + accountNumber
+        return "Właściciel ID: " + ownerId + "\nNumer rachunku: " + accountNumber
                 + " Saldo: " + balance.toString();
     }
 

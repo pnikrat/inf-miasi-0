@@ -5,7 +5,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import bank.Operation.*;
 
 /**
  * Created by student on 05.11.2016.
@@ -50,11 +49,16 @@ public class TermDeposit implements IProduct {
 
     }
 
+    public boolean getIsTermDepositActive() { return isTermDepositActive; }
+
     public void setIsTermDepositActive(boolean value) {
         isTermDepositActive = value;
     }
 
     public LocalDate getEndDate() { return endDate; }
+
+    //FOR TESTING PURPOSES, should be set in constructor
+    public void setEndDate(LocalDate endDate) {this.endDate = endDate;}
 
     @Override
     public List<IOperation> getOperationHistory() {
@@ -94,8 +98,8 @@ public class TermDeposit implements IProduct {
 
     @Override
     public String toString() {
-        return "Lokata ID: " + termDepositNumber + ". Zalozona dnia: " + creationDate.toString()
-                + " na kwote: " + originalAmount + ". Koniec lokaty dnia: " + endDate.toString() + ".\n"
-                + "Powiazane konto: \n" + associatedAccount.toString();
+        return "Lokata ID: " + termDepositNumber + ". Założona dnia: " + creationDate.toString()
+                + " na kwotę: " + originalAmount + ". Koniec lokaty dnia: " + endDate.toString() + ".\n"
+                + "Powiązane konto: \n" + associatedAccount.toString();
     }
 }
