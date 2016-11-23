@@ -13,23 +13,24 @@ public class TermDeposit implements IProduct {
     private Account associatedAccount;
     private String termDepositNumber;
     private BigDecimal originalAmount;
+    private BigDecimal finalAmount;
     private LocalDate creationDate;
     private LocalDate endDate;
-    private BigDecimal interestRate;
+    private IInterestRate interestRateMechanism;
     private boolean isTermDepositActive;
     private List<IOperation> operationHistory = new ArrayList<IOperation>();
 
     public TermDeposit(Account associatedAccount, BigDecimal originalAmount, LocalDate endDate,
-                       String termDepositNumber) {
+                       String termDepositNumber, IInterestRate interestRateMechanism) {
         this.isTermDepositActive = true;
         this.associatedAccount = associatedAccount;
         this.termDepositNumber = termDepositNumber;
         this.originalAmount = originalAmount;
+        this.finalAmount = BigDecimal.ZERO;
         this.creationDate = LocalDate.now();
         this.endDate = endDate;
-            // interestRate
+        this.interestRateMechanism = interestRateMechanism;
         CreateTermDeposit createOperation = new CreateTermDeposit(associatedAccount, this, originalAmount);
-
     }
 
     public Account getAssociatedAccount() { return associatedAccount; }
@@ -45,8 +46,22 @@ public class TermDeposit implements IProduct {
     }
 
     @Override
-    public void setBalance(BigDecimal amount) {
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
 
+    @Override
+    public IInterestRate getInterestRateMechanism() {
+        return interestRateMechanism;
+    }
+
+    @Override
+    public void setBalance(BigDecimal finalAmount) {
+        this.finalAmount = finalAmount;
+    }
+
+    public BigDecimal getFinalAmount() {
+        return finalAmount;
     }
 
     public boolean getIsTermDepositActive() { return isTermDepositActive; }
@@ -57,7 +72,8 @@ public class TermDeposit implements IProduct {
 
     public LocalDate getEndDate() { return endDate; }
 
-    //FOR TESTING PURPOSES, should be set in constructor
+    //FOR TESTING PURPOSES, should never be used in production!!
+    public void setCreationDate(LocalDate creationDate) {this.creationDate = creationDate;}
     public void setEndDate(LocalDate endDate) {this.endDate = endDate;}
 
     @Override

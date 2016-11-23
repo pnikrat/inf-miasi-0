@@ -12,16 +12,15 @@ public class EndTermDeposit implements IOperation {
     private String description;
 
     public EndTermDeposit(TermDeposit termDepositToEnd) {
-        if (LocalDate.now().isAfter(termDepositToEnd.getEndDate())) { //get money with interest
-            BigDecimal accountsMoney = termDepositToEnd.getAssociatedAccount().getBalance();
-            BigDecimal tempInterest = new BigDecimal("100.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-            termDepositToEnd.getAssociatedAccount().setBalance(termDepositToEnd.getBalance()
-                    .add(tempInterest).add(accountsMoney));
+        BigDecimal accountsMoney = termDepositToEnd.getAssociatedAccount().getBalance();
+        if (LocalDate.now().isAfter(termDepositToEnd.getEndDate())) {
+            //get money with interest
+            InterestCapitalisation capitalisation = new InterestCapitalisation(termDepositToEnd);
+            termDepositToEnd.getAssociatedAccount().setBalance(termDepositToEnd.getFinalAmount().add(accountsMoney));
         }
-        else { //get money without interest
-            BigDecimal accounstMoney = termDepositToEnd.getAssociatedAccount().getBalance();
-            termDepositToEnd.getAssociatedAccount().setBalance(termDepositToEnd.getBalance().add(accounstMoney));
-        }
+        else //get money without interest
+            termDepositToEnd.getAssociatedAccount().setBalance(termDepositToEnd.getBalance().add(accountsMoney));
+
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId
                 + "\nZakończona lokata: " + termDepositToEnd.toString();

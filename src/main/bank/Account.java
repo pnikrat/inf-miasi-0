@@ -12,15 +12,15 @@ public class Account implements IProduct {
     private BigDecimal balance;
     private LocalDate creationDate;
     private Integer ownerId;
-    private BigDecimal interestRate;
+    private IInterestRate interestRateMechanism;
     private List<IOperation> operationHistory = new ArrayList<IOperation>();
 
-    public Account(String accountNumber, Integer ownerId) {
+    public Account(String accountNumber, Integer ownerId, IInterestRate interestRateMechanism) {
         this.accountNumber = accountNumber;
         this.balance = new BigDecimal("0.0").setScale(2, BigDecimal.ROUND_HALF_UP);
         this.creationDate = LocalDate.now();
         this.ownerId = ownerId;
-//        TODO: Add InterestRate to regular Account once Interests are implemented
+        this.interestRateMechanism = interestRateMechanism;
     }
 
     @Override
@@ -34,7 +34,17 @@ public class Account implements IProduct {
     }
 
     @Override
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    @Override
     public BigDecimal getBalance() { return balance; }
+
+    @Override
+    public IInterestRate getInterestRateMechanism() {
+        return interestRateMechanism;
+    }
 
     @Override
     public List<IOperation> getOperationHistory() {

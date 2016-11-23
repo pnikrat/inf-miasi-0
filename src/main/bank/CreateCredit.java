@@ -16,6 +16,7 @@ public class CreateCredit implements IOperation {
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId
                 + "\nStworzony kredyt: " + createdCredit.toString();
+        InterestCapitalisation amountToPaybackCapitalisation = new InterestCapitalisation(createdCredit);
         associatedAccount.addOperationToHistory(this);
     }
 

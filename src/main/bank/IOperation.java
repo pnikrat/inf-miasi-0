@@ -15,8 +15,13 @@ public interface IOperation {
     * 5 - END_TERM_DEPOSIT
     * 6 - CREATE_CREDIT
     * 7 - REPAY_CREDIT
+    * 8 - INTEREST_CAPITALISATION
+    * 9 - INTEREST_MECHANISM_CHANGE
      */
     Integer getOperationTypeId();
     LocalDate getExecutionDate();
     String getDescription();
+
+
+    //TODO rethink if finalAmount in TermDeposit should be calculated before end of termdeposit
 }

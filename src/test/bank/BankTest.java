@@ -19,15 +19,16 @@ public class BankTest {
     @Before
     public void setUp() throws Exception {
         tester = new Bank();
-        tester.createAccount("1234", 1);
+        MonthlyInterestRate testRate = new MonthlyInterestRate(new BigDecimal("0.02").setScale(2, BigDecimal.ROUND_HALF_UP));
+        tester.createAccount("1234", 1, testRate);
         accountForOperationTesting = (Account) tester.BankProducts.get(0);
 
         tester.createCredit((Account) tester.BankProducts.get(0),
-                new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP), "CRED001",
-                new BigDecimal("3.5").setScale(1, BigDecimal.ROUND_HALF_UP));
+                new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP),
+                LocalDate.of(2020, 7, 23), "CRED001", testRate);
         tester.createTermDeposit((Account) tester.BankProducts.get(0),
-                                new BigDecimal("1000.00").setScale(2, BigDecimal.ROUND_HALF_UP),
-                                LocalDate.now(), "LOC001");
+                new BigDecimal("1000.00").setScale(2, BigDecimal.ROUND_HALF_UP),
+                LocalDate.of(2019, 7, 23), "LOC001", testRate);
 
         BigDecimal tempDepoAmount = new BigDecimal("5000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
         Deposit tempDepo = new Deposit(accountForOperationTesting, tempDepoAmount);

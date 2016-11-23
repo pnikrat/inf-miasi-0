@@ -1,6 +1,7 @@
 package bank;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -11,8 +12,10 @@ public interface IProduct {
     List<IOperation> getOperationHistory();
     BigDecimal getBalance();
     void setBalance(BigDecimal amount);
+    IInterestRate getInterestRateMechanism();
+    LocalDate getCreationDate();
 
-
+    //TODO: Rethink usage of productDeposit, productWithdrawal, getBalance, setBalance
     void productDeposit(BigDecimal amount);
     void productWithdrawal(BigDecimal amount);
 

@@ -13,26 +13,22 @@ public class Credit implements IProduct {
     private Account associatedAccount;
     private String creditNumber;
     private BigDecimal borrowedAmount;
-    private LocalDate creationDate;
-    //TODO remove amount to payback once interest rate is done
     private BigDecimal amountToPayback;
-
-    private BigDecimal interestRate;
+    private LocalDate creationDate;
+    private LocalDate repaymentDate;
+    private IInterestRate interestRateMechanism;
     private boolean isCreditActive;
     private List<IOperation> operationHistory = new ArrayList<IOperation>();
 
-    public Credit(Account associatedAccount, BigDecimal borrowedAmount, String creditNumber, BigDecimal interestRate) {
+    public Credit(Account associatedAccount, BigDecimal borrowedAmount, LocalDate repaymentDate,
+                  String creditNumber, IInterestRate interestRateMechanism) {
         this.isCreditActive = true;
         this.associatedAccount = associatedAccount;
         this.creditNumber = creditNumber;
         this.borrowedAmount = borrowedAmount;
         this.creationDate = LocalDate.now();
-        //TODO interest rate change
-        this.interestRate = interestRate;
-
-        BigDecimal tempNumber = borrowedAmount.add(interestRate);
-        this.amountToPayback = tempNumber;
-
+        this.repaymentDate = repaymentDate;
+        this.interestRateMechanism = interestRateMechanism;
         CreateCredit createOperation = new CreateCredit(associatedAccount, this, borrowedAmount);
     }
 
@@ -44,13 +40,27 @@ public class Credit implements IProduct {
     }
 
     @Override
-    public BigDecimal getBalance() {
-        return amountToPayback;
+    public IInterestRate getInterestRateMechanism() {
+        return interestRateMechanism;
     }
 
     @Override
-    public void setBalance(BigDecimal amount) {
-        //TODO: setBalance & getBalance in Credit and TermDeposit
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    public LocalDate getRepaymentDate() {
+        return repaymentDate;
+    }
+
+    @Override
+    public BigDecimal getBalance() {
+        return borrowedAmount;
+    }
+
+    @Override
+    public void setBalance(BigDecimal amountToPayback) {
+        this.amountToPayback = amountToPayback;
     }
 
     @Override

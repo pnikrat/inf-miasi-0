@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.Year;
 
 import static org.junit.Assert.*;
 
@@ -20,30 +21,37 @@ public class TermDepositTest {
 
     @Before
     public void setUp() throws Exception {
-        baseAccountForTester = new Account("4557 4562", 91);
+        MonthlyInterestRate testRate = new MonthlyInterestRate(new BigDecimal("0.08").setScale(2, BigDecimal.ROUND_HALF_UP));
+        YearlyInterestRate testRate2 = new YearlyInterestRate(new BigDecimal("0.06").setScale(2, BigDecimal.ROUND_HALF_UP));
+        baseAccountForTester = new Account("4557 4562", 91, testRate);
         startingMoneyForBaseAccount = new BigDecimal("5437.86").setScale(2, BigDecimal.ROUND_HALF_UP);
         Deposit tempDepo = new Deposit(baseAccountForTester, startingMoneyForBaseAccount);
 
         testedTermDepositAmount = new BigDecimal("2000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-        tester = new TermDeposit(baseAccountForTester, testedTermDepositAmount, LocalDate.now(), "LOCO:002");
+        tester = new TermDeposit(baseAccountForTester, testedTermDepositAmount,
+                LocalDate.of(2020, 7, 23), "LOCO:002", testRate2);
 
     }
 
     @Test
     public void testEndTermDepositBeforePeriod() throws Exception {
-        tester.setEndDate(LocalDate.of(2020, 7, 23));
         EndTermDeposit endOperation = new EndTermDeposit(tester);
         assertFalse(tester.getIsTermDepositActive());
         assertEquals(startingMoneyForBaseAccount, baseAccountForTester.getBalance());
     }
 
     @Test
-    public void testEndTermDepositAfterPeriod() throws Exception {
-        tester.setEndDate(LocalDate.of(2010, 7, 23));
+    public void testEndTermDepositAfterPeriodWithYearlyCapitalisation() throws Exception {
+        tester.setCreationDate(LocalDate.of(2010, 7, 23));
+        tester.setEndDate(LocalDate.of(2014, 8, 19));
         EndTermDeposit endOperation = new EndTermDeposit(tester);
         assertFalse(tester.getIsTermDepositActive());
-        assertEquals(startingMoneyForBaseAccount.add(new BigDecimal("100.00").setScale(2, BigDecimal.ROUND_HALF_UP)),
-                    baseAccountForTester.getBalance());
+        assertEquals(5962.81, baseAccountForTester.getBalance().doubleValue(), 0.001);
+    }
+
+    @Test
+    public void testEndTermDepositAfterPeriodWithMonthlyCapitalisation() throws Exception {
+        //TODO
     }
 
     @Test

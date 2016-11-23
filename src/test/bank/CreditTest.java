@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
@@ -16,22 +17,23 @@ public class CreditTest {
     private Account baseAccountForTester;
     private BigDecimal startingMoneyForBaseAccount;
     private BigDecimal testedBorrowedAmount;
-    private BigDecimal testedInterestRate;
 
     @Before
     public void setUp() throws Exception {
-        baseAccountForTester = new Account("1234", 123);
+        MonthlyInterestRate testRate = new MonthlyInterestRate(new BigDecimal("0.02").setScale(2, BigDecimal.ROUND_HALF_UP));
+        YearlyInterestRate testRate2 = new YearlyInterestRate(new BigDecimal("0.06").setScale(2, BigDecimal.ROUND_HALF_UP));
+        baseAccountForTester = new Account("1234", 123, testRate);
         startingMoneyForBaseAccount = new BigDecimal("5000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
         Deposit testDepo = new Deposit(baseAccountForTester, startingMoneyForBaseAccount);
 
         testedBorrowedAmount = new BigDecimal("2150.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-        testedInterestRate = new BigDecimal("3.50").setScale(2, BigDecimal.ROUND_HALF_UP);
-        tester = new Credit(baseAccountForTester, testedBorrowedAmount, "CRED:001", testedInterestRate);
+        tester = new Credit(baseAccountForTester, testedBorrowedAmount, LocalDate.of(2020, 7, 23), "CRED:001", testRate2);
     }
 
     @Test
     public void testAmountToPaybackIsSetCorrectly() throws Exception {
-        assertEquals(testedBorrowedAmount.add(testedInterestRate), tester.getAmountToPayback());
+        tester.repayCredit();
+        assertEquals(2560.68, tester.getAmountToPayback().doubleValue(), 0.001);
     }
 
     @Test
@@ -47,9 +49,14 @@ public class CreditTest {
     }
 
     @Test
-    public void testRepayCreditWithEnoughMoneyOnAccount() throws Exception {
+    public void testRepayCreditWithEnoughMoneyOnAccountYearlyInterest() throws Exception {
         assertTrue(tester.repayCredit());
-        assertEquals( new BigDecimal("4996.50").setScale(2, BigDecimal.ROUND_HALF_UP), baseAccountForTester.getBalance());
+        assertEquals(4589.32, baseAccountForTester.getBalance().doubleValue(), 0.001);
+    }
+
+    @Test
+    public void testRepayCreditWithEnoughMoneyOnAccountMonthlyInterest() throws Exception {
+        //TODO
     }
 
     @Test

@@ -7,9 +7,9 @@ import java.time.LocalDate;
  * Created by student on 05.11.2016.
  */
 public interface IBank {
-    void createAccount(String accountNumber, Integer ownerId);
+    void createAccount(String accountNumber, Integer ownerId, IInterestRate interestRateMechanism);
     boolean createTermDeposit(Account associatedAccount, BigDecimal originalAmount, LocalDate endDate,
-                           String termDepositNumber);
+                           String termDepositNumber, IInterestRate interestRateMechanism);
     void createCredit(Account associatedAccount, BigDecimal borrowedAmount,
-                      String creditNumber, BigDecimal interestRate);
+                      LocalDate repaymentDate, String creditNumber, IInterestRate interestRateMechanism);
 }

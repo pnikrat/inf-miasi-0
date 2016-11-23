@@ -9,13 +9,11 @@ import java.util.IntSummaryStatistics;
  * Created by Przemek on 2016-11-22.
  */
 public class YearlyInterestRate implements IInterestRate {
-    private BigDecimal startingCapital;
     private BigDecimal interestRate;
     private final Integer numberOfCapitalisationsInYear = 1;
 
 
-    public YearlyInterestRate(IProduct associatedProduct, BigDecimal interestRate) {
-        this.startingCapital = associatedProduct.getBalance();
+    public YearlyInterestRate(BigDecimal interestRate) {
         this.interestRate = interestRate;
     }
 
@@ -26,7 +24,7 @@ public class YearlyInterestRate implements IInterestRate {
     }
 
     @Override
-    public BigDecimal calculateFinalValue(LocalDate startDate, LocalDate endDate) {
+    public BigDecimal calculateFinalValue(BigDecimal startingCapital, LocalDate startDate, LocalDate endDate) {
         Period totalInvestmentTime = Period.between(startDate, endDate);
         int years = totalInvestmentTime.getYears();
         BigDecimal powerResult = new BigDecimal("0.00"); //drop scale 2 constraint for power factor calculation

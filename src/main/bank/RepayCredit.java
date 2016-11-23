@@ -14,9 +14,12 @@ public class RepayCredit implements IOperation {
     public RepayCredit(Credit creditToRepay) {
         this.executionDate = LocalDate.now();
         this.description = "Operation ID: " + operationTypeId + "\nZakończony kredyt: " + creditToRepay.toString();
+
+
         BigDecimal repayAmount = creditToRepay.getAmountToPayback();
-        creditToRepay.getAssociatedAccount().setBalance
-                (creditToRepay.getAssociatedAccount().getBalance().subtract(repayAmount));
+        BigDecimal accountsMoney = creditToRepay.getAssociatedAccount().getBalance();
+        creditToRepay.getAssociatedAccount().setBalance(accountsMoney.subtract(repayAmount));
+
         creditToRepay.setIsCreditActive(false);
         creditToRepay.addOperationToHistory(this);
     }

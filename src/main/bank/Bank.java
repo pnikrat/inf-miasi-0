@@ -13,18 +13,19 @@ public class Bank implements IBank {
     public Map<IProduct, List<IOperation>> BankOperations = new HashMap<>();
 
     @Override
-    public void createAccount(String accountNumber, Integer ownerId) {
-        Account tempName = new Account(accountNumber, ownerId);
+    public void createAccount(String accountNumber, Integer ownerId, IInterestRate interestRateMechanism) {
+        Account tempName = new Account(accountNumber, ownerId, interestRateMechanism);
         BankProducts.add(tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
     }
 
     @Override
     public boolean createTermDeposit(Account associatedAccount, BigDecimal originalAmount,
-                                  LocalDate endDate, String termDepositNumber) {
+                                  LocalDate endDate, String termDepositNumber, IInterestRate interestRateMechanism) {
         if (!(associatedAccount.isBalancePositive(originalAmount)))
             return false;
-        TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, endDate, termDepositNumber);
+        TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, endDate,
+                                                termDepositNumber, interestRateMechanism);
         BankProducts.add(tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
         return true;
@@ -32,8 +33,9 @@ public class Bank implements IBank {
 
     @Override
     public void createCredit(Account associatedAccount, BigDecimal borrowedAmount,
-                             String creditNumber, BigDecimal interestRate) {
-        Credit tempName = new Credit(associatedAccount, borrowedAmount, creditNumber, interestRate);
+                             LocalDate repaymentDate, String creditNumber, IInterestRate interestRateMechanism) {
+        Credit tempName = new Credit(associatedAccount, borrowedAmount, repaymentDate,
+                                        creditNumber, interestRateMechanism);
         BankProducts.add(tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
     }

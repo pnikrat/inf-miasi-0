@@ -21,12 +21,12 @@ public class YearlyInterestRateTest {
 
     @Before
     public void setUp() throws Exception {
-        tester = new Account("123", 15);
-        testNumber = new BigDecimal("10000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
         testInterestRate = new BigDecimal("0.06").setScale(2, BigDecimal.ROUND_HALF_UP);
+        testInterest = new YearlyInterestRate(testInterestRate);
+        tester = new Account("123", 15, testInterest);
+        testNumber = new BigDecimal("10000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
 
         Deposit testDepo = new Deposit(tester, testNumber);
-        testInterest = new YearlyInterestRate(tester, testInterestRate);
 
         beginTest = LocalDate.of(2012, 1, 20);
         endTest = LocalDate.of(2015, 4, 12);
@@ -41,7 +41,7 @@ public class YearlyInterestRateTest {
     @Test
     public void testMultipleRatesAreCalculatedCorrectly() throws Exception {
         assertEquals(new BigDecimal("11910.16").setScale(2, BigDecimal.ROUND_HALF_UP),
-                testInterest.calculateFinalValue(beginTest, endTest));
+                testInterest.calculateFinalValue(tester.getBalance(), beginTest, endTest));
     }
 
 }

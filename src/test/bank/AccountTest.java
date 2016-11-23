@@ -21,8 +21,10 @@ public class AccountTest {
 
     @Before
     public void setUp() throws  Exception {
-        tester = new Account("5678", 2);
-        tester2 = new Account("1234", 3);
+        MonthlyInterestRate testRate = new MonthlyInterestRate(new BigDecimal("0.02").setScale(2, BigDecimal.ROUND_HALF_UP));
+        YearlyInterestRate testRate2 = new YearlyInterestRate(new BigDecimal("0.03").setScale(2, BigDecimal.ROUND_HALF_UP));
+        tester = new Account("5678", 2, testRate);
+        tester2 = new Account("1234", 3, testRate2);
         testNumber = new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP);
         testNumber2 = new BigDecimal("864.56").setScale(2, BigDecimal.ROUND_HALF_UP);
 
@@ -50,6 +52,18 @@ public class AccountTest {
     }
 
     @Test
+    public void testMonthlyInterestCapitalisation() throws Exception {
+        InterestCapitalisation tempCapitalisation = new InterestCapitalisation(tester);
+        assertEquals(1502.50, tester.getBalance().doubleValue(), 0.001);
+    }
+
+    @Test
+    public void testYearlyInterestCapitalisation() throws Exception {
+        InterestCapitalisation tempCapitalisation = new InterestCapitalisation(tester2);
+        assertEquals(1545.00, tester2.getBalance().doubleValue(), 0.001);
+    }
+
+    @Test
     public void testOperationHistoryContainsDepositRecord() throws Exception {
         assertTrue(tester.getOperationHistory().stream().filter(x -> x.getOperationTypeId().equals(1))
                 .findFirst().isPresent());
@@ -71,4 +85,10 @@ public class AccountTest {
                 .findFirst().isPresent());
     }
 
+    @Test
+    public void testOperationHistoryContainsInterestCapitalisationRecord() throws Exception {
+        InterestCapitalisation tempCapitalisation = new InterestCapitalisation(tester);
+        assertTrue(tester.getOperationHistory().stream().filter(x -> x.getOperationTypeId().equals(8))
+                .findFirst().isPresent());
+    }
 }
