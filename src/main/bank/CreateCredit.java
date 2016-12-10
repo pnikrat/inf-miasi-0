@@ -10,14 +10,22 @@ public class CreateCredit implements IOperation {
     private final Integer operationTypeId = 6;
     private LocalDate executionDate;
     private String description;
+    private boolean wasExecuted = false;
+
+    private Account associatedAccount;
+    private Credit createdCredit;
+    private BigDecimal creditAmount;
 
     public CreateCredit(Account associatedAccount, Credit createdCredit, BigDecimal creditAmount) {
-        associatedAccount.setBalance(associatedAccount.getBalance().add(creditAmount));
+
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId
                 + "\nStworzony kredyt: " + createdCredit.toString();
-        InterestCapitalisation amountToPaybackCapitalisation = new InterestCapitalisation(createdCredit);
-        associatedAccount.addOperationToHistory(this);
+        this.associatedAccount = associatedAccount;
+        this.createdCredit = createdCredit;
+        this.creditAmount = creditAmount;
+
+        executeOperation();
     }
 
     @Override
@@ -33,5 +41,18 @@ public class CreateCredit implements IOperation {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean getWasExecuted() {
+        return wasExecuted;
+    }
+
+    @Override
+    public void executeOperation() {
+        associatedAccount.setBalance(associatedAccount.getBalance().add(creditAmount));
+        InterestCapitalisation amountToPaybackCapitalisation = new InterestCapitalisation(createdCredit);
+        wasExecuted = true;
+        associatedAccount.addOperationToHistory(this);
     }
 }

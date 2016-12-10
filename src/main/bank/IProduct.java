@@ -19,6 +19,7 @@ public interface IProduct {
     void setInterestRateMechanism(IInterestRate newMechanism);
     IInterestRate getInterestRateMechanism();
 
+    void setCreationDate(LocalDate date); //for testing purposes
     LocalDate getCreationDate();
 
     //TODO: Rethink usage of productDeposit, productWithdrawal, getBalance, setBalance

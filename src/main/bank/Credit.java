@@ -50,6 +50,11 @@ public class Credit implements IProduct {
     }
 
     @Override
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    @Override
     public LocalDate getCreationDate() {
         return creationDate;
     }

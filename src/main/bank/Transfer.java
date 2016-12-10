@@ -10,6 +10,11 @@ public class Transfer implements IOperation {
     private final Integer operationTypeId = 3;
     private LocalDate executionDate;
     private String description;
+    private boolean wasExecuted = false;
+
+    private IProduct transferOriginProduct;
+    private IProduct transferTargetProduct;
+    private BigDecimal transferAmount;
 
     public Transfer(IProduct transferOriginProduct, IProduct transferTargetProduct, BigDecimal transferAmount) {
         if (transferOriginProduct instanceof Account && transferTargetProduct instanceof Account) {
@@ -17,10 +22,11 @@ public class Transfer implements IOperation {
                 this.executionDate = LocalDate.now();
                 this.description = "OperationID: " + operationTypeId + " " + "\nZ konta: " + transferOriginProduct.toString()
                                     + "\nNa konto: " + transferTargetProduct.toString();
-                transferOriginProduct.setBalance(transferOriginProduct.getBalance().subtract(transferAmount));
-                transferTargetProduct.setBalance(transferTargetProduct.getBalance().add(transferAmount));
-                transferOriginProduct.addOperationToHistory(this);
-                transferTargetProduct.addOperationToHistory(this);
+                this.transferOriginProduct = transferOriginProduct;
+                this.transferTargetProduct = transferTargetProduct;
+                this.transferAmount = transferAmount;
+
+                executeOperation();
             }
         }
     }
@@ -38,5 +44,19 @@ public class Transfer implements IOperation {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean getWasExecuted() {
+        return wasExecuted;
+    }
+
+    @Override
+    public void executeOperation() {
+        transferOriginProduct.setBalance(transferOriginProduct.getBalance().subtract(transferAmount));
+        transferTargetProduct.setBalance(transferTargetProduct.getBalance().add(transferAmount));
+        wasExecuted = true;
+        transferOriginProduct.addOperationToHistory(this);
+        transferTargetProduct.addOperationToHistory(this);
     }
 }

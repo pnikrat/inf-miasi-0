@@ -32,11 +32,11 @@ public class MonthlyInterestRate implements IInterestRate {
     }
 
     @Override
-    public BigDecimal calculateFinalValue(BigDecimal startingCapital, LocalDate startDate, LocalDate endDate) {
-        int months = (int) MONTHS.between(startDate, endDate);
+    public BigDecimal calculateFinalValue(IProduct currentProduct, LocalDate endDate) {
+        int months = (int) MONTHS.between(currentProduct.getCreationDate(), endDate);
         BigDecimal powerResult = new BigDecimal("0.00"); //drop scale 2 constraint for power factor calculation
         powerResult = powerResult.add(((interestRate.divide(capitaFactor, 10, BigDecimal.ROUND_HALF_UP))
                 .add(BigDecimal.ONE)).pow(months));
-        return startingCapital.multiply(powerResult).setScale(2, BigDecimal.ROUND_HALF_UP);
+        return currentProduct.getBalance().multiply(powerResult).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 }

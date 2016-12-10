@@ -29,11 +29,11 @@ public class YearlyInterestRate implements IInterestRate {
     }
 
     @Override
-    public BigDecimal calculateFinalValue(BigDecimal startingCapital, LocalDate startDate, LocalDate endDate) {
-        Period totalInvestmentTime = Period.between(startDate, endDate);
+    public BigDecimal calculateFinalValue(IProduct currentProduct, LocalDate endDate) {
+        Period totalInvestmentTime = Period.between(currentProduct.getCreationDate(), endDate);
         int years = totalInvestmentTime.getYears();
         BigDecimal powerResult = new BigDecimal("0.00"); //drop scale 2 constraint for power factor calculation
         powerResult = powerResult.add((interestRate.add(BigDecimal.ONE)).pow(years));
-        return startingCapital.multiply(powerResult).setScale(2, BigDecimal.ROUND_HALF_UP);
+        return currentProduct.getBalance().multiply(powerResult).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 }

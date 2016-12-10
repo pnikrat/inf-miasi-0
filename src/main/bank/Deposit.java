@@ -10,13 +10,18 @@ public class Deposit implements IOperation {
     private final Integer operationTypeId = 1;
     private LocalDate executionDate;
     private String description;
+    private boolean wasExecuted = false;
+
+    private IProduct depositTargetProduct;
+    private BigDecimal depositAmount;
 
     public Deposit(IProduct depositTargetProduct, BigDecimal depositAmount) {
         this.executionDate = LocalDate.now();
-
-        depositTargetProduct.setBalance(depositTargetProduct.getBalance().add(depositAmount));
         this.description = "OperationID: " + operationTypeId + " " + depositTargetProduct.toString();
-        depositTargetProduct.addOperationToHistory(this);
+        this.depositTargetProduct = depositTargetProduct;
+        this.depositAmount = depositAmount;
+
+        executeOperation();
     }
 
     @Override
@@ -32,5 +37,17 @@ public class Deposit implements IOperation {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean getWasExecuted() {
+        return wasExecuted;
+    }
+
+    @Override
+    public void executeOperation() {
+        depositTargetProduct.setBalance(depositTargetProduct.getBalance().add(depositAmount));
+        wasExecuted = true;
+        depositTargetProduct.addOperationToHistory(this);
     }
 }

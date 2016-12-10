@@ -10,20 +10,19 @@ public class InterestCapitalisation implements IOperation {
     private final Integer operationTypeId = 8;
     private LocalDate executionDate;
     private String description;
+    private boolean wasExecuted = false;
+
     private IInterestRate interestRateMechanism;
+    private IProduct productToCapitalise;
 
     public InterestCapitalisation(IProduct productToCapitalise) {
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId
                 + "\nNaliczenie odsetek dla: " + productToCapitalise.toString();
         this.interestRateMechanism = productToCapitalise.getInterestRateMechanism();
-        if(productToCapitalise instanceof Account)
-            capitaliseAccount((Account) productToCapitalise);
-        else if(productToCapitalise instanceof TermDeposit)
-            capitaliseTermDeposit((TermDeposit) productToCapitalise);
-        else if(productToCapitalise instanceof Credit)
-            capitaliseCredit((Credit) productToCapitalise);
-        productToCapitalise.addOperationToHistory(this);
+        this.productToCapitalise = productToCapitalise;
+
+        executeOperation();
     }
 
     @Override
@@ -41,6 +40,23 @@ public class InterestCapitalisation implements IOperation {
         return description;
     }
 
+    @Override
+    public boolean getWasExecuted() {
+        return wasExecuted;
+    }
+
+    @Override
+    public void executeOperation() {
+        if(productToCapitalise instanceof Account)
+            capitaliseAccount((Account) productToCapitalise);
+        else if(productToCapitalise instanceof TermDeposit)
+            capitaliseTermDeposit((TermDeposit) productToCapitalise);
+        else if(productToCapitalise instanceof Credit)
+            capitaliseCredit((Credit) productToCapitalise);
+        wasExecuted = true;
+        productToCapitalise.addOperationToHistory(this);
+    }
+
     private void capitaliseAccount(Account accountToCapitalise) {
         BigDecimal currentAccountBalance = accountToCapitalise.getBalance();
         accountToCapitalise.setBalance(currentAccountBalance
@@ -48,16 +64,16 @@ public class InterestCapitalisation implements IOperation {
     }
 
     private void capitaliseTermDeposit(TermDeposit termDepositToCapitalise) {
-        BigDecimal originalAmount = termDepositToCapitalise.getBalance();
-        BigDecimal finalAmount = interestRateMechanism.calculateFinalValue(originalAmount,
-                termDepositToCapitalise.getCreationDate(), termDepositToCapitalise.getEndDate());
+        //BigDecimal originalAmount = termDepositToCapitalise.getBalance();
+        BigDecimal finalAmount = interestRateMechanism.calculateFinalValue(termDepositToCapitalise,
+                 termDepositToCapitalise.getEndDate());
         termDepositToCapitalise.setBalance(finalAmount);
     }
 
     private void capitaliseCredit(Credit creditToCapitalise) {
-        BigDecimal borrowedAmount = creditToCapitalise.getBalance();
-        BigDecimal amountToPayback = interestRateMechanism.calculateFinalValue(borrowedAmount,
-                creditToCapitalise.getCreationDate(), creditToCapitalise.getRepaymentDate());
+        //BigDecimal borrowedAmount = creditToCapitalise.getBalance();
+        BigDecimal amountToPayback = interestRateMechanism.calculateFinalValue(creditToCapitalise,
+                creditToCapitalise.getRepaymentDate());
         creditToCapitalise.setBalance(amountToPayback);
     }
 }

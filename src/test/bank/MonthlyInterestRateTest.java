@@ -40,8 +40,9 @@ public class MonthlyInterestRateTest {
 
     @Test
     public void calculateFinalValue() throws Exception {
+        tester.setCreationDate(beginTest);
         assertEquals(new BigDecimal("11966.81").setScale(2, BigDecimal.ROUND_HALF_UP),
-                testInterest.calculateFinalValue(tester.getBalance(), beginTest, endTest));
+                testInterest.calculateFinalValue(tester, endTest));
     }
 
 }

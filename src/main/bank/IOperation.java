@@ -21,7 +21,9 @@ public interface IOperation {
     Integer getOperationTypeId();
     LocalDate getExecutionDate();
     String getDescription();
+    boolean getWasExecuted();
 
+    void executeOperation();
 
     //TODO rethink if finalAmount in TermDeposit should be calculated before end of termdeposit
 }

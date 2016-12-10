@@ -10,14 +10,20 @@ public class Withdraw implements IOperation {
     private final Integer operationTypeId = 2;
     private LocalDate executionDate;
     private String description;
+    private boolean wasExecuted = false;
+
+    private IProduct withdrawTargetProduct;
+    private BigDecimal withdrawAmount;
 
     public Withdraw(IProduct withdrawTargetProduct, BigDecimal withdrawAmount) {
         if (withdrawTargetProduct instanceof Account) {
             if (withdrawTargetProduct.isBalancePositive(withdrawAmount)) {
                 this.executionDate = LocalDate.now();
                 this.description = "OperationID: " + operationTypeId + " " + withdrawTargetProduct.toString();
-                withdrawTargetProduct.setBalance(withdrawTargetProduct.getBalance().subtract(withdrawAmount));
-                withdrawTargetProduct.addOperationToHistory(this);
+                this.withdrawTargetProduct = withdrawTargetProduct;
+                this.withdrawAmount = withdrawAmount;
+
+                executeOperation();
             }
             // TODO: Add DEBIT possibility
         }
@@ -36,5 +42,17 @@ public class Withdraw implements IOperation {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean getWasExecuted() {
+        return wasExecuted;
+    }
+
+    @Override
+    public void executeOperation() {
+        withdrawTargetProduct.setBalance(withdrawTargetProduct.getBalance().subtract(withdrawAmount));
+        wasExecuted = true;
+        withdrawTargetProduct.addOperationToHistory(this);
     }
 }

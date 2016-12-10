@@ -40,8 +40,9 @@ public class YearlyInterestRateTest {
 
     @Test
     public void testMultipleRatesAreCalculatedCorrectly() throws Exception {
+        tester.setCreationDate(beginTest);
         assertEquals(new BigDecimal("11910.16").setScale(2, BigDecimal.ROUND_HALF_UP),
-                testInterest.calculateFinalValue(tester.getBalance(), beginTest, endTest));
+                testInterest.calculateFinalValue(tester, endTest));
     }
 
 }

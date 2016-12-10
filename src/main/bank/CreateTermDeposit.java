@@ -10,13 +10,21 @@ public class CreateTermDeposit implements IOperation {
     private final Integer operationTypeId = 4;
     private LocalDate executionDate;
     private String description;
+    private boolean wasExecuted = false;
+
+    private Account associatedAccount;
+    private TermDeposit createdTermDeposit;
+    private BigDecimal termDepositAmount;
 
     public CreateTermDeposit(Account associatedAccount, TermDeposit createdTermDeposit, BigDecimal termDepositAmount) {
-        associatedAccount.setBalance(associatedAccount.getBalance().subtract(termDepositAmount));
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId
                             + "\nStworzona lokata: " + createdTermDeposit.toString();
-        associatedAccount.addOperationToHistory(this);
+        this.associatedAccount = associatedAccount;
+        this.createdTermDeposit = createdTermDeposit;
+        this.termDepositAmount = termDepositAmount;
+
+        executeOperation();
     }
 
     @Override
@@ -32,5 +40,17 @@ public class CreateTermDeposit implements IOperation {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean getWasExecuted() {
+        return wasExecuted;
+    }
+
+    @Override
+    public void executeOperation() {
+        associatedAccount.setBalance(associatedAccount.getBalance().subtract(termDepositAmount));
+        wasExecuted = true;
+        associatedAccount.addOperationToHistory(this);
     }
 }

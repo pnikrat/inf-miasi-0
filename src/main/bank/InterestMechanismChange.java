@@ -9,13 +9,19 @@ public class InterestMechanismChange implements IOperation {
     private final Integer operationTypeId = 9;
     private LocalDate executionDate;
     private String description;
+    private boolean wasExecuted = false;
+
+    private IProduct productToChangeMechanism;
+    private IInterestRate newMechanism;
 
     public InterestMechanismChange(IProduct productToChangeMechanism, IInterestRate newMechanism) {
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId
                 + "\nZmiana mechanizmu naliczania odsetek dla: " + productToChangeMechanism.toString();
-        productToChangeMechanism.setInterestRateMechanism(newMechanism);
-        productToChangeMechanism.addOperationToHistory(this);
+        this.productToChangeMechanism = productToChangeMechanism;
+        this.newMechanism = newMechanism;
+
+        executeOperation();
     }
     @Override
     public Integer getOperationTypeId() {
@@ -30,5 +36,17 @@ public class InterestMechanismChange implements IOperation {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean getWasExecuted() {
+        return wasExecuted;
+    }
+
+    @Override
+    public void executeOperation() {
+        productToChangeMechanism.setInterestRateMechanism(newMechanism);
+        wasExecuted = true;
+        productToChangeMechanism.addOperationToHistory(this);
     }
 }

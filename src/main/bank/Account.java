@@ -34,6 +34,11 @@ public class Account implements IProduct {
     }
 
     @Override
+    public void setCreationDate(LocalDate creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    @Override
     public LocalDate getCreationDate() {
         return creationDate;
     }
