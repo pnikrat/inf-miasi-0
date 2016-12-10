@@ -36,12 +36,22 @@ public class TermDeposit implements IProduct {
     public Account getAssociatedAccount() { return associatedAccount; }
 
     @Override
+    public Integer getOwnerId() {
+        return associatedAccount.getOwnerId();
+    }
+
+    @Override
     public String getProductNumber() {
         return termDepositNumber;
     }
 
     @Override
     public BigDecimal getBalance() {
+        return originalAmount;
+    }
+
+    @Override
+    public BigDecimal getBalanceWithDebit() {
         return originalAmount;
     }
 
@@ -86,35 +96,17 @@ public class TermDeposit implements IProduct {
         return operationHistory;
     }
 
-    @Override
-    public boolean canDepositMoney() {
-        return false;
-    }
-
-    @Override
-    public boolean canWithdrawMoney() {
-        return false;
-    }
 
     @Override
     public boolean isBalancePositive(BigDecimal amount) {
         return false;
     }
 
-    @Override
-    public void productWithdrawal(BigDecimal amount) {
-
-    }
 
     @Override
     public void addOperationToHistory(IOperation operation) {
         operationHistory.add(operation);
         Collections.sort(operationHistory, new OperationComparator());
-    }
-
-    @Override
-    public void productDeposit(BigDecimal amount) {
-        this.originalAmount = amount;
     }
 
     @Override

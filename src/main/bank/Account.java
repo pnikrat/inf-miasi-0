@@ -24,6 +24,11 @@ public class Account implements IProduct {
     }
 
     @Override
+    public Integer getOwnerId() {
+        return ownerId;
+    }
+
+    @Override
     public String getProductNumber() {
         return accountNumber;
     }
@@ -47,6 +52,11 @@ public class Account implements IProduct {
     public BigDecimal getBalance() { return balance; }
 
     @Override
+    public BigDecimal getBalanceWithDebit() {
+        return balance;
+    }
+
+    @Override
     public void setInterestRateMechanism(IInterestRate interestRateMechanism) {
         this.interestRateMechanism = interestRateMechanism;
     }
@@ -62,33 +72,9 @@ public class Account implements IProduct {
     }
 
     @Override
-    public void productDeposit(BigDecimal amount) {
-        balance = balance.add(amount);
-        //addOperationToHistory(new Operation(operationType.DEPOSIT, LocalDate.now(), "Wplata"));
-    }
-
-    @Override
-    public void productWithdrawal(BigDecimal amount) {
-        if (!isBalancePositive(amount))
-                return;
-        balance = balance.subtract(amount);
-        //addOperationToHistory(new Operation(operationType.WITHDRAW, LocalDate.now(), "Wyplata"));
-    }
-
-    @Override
     public void addOperationToHistory(IOperation operation) {
         operationHistory.add(operation);
         Collections.sort(operationHistory, new OperationComparator());
-    }
-
-    @Override
-    public boolean canDepositMoney() {
-        return true;
-    }
-
-    @Override
-    public boolean canWithdrawMoney() {
-        return true;
     }
 
     /*

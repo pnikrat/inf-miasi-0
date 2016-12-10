@@ -25,7 +25,7 @@ public class Withdraw implements IOperation {
 
                 executeOperation();
             }
-            // TODO: Add DEBIT possibility
+            // TODO: Add DEBIT possibility - decorator mechanism first
         }
     }
 

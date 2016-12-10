@@ -17,6 +17,7 @@ public interface IOperation {
     * 7 - REPAY_CREDIT
     * 8 - INTEREST_CAPITALISATION
     * 9 - INTEREST_MECHANISM_CHANGE
+    * 10 - CREATE_DEBIT
      */
     Integer getOperationTypeId();
     LocalDate getExecutionDate();

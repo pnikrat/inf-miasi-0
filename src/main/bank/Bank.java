@@ -12,6 +12,8 @@ public class Bank implements IBank {
     public List<IProduct> BankProducts = new ArrayList<IProduct>();
     public Map<IProduct, List<IOperation>> BankOperations = new HashMap<>();
 
+    // TODO: Add method boolean executeOperation(IOperation) -> Bank should be central repository to manage operations
+
     @Override
     public void createAccount(String accountNumber, Integer ownerId, IInterestRate interestRateMechanism) {
         Account tempName = new Account(accountNumber, ownerId, interestRateMechanism);
@@ -38,5 +40,12 @@ public class Bank implements IBank {
                                         creditNumber, interestRateMechanism);
         BankProducts.add(tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
+    }
+
+    public void createDebitAccount(IProduct decoratedAccount, BigDecimal maximumDebit) {
+        DebitAccount tempName = new DebitAccount(decoratedAccount, maximumDebit);
+
+        BankProducts.remove(decoratedAccount);
+        BankProducts.add(tempName);
     }
 }

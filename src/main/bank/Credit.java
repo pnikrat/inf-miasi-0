@@ -35,6 +35,11 @@ public class Credit implements IProduct {
     public Account getAssociatedAccount() { return associatedAccount; }
 
     @Override
+    public Integer getOwnerId() {
+        return associatedAccount.getOwnerId();
+    }
+
+    @Override
     public String getProductNumber() {
         return creditNumber;
     }
@@ -69,6 +74,11 @@ public class Credit implements IProduct {
     }
 
     @Override
+    public BigDecimal getBalanceWithDebit() {
+        return borrowedAmount;
+    }
+
+    @Override
     public void setBalance(BigDecimal amountToPayback) {
         this.amountToPayback = amountToPayback;
     }
@@ -86,15 +96,6 @@ public class Credit implements IProduct {
 
     public BigDecimal getAmountToPayback() {return amountToPayback; }
 
-    @Override
-    public void productDeposit(BigDecimal amount) {
-
-    }
-
-    @Override
-    public void productWithdrawal(BigDecimal amount) {
-
-    }
 
     @Override
     public void addOperationToHistory(IOperation operation) {
@@ -107,16 +108,6 @@ public class Credit implements IProduct {
             RepayCredit repayOperation = new RepayCredit(this);
             return true;
         }
-        return false;
-    }
-
-    @Override
-    public boolean canWithdrawMoney() {
-        return false;
-    }
-
-    @Override
-    public boolean canDepositMoney() {
         return false;
     }
 
