@@ -35,7 +35,7 @@ public class MonthlyInterestRateTest {
     @Test
     public void capitalisation() throws Exception {
         assertEquals(new BigDecimal("50.00").setScale(2, BigDecimal.ROUND_HALF_UP),
-                testInterest.capitalisation(tester.getBalance()));
+                testInterest.capitalisation(tester));
     }
 
     @Test

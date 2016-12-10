@@ -18,9 +18,14 @@ public class YearlyInterestRate implements IInterestRate {
     }
 
     @Override
-    public BigDecimal capitalisation(BigDecimal currentProductBalance) {
-        return currentProductBalance.multiply(interestRate.add(BigDecimal.ONE))
-                .subtract(currentProductBalance).setScale(2, BigDecimal.ROUND_HALF_UP);
+    public Integer getNumberOfCapitalisations() {
+        return numberOfCapitalisationsInYear;
+    }
+
+    @Override
+    public BigDecimal capitalisation(IProduct currentProduct) {
+        return currentProduct.getBalance().multiply(interestRate.add(BigDecimal.ONE))
+                .subtract(currentProduct.getBalance()).setScale(2, BigDecimal.ROUND_HALF_UP);
     }
 
     @Override

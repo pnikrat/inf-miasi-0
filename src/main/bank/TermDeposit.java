@@ -51,6 +51,11 @@ public class TermDeposit implements IProduct {
     }
 
     @Override
+    public void setInterestRateMechanism(IInterestRate interestRateMechanism) {
+        this.interestRateMechanism = interestRateMechanism;
+    }
+
+    @Override
     public IInterestRate getInterestRateMechanism() {
         return interestRateMechanism;
     }

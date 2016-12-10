@@ -12,6 +12,8 @@ public interface IInterestRate {
     V = V0 * (1 + r/m)^(m*n)
      */
 
-    public BigDecimal capitalisation(BigDecimal currentProductBalance);
-    public BigDecimal calculateFinalValue(BigDecimal startingCapital, LocalDate startDate, LocalDate endDate);
+    Integer getNumberOfCapitalisations();
+
+    BigDecimal capitalisation(IProduct currentProduct);
+    BigDecimal calculateFinalValue(BigDecimal startingCapital, LocalDate startDate, LocalDate endDate);
 }

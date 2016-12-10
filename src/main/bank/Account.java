@@ -42,6 +42,11 @@ public class Account implements IProduct {
     public BigDecimal getBalance() { return balance; }
 
     @Override
+    public void setInterestRateMechanism(IInterestRate interestRateMechanism) {
+        this.interestRateMechanism = interestRateMechanism;
+    }
+
+    @Override
     public IInterestRate getInterestRateMechanism() {
         return interestRateMechanism;
     }

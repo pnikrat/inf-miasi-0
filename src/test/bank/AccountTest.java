@@ -18,11 +18,15 @@ public class AccountTest {
     private BigDecimal testNumber2;
     private Deposit testDepo1;
     private Deposit testDepo2;
+    private MonthlyInterestRate testRate;
+    private YearlyInterestRate testRate2;
+    private YearlyInterestRate testRate3;
 
     @Before
     public void setUp() throws  Exception {
-        MonthlyInterestRate testRate = new MonthlyInterestRate(new BigDecimal("0.02").setScale(2, BigDecimal.ROUND_HALF_UP));
-        YearlyInterestRate testRate2 = new YearlyInterestRate(new BigDecimal("0.03").setScale(2, BigDecimal.ROUND_HALF_UP));
+        testRate = new MonthlyInterestRate(new BigDecimal("0.02").setScale(2, BigDecimal.ROUND_HALF_UP));
+        testRate2 = new YearlyInterestRate(new BigDecimal("0.03").setScale(2, BigDecimal.ROUND_HALF_UP));
+        testRate3 = new YearlyInterestRate(new BigDecimal("0.04").setScale(2, BigDecimal.ROUND_HALF_UP));
         tester = new Account("5678", 2, testRate);
         tester2 = new Account("1234", 3, testRate2);
         testNumber = new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP);
@@ -64,6 +68,13 @@ public class AccountTest {
     }
 
     @Test
+    public void testInterestRateMechanismChange() throws Exception {
+        InterestMechanismChange tempChange = new InterestMechanismChange(tester, testRate3);
+        assertEquals(testRate2.getNumberOfCapitalisations(),
+                tester.getInterestRateMechanism().getNumberOfCapitalisations());
+    }
+
+    @Test
     public void testOperationHistoryContainsDepositRecord() throws Exception {
         assertTrue(tester.getOperationHistory().stream().filter(x -> x.getOperationTypeId().equals(1))
                 .findFirst().isPresent());
@@ -90,5 +101,12 @@ public class AccountTest {
         InterestCapitalisation tempCapitalisation = new InterestCapitalisation(tester);
         assertTrue(tester.getOperationHistory().stream().filter(x -> x.getOperationTypeId().equals(8))
                 .findFirst().isPresent());
+    }
+
+    @Test
+    public void testOperationHistoryContainsInterestChangeRecord() throws Exception {
+        InterestMechanismChange tempChange = new InterestMechanismChange(tester, testRate3);
+        assertTrue(tester.getOperationHistory().stream().filter(x -> x.getOperationTypeId().equals(9))
+            .findFirst().isPresent());
     }
 }

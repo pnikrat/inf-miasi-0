@@ -17,11 +17,13 @@ public class CreditTest {
     private Account baseAccountForTester;
     private BigDecimal startingMoneyForBaseAccount;
     private BigDecimal testedBorrowedAmount;
+    private MonthlyInterestRate testRate;
+    private YearlyInterestRate testRate2;
 
     @Before
     public void setUp() throws Exception {
-        MonthlyInterestRate testRate = new MonthlyInterestRate(new BigDecimal("0.02").setScale(2, BigDecimal.ROUND_HALF_UP));
-        YearlyInterestRate testRate2 = new YearlyInterestRate(new BigDecimal("0.06").setScale(2, BigDecimal.ROUND_HALF_UP));
+        testRate = new MonthlyInterestRate(new BigDecimal("0.02").setScale(2, BigDecimal.ROUND_HALF_UP));
+        testRate2 = new YearlyInterestRate(new BigDecimal("0.06").setScale(2, BigDecimal.ROUND_HALF_UP));
         baseAccountForTester = new Account("1234", 123, testRate);
         startingMoneyForBaseAccount = new BigDecimal("5000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
         Deposit testDepo = new Deposit(baseAccountForTester, startingMoneyForBaseAccount);
@@ -56,7 +58,10 @@ public class CreditTest {
 
     @Test
     public void testRepayCreditWithEnoughMoneyOnAccountMonthlyInterest() throws Exception {
-        //TODO
+        //TODO Change Credit and TermDeposit to calculate amount to payback at repayment/end
+//        InterestMechanismChange tempChange = new InterestMechanismChange(tester, testRate);
+//        assertTrue(tester.repayCredit());
+//        assertEquals();
     }
 
     @Test

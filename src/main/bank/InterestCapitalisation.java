@@ -44,7 +44,7 @@ public class InterestCapitalisation implements IOperation {
     private void capitaliseAccount(Account accountToCapitalise) {
         BigDecimal currentAccountBalance = accountToCapitalise.getBalance();
         accountToCapitalise.setBalance(currentAccountBalance
-                .add(interestRateMechanism.capitalisation(currentAccountBalance)));
+                .add(interestRateMechanism.capitalisation(accountToCapitalise)));
     }
 
     private void capitaliseTermDeposit(TermDeposit termDepositToCapitalise) {

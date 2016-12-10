@@ -9,10 +9,16 @@ import java.util.List;
  */
 public interface IProduct {
     String getProductNumber();
+
     List<IOperation> getOperationHistory();
+    void addOperationToHistory(IOperation operation);
+
     BigDecimal getBalance();
     void setBalance(BigDecimal amount);
+
+    void setInterestRateMechanism(IInterestRate newMechanism);
     IInterestRate getInterestRateMechanism();
+
     LocalDate getCreationDate();
 
     //TODO: Rethink usage of productDeposit, productWithdrawal, getBalance, setBalance
@@ -22,7 +28,8 @@ public interface IProduct {
     boolean canDepositMoney();
     boolean canWithdrawMoney();
     boolean isBalancePositive(BigDecimal amount);
+
     String toString();
 
-    void addOperationToHistory(IOperation operation);
+
 }

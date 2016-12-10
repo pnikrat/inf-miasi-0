@@ -35,7 +35,7 @@ public class YearlyInterestRateTest {
     @Test
     public void testSingleRateIsCalculatedCorrectly() throws Exception {
         assertEquals(new BigDecimal("600.00").setScale(2, BigDecimal.ROUND_HALF_UP),
-                testInterest.capitalisation(tester.getBalance()));
+                testInterest.capitalisation(tester));
     }
 
     @Test
