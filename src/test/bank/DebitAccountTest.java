@@ -38,46 +38,46 @@ public class DebitAccountTest {
 
         testDebit = new BigDecimal("300.00").setScale(2, BigDecimal.ROUND_HALF_UP);
 
-        testDepo1 = new Deposit(testBank.BankProducts.get(0), testNumber);
-        testDepo2 = new Deposit(testBank.BankProducts.get(1), testNumber);
-        testBank.createDebitAccount(testBank.BankProducts.get(1), testDebit);
+        testDepo1 = new Deposit(testBank.getBankProduct("5678"), testNumber);
+        testDepo2 = new Deposit(testBank.getBankProduct("1234"), testNumber);
+        testBank.createDebitAccount(testBank.getBankProduct("1234"), testDebit);
     }
 
     @Test
     public void testWithdrawBelowDebitLimit() throws Exception {
-        Withdraw tempOp = new Withdraw(testBank.BankProducts.get(1), testNumber3);
-        assertEquals(0.0, testBank.BankProducts.get(1).getBalance().doubleValue(), 0.001);
-        assertEquals(-100.0, testBank.BankProducts.get(1).getDebit().doubleValue(), 0.001);
+        Withdraw tempOp = new Withdraw(testBank.getBankProduct("1234"), testNumber3);
+        assertEquals(0.0, testBank.getBankProduct("1234").getBalance().doubleValue(), 0.001);
+        assertEquals(-100.0, testBank.getBankProduct("1234").getDebit().doubleValue(), 0.001);
         //assertEquals(200.0, testBank.BankProducts.get(1).getDebitLeft().doubleValue(), 0.001);
     }
 
     @Test
     public void testWithdrawWithoutReachingDebit() throws Exception {
-        Withdraw tempOp = new Withdraw(testBank.BankProducts.get(1), testNumber2);
-        assertEquals(635.44, testBank.BankProducts.get(1).getBalance().doubleValue(), 0.001);
+        Withdraw tempOp = new Withdraw(testBank.getBankProduct("1234"), testNumber2);
+        assertEquals(635.44, testBank.getBankProduct("1234").getBalance().doubleValue(), 0.001);
     }
 
     @Test
     public void testWithdrawAboveDebitLimit() throws Exception {
-        Withdraw tempOp = new Withdraw(testBank.BankProducts.get(1), testNumber4);
-        assertEquals(1500.00, testBank.BankProducts.get(1).getBalance().doubleValue(), 0.001);
-        assertEquals(0.0, testBank.BankProducts.get(1).getDebit().doubleValue(), 0.001);
+        Withdraw tempOp = new Withdraw(testBank.getBankProduct("1234"), testNumber4);
+        assertEquals(1500.00, testBank.getBankProduct("1234").getBalance().doubleValue(), 0.001);
+        assertEquals(0.0, testBank.getBankProduct("1234").getDebit().doubleValue(), 0.001);
     }
 
     @Test
     public void testDepositOnAccountWithoutDebit() throws Exception {
-        Deposit tempOp = new Deposit(testBank.BankProducts.get(1), testNumber2);
-        assertEquals(2364.56, testBank.BankProducts.get(1).getBalance().doubleValue(), 0.001);
+        Deposit tempOp = new Deposit(testBank.getBankProduct("1234"), testNumber2);
+        assertEquals(2364.56, testBank.getBankProduct("1234").getBalance().doubleValue(), 0.001);
     }
 
     @Test
     public void testDepositOnAccountWithDebit() throws Exception {
         //withdraw something so that debit creates
-        Withdraw tempWithdraw = new Withdraw(testBank.BankProducts.get(1), testNumber3);
+        Withdraw tempWithdraw = new Withdraw(testBank.getBankProduct("1234"), testNumber3);
         //debit should be -100 now, check with depo 864.56
-        Deposit tempOp = new Deposit(testBank.BankProducts.get(1), testNumber2);
-        assertEquals(764.56, testBank.BankProducts.get(1).getBalance().doubleValue(), 0.001);
-        assertEquals(0.0, testBank.BankProducts.get(1).getDebit().doubleValue(), 0.001);
+        Deposit tempOp = new Deposit(testBank.getBankProduct("1234"), testNumber2);
+        assertEquals(764.56, testBank.getBankProduct("1234").getBalance().doubleValue(), 0.001);
+        assertEquals(0.0, testBank.getBankProduct("1234").getDebit().doubleValue(), 0.001);
     }
 
     //TODO: Add more tests - boundary cases and so on

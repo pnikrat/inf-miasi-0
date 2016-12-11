@@ -9,7 +9,7 @@ import java.util.*;
  */
 public class Bank implements IBank {
     // TODO: Change these to private once reports are implemented
-    public List<IProduct> BankProducts = new ArrayList<IProduct>();
+    private Map<String, IProduct> BankProducts = new HashMap<>();
     public Map<IProduct, List<IOperation>> BankOperations = new HashMap<>();
 
     // TODO: Add method boolean executeOperation(IOperation) -> Bank should be central repository to manage operations
@@ -17,14 +17,14 @@ public class Bank implements IBank {
     @Override
     public void createAccount(String accountNumber, Integer ownerId, IInterestRate interestRateMechanism) {
         Account tempName = new Account(accountNumber, ownerId, interestRateMechanism);
-        BankProducts.add(tempName);
+        BankProducts.put(accountNumber, tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
     }
 
     @Override
     public void createAccount(String accountNumber, Integer ownerId) {
         Account tempName = new Account(accountNumber, ownerId);
-        BankProducts.add(tempName);
+        BankProducts.put(accountNumber, tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
     }
 
@@ -35,7 +35,7 @@ public class Bank implements IBank {
             return false;
         TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, endDate,
                                                 termDepositNumber, interestRateMechanism);
-        BankProducts.add(tempName);
+        BankProducts.put(termDepositNumber, tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
         return true;
     }
@@ -47,17 +47,17 @@ public class Bank implements IBank {
             return false;
         TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, endDate,
                 termDepositNumber);
-        BankProducts.add(tempName);
+        BankProducts.put(termDepositNumber, tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
         return true;
     }
 
     @Override
-    public void createCredit(Account associatedAccount, BigDecimal borrowedAmount,
+    public void createCredit(IProduct associatedAccount, BigDecimal borrowedAmount,
                              LocalDate repaymentDate, String creditNumber, IInterestRate interestRateMechanism) {
         Credit tempName = new Credit(associatedAccount, borrowedAmount, repaymentDate,
                                         creditNumber, interestRateMechanism);
-        BankProducts.add(tempName);
+        BankProducts.put(creditNumber, tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
     }
 
@@ -66,16 +66,40 @@ public class Bank implements IBank {
                              LocalDate repaymentDate, String creditNumber) {
         Credit tempName = new Credit(associatedAccount, borrowedAmount, repaymentDate,
                                         creditNumber);
-        BankProducts.add(tempName);
+        BankProducts.put(creditNumber, tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
     }
 
     @Override
     public void createDebitAccount(IProduct decoratedAccount, BigDecimal maximumDebit) {
         DebitAccount tempName = new DebitAccount(decoratedAccount, maximumDebit);
-        int index = BankProducts.indexOf(decoratedAccount);
-        BankProducts.remove(decoratedAccount);
-        BankProducts.add(index, tempName);
+        BankProducts.remove(decoratedAccount.getProductNumber());
+        BankProducts.put(tempName.getProductNumber(), tempName);
         // TODO: Delete from BankOperations or not? Probably not - historian
+    }
+
+    @Override
+    public IProduct getBankProduct(String productNumber) {
+        return BankProducts.get(productNumber);
+    }
+
+    @Override
+    public Map<String, IProduct> getBankProducts() {
+        return BankProducts;
+    }
+
+    @Override
+    public List<IOperation> getListOfOperationsByProduct(IProduct product) {
+        return BankOperations.get(product);
+    }
+
+    @Override
+    public List<IOperation> getListOfOperationsByProductNumber(String productNumber) {
+        return BankOperations.get(getBankProduct(productNumber));
+    }
+
+    @Override
+    public Map<IProduct, List<IOperation>> getBankOperations() {
+        return BankOperations;
     }
 }

@@ -24,12 +24,12 @@ public class BankTest {
         testDebit1 = new BigDecimal("300.00").setScale(2, BigDecimal.ROUND_HALF_UP);
 
         tester.createAccount("1234", 1, testRate);
-        accountForOperationTesting = (Account) tester.BankProducts.get(0);
+        accountForOperationTesting = (Account) tester.getBankProduct("1234");
 
-        tester.createCredit((Account) tester.BankProducts.get(0),
+        tester.createCredit(tester.getBankProduct("1234"),
                 new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP),
                 LocalDate.of(2020, 7, 23), "CRED001", testRate);
-        tester.createTermDeposit((Account) tester.BankProducts.get(0),
+        tester.createTermDeposit(tester.getBankProduct("1234"),
                 new BigDecimal("1000.00").setScale(2, BigDecimal.ROUND_HALF_UP),
                 LocalDate.of(2019, 7, 23), "LOC001", testRate);
         tester.createDebitAccount(accountForOperationTesting, testDebit1);
@@ -41,24 +41,24 @@ public class BankTest {
 
     @Test
     public void testBankProductsContainsNewAccount() throws Exception {
-        assertTrue(tester.BankProducts.stream().filter(x -> x.getProductNumber().equals("1234")).findFirst().isPresent());
+        assertTrue(tester.getBankProducts().containsKey("1234"));
     }
 
     @Test
     public void testBankProductsContainsNewTermDeposit() throws Exception {
-        assertTrue(tester.BankProducts.stream().filter(x -> x.getProductNumber().equals("LOC001")).findFirst().isPresent());
+        assertTrue(tester.getBankProducts().containsKey("LOC001"));
     }
 
     @Test
     public void testBankProductsContainsNewCredit() throws Exception {
-        assertTrue(tester.BankProducts.stream().filter(x -> x.getProductNumber().equals("CRED001")).findFirst().isPresent());
+        assertTrue(tester.getBankProducts().containsKey("CRED001"));
     }
 
     @Test
     public void testBankProductsContainsNewDebitAccount() throws Exception {
         //TODO: test for position of debit account in BankProducts!!
-        assertFalse(tester.BankProducts.stream().filter(x -> x instanceof Account).findFirst().isPresent());
-        assertTrue(tester.BankProducts.stream().filter(x -> x instanceof DebitAccount).findFirst().isPresent());
+        assertFalse(tester.getBankProducts().get("1234") instanceof Account);
+        assertTrue(tester.getBankProducts().get("1234") instanceof DebitAccount);
     }
 
     @Test
