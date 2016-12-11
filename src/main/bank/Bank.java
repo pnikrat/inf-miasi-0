@@ -21,6 +21,7 @@ public class Bank implements IBank {
         BankOperations.put(tempName, tempName.getOperationHistory());
     }
 
+    @Override
     public void createAccount(String accountNumber, Integer ownerId) {
         Account tempName = new Account(accountNumber, ownerId);
         BankProducts.add(tempName);
@@ -28,12 +29,24 @@ public class Bank implements IBank {
     }
 
     @Override
-    public boolean createTermDeposit(Account associatedAccount, BigDecimal originalAmount,
+    public boolean createTermDeposit(IProduct associatedAccount, BigDecimal originalAmount,
                                   LocalDate endDate, String termDepositNumber, IInterestRate interestRateMechanism) {
-        if (!(associatedAccount.isBalancePositive(originalAmount)))
+        if (!(associatedAccount.isBalancePositive(originalAmount))) //TODO: Check if cannot create termdeposit with debit!!
             return false;
         TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, endDate,
                                                 termDepositNumber, interestRateMechanism);
+        BankProducts.add(tempName);
+        BankOperations.put(tempName, tempName.getOperationHistory());
+        return true;
+    }
+
+    @Override
+    public boolean createTermDeposit(IProduct associatedAccount, BigDecimal originalAmount,
+                                     LocalDate endDate, String termDepositNumber) {
+        if (!(associatedAccount.isBalancePositive(originalAmount)))
+            return false;
+        TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, endDate,
+                termDepositNumber);
         BankProducts.add(tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
         return true;
@@ -48,6 +61,16 @@ public class Bank implements IBank {
         BankOperations.put(tempName, tempName.getOperationHistory());
     }
 
+    @Override
+    public void createCredit(IProduct associatedAccount, BigDecimal borrowedAmount,
+                             LocalDate repaymentDate, String creditNumber) {
+        Credit tempName = new Credit(associatedAccount, borrowedAmount, repaymentDate,
+                                        creditNumber);
+        BankProducts.add(tempName);
+        BankOperations.put(tempName, tempName.getOperationHistory());
+    }
+
+    @Override
     public void createDebitAccount(IProduct decoratedAccount, BigDecimal maximumDebit) {
         DebitAccount tempName = new DebitAccount(decoratedAccount, maximumDebit);
         int index = BankProducts.indexOf(decoratedAccount);

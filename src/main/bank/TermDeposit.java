@@ -10,7 +10,7 @@ import java.util.List;
  * Created by student on 05.11.2016.
  */
 public class TermDeposit implements IProduct {
-    private Account associatedAccount;
+    private IProduct associatedAccount;
     private String termDepositNumber;
     private BigDecimal originalAmount;
     private BigDecimal finalAmount;
@@ -20,7 +20,7 @@ public class TermDeposit implements IProduct {
     private boolean isTermDepositActive;
     private List<IOperation> operationHistory = new ArrayList<IOperation>();
 
-    public TermDeposit(Account associatedAccount, BigDecimal originalAmount, LocalDate endDate,
+    public TermDeposit(IProduct associatedAccount, BigDecimal originalAmount, LocalDate endDate,
                        String termDepositNumber, IInterestRate interestRateMechanism) {
         this.isTermDepositActive = true;
         this.associatedAccount = associatedAccount;
@@ -33,7 +33,20 @@ public class TermDeposit implements IProduct {
         CreateTermDeposit createOperation = new CreateTermDeposit(associatedAccount, this, originalAmount);
     }
 
-    public Account getAssociatedAccount() { return associatedAccount; }
+    public TermDeposit(IProduct associatedAccount, BigDecimal originalAmount, LocalDate endDate,
+                       String termDepositNumber) {
+        this.isTermDepositActive = true;
+        this.associatedAccount = associatedAccount;
+        this.termDepositNumber = termDepositNumber;
+        this.originalAmount = originalAmount;
+        this.finalAmount = BigDecimal.ZERO;
+        this.creationDate = LocalDate.now();
+        this.endDate = endDate;
+        this.interestRateMechanism = new MonthlyInterestRate(new BigDecimal("0.03").setScale(2, BigDecimal.ROUND_HALF_UP));
+        CreateTermDeposit createOperation = new CreateTermDeposit(associatedAccount, this, originalAmount);
+    }
+
+    public IProduct getAssociatedAccount() { return associatedAccount; }
 
     @Override
     public Integer getOwnerId() {

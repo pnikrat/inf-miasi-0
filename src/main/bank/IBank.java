@@ -8,8 +8,17 @@ import java.time.LocalDate;
  */
 public interface IBank {
     void createAccount(String accountNumber, Integer ownerId, IInterestRate interestRateMechanism);
-    boolean createTermDeposit(Account associatedAccount, BigDecimal originalAmount, LocalDate endDate,
+    void createAccount(String accountNumber, Integer ownerId);
+
+    boolean createTermDeposit(IProduct associatedAccount, BigDecimal originalAmount, LocalDate endDate,
                            String termDepositNumber, IInterestRate interestRateMechanism);
+    boolean createTermDeposit(IProduct associatedAccount, BigDecimal originalAmount, LocalDate endDate,
+                              String termDepositNumber);
+
     void createCredit(Account associatedAccount, BigDecimal borrowedAmount,
                       LocalDate repaymentDate, String creditNumber, IInterestRate interestRateMechanism);
+    void createCredit(IProduct associatedAccount, BigDecimal borrowedAmount,
+                      LocalDate repaymentDate, String creditNumber);
+
+    void createDebitAccount(IProduct decoratedAccount, BigDecimal maximumDebit);
 }

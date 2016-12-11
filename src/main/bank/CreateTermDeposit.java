@@ -12,11 +12,11 @@ public class CreateTermDeposit implements IOperation {
     private String description;
     private boolean wasExecuted = false;
 
-    private Account associatedAccount;
+    private IProduct associatedAccount;
     private TermDeposit createdTermDeposit;
     private BigDecimal termDepositAmount;
 
-    public CreateTermDeposit(Account associatedAccount, TermDeposit createdTermDeposit, BigDecimal termDepositAmount) {
+    public CreateTermDeposit(IProduct associatedAccount, TermDeposit createdTermDeposit, BigDecimal termDepositAmount) {
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId
                             + "\nStworzona lokata: " + createdTermDeposit.toString();

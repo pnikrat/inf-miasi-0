@@ -12,11 +12,11 @@ public class CreateCredit implements IOperation {
     private String description;
     private boolean wasExecuted = false;
 
-    private Account associatedAccount;
+    private IProduct associatedAccount;
     private Credit createdCredit;
     private BigDecimal creditAmount;
 
-    public CreateCredit(Account associatedAccount, Credit createdCredit, BigDecimal creditAmount) {
+    public CreateCredit(IProduct associatedAccount, Credit createdCredit, BigDecimal creditAmount) {
 
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId

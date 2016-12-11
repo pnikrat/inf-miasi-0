@@ -10,7 +10,7 @@ import java.util.List;
  * Created by Przemek on 2016-11-13.
  */
 public class Credit implements IProduct {
-    private Account associatedAccount;
+    private IProduct associatedAccount;
     private String creditNumber;
     private BigDecimal borrowedAmount;
     private BigDecimal amountToPayback;
@@ -20,7 +20,7 @@ public class Credit implements IProduct {
     private boolean isCreditActive;
     private List<IOperation> operationHistory = new ArrayList<IOperation>();
 
-    public Credit(Account associatedAccount, BigDecimal borrowedAmount, LocalDate repaymentDate,
+    public Credit(IProduct associatedAccount, BigDecimal borrowedAmount, LocalDate repaymentDate,
                   String creditNumber, IInterestRate interestRateMechanism) {
         this.isCreditActive = true;
         this.associatedAccount = associatedAccount;
@@ -32,7 +32,19 @@ public class Credit implements IProduct {
         CreateCredit createOperation = new CreateCredit(associatedAccount, this, borrowedAmount);
     }
 
-    public Account getAssociatedAccount() { return associatedAccount; }
+    public Credit(IProduct associatedAccount, BigDecimal borrowedAmount, LocalDate repaymentDate,
+                  String creditNumber) {
+        this.isCreditActive = true;
+        this.associatedAccount = associatedAccount;
+        this.creditNumber = creditNumber;
+        this.borrowedAmount = borrowedAmount;
+        this.creationDate = LocalDate.now();
+        this.repaymentDate = repaymentDate;
+        this.interestRateMechanism = new MonthlyInterestRate(new BigDecimal("0.03").setScale(2, BigDecimal.ROUND_HALF_UP));
+        CreateCredit createOperation = new CreateCredit(associatedAccount, this, borrowedAmount);
+    }
+
+    public IProduct getAssociatedAccount() { return associatedAccount; }
 
     @Override
     public Integer getOwnerId() {
