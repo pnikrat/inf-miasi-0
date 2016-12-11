@@ -22,6 +22,7 @@ public class BankTest {
         tester = new Bank();
         MonthlyInterestRate testRate = new MonthlyInterestRate(new BigDecimal("0.02").setScale(2, BigDecimal.ROUND_HALF_UP));
         testDebit1 = new BigDecimal("300.00").setScale(2, BigDecimal.ROUND_HALF_UP);
+
         tester.createAccount("1234", 1, testRate);
         accountForOperationTesting = (Account) tester.BankProducts.get(0);
 
@@ -55,7 +56,7 @@ public class BankTest {
 
     @Test
     public void testBankProductsContainsNewDebitAccount() throws Exception {
-
+        //TODO: test for position of debit account in BankProducts!!
         assertFalse(tester.BankProducts.stream().filter(x -> x instanceof Account).findFirst().isPresent());
         assertTrue(tester.BankProducts.stream().filter(x -> x instanceof DebitAccount).findFirst().isPresent());
     }

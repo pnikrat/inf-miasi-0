@@ -16,17 +16,12 @@ public class Withdraw implements IOperation {
     private BigDecimal withdrawAmount;
 
     public Withdraw(IProduct withdrawTargetProduct, BigDecimal withdrawAmount) {
-        if (withdrawTargetProduct instanceof Account) {
-            if (withdrawTargetProduct.isBalancePositive(withdrawAmount)) {
-                this.executionDate = LocalDate.now();
-                this.description = "OperationID: " + operationTypeId + " " + withdrawTargetProduct.toString();
-                this.withdrawTargetProduct = withdrawTargetProduct;
-                this.withdrawAmount = withdrawAmount;
+        this.executionDate = LocalDate.now();
+        this.description = "OperationID: " + operationTypeId + " " + withdrawTargetProduct.toString();
+        this.withdrawTargetProduct = withdrawTargetProduct;
+        this.withdrawAmount = withdrawAmount;
 
-                executeOperation();
-            }
-            // TODO: Add DEBIT possibility - decorator mechanism first
-        }
+        executeOperation();
     }
 
     @Override
@@ -51,7 +46,23 @@ public class Withdraw implements IOperation {
 
     @Override
     public void executeOperation() {
-        withdrawTargetProduct.setBalance(withdrawTargetProduct.getBalance().subtract(withdrawAmount));
+
+        if (withdrawTargetProduct.getBalance().compareTo(withdrawAmount) >= 0) { //got 100$ wanna withdraw 80$
+            withdrawTargetProduct.setBalance(withdrawTargetProduct.getBalance().subtract(withdrawAmount));
+        }
+        else { //got 100$ wanna withdraw 120$ (not enough money, check if have debit)
+            //check if have debit
+            if (withdrawTargetProduct.getBalanceWithDebit().compareTo(withdrawAmount) >= 0) { //got 100$ and 50$ debit withdraw 120$
+                BigDecimal regularBalance = withdrawTargetProduct.getBalance(); //might be 0$ or more
+                withdrawTargetProduct.setBalance(withdrawTargetProduct.getBalance().subtract(regularBalance));
+                BigDecimal amountToBeSubtractedFromDebit = withdrawAmount.subtract(regularBalance);
+                withdrawTargetProduct.setDebit(withdrawTargetProduct.getDebit().subtract(amountToBeSubtractedFromDebit));
+            }
+            else { //not enough money even with debit - return to avoid adding op to history and executing
+                return;
+            }
+        }
+
         wasExecuted = true;
         withdrawTargetProduct.addOperationToHistory(this);
     }

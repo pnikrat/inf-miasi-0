@@ -21,6 +21,12 @@ public class Bank implements IBank {
         BankOperations.put(tempName, tempName.getOperationHistory());
     }
 
+    public void createAccount(String accountNumber, Integer ownerId) {
+        Account tempName = new Account(accountNumber, ownerId);
+        BankProducts.add(tempName);
+        BankOperations.put(tempName, tempName.getOperationHistory());
+    }
+
     @Override
     public boolean createTermDeposit(Account associatedAccount, BigDecimal originalAmount,
                                   LocalDate endDate, String termDepositNumber, IInterestRate interestRateMechanism) {
@@ -44,8 +50,9 @@ public class Bank implements IBank {
 
     public void createDebitAccount(IProduct decoratedAccount, BigDecimal maximumDebit) {
         DebitAccount tempName = new DebitAccount(decoratedAccount, maximumDebit);
-
+        int index = BankProducts.indexOf(decoratedAccount);
         BankProducts.remove(decoratedAccount);
-        BankProducts.add(tempName);
+        BankProducts.add(index, tempName);
+        // TODO: Delete from BankOperations or not? Probably not - historian
     }
 }

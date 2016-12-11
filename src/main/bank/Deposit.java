@@ -46,7 +46,20 @@ public class Deposit implements IOperation {
 
     @Override
     public void executeOperation() {
-        depositTargetProduct.setBalance(depositTargetProduct.getBalance().add(depositAmount));
+            if (depositTargetProduct instanceof DebitAccount) { //possible debit
+                //depo 100$, have to lower debit for 50$ and add 50$ to regular acc
+                BigDecimal depositLeftAfterDebit = depositAmount.subtract(depositTargetProduct.getDebit().abs());
+                if (depositLeftAfterDebit.compareTo(BigDecimal.ZERO) > 0) { //still money left, add to regular acc
+                    depositTargetProduct.setDebit(BigDecimal.ZERO);
+                    depositTargetProduct.setBalance(depositTargetProduct.getBalance().add(depositLeftAfterDebit));
+                }
+                else if (depositLeftAfterDebit.compareTo(BigDecimal.ZERO) <= 0) {  //depo too low to cover whole debit
+                    depositTargetProduct.setDebit(depositTargetProduct.getDebit().add(depositAmount));
+                }
+            }
+            else {
+                depositTargetProduct.setBalance(depositTargetProduct.getBalance().add(depositAmount));
+            }
         wasExecuted = true;
         depositTargetProduct.addOperationToHistory(this);
     }

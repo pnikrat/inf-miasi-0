@@ -121,4 +121,14 @@ public class Credit implements IProduct {
         return "Kredyt ID: " + creditNumber + ". Pożyczona kwota: " + borrowedAmount + "\n"
                 + "Powiązane konto: \n" + associatedAccount.toString();
     }
+
+    @Override
+    public BigDecimal getDebit() {
+        return null;
+    }
+
+    @Override
+    public void setDebit(BigDecimal amount) {
+
+    }
 }

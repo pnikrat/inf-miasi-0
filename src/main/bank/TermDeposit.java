@@ -115,4 +115,14 @@ public class TermDeposit implements IProduct {
                 + " na kwotę: " + originalAmount + ". Koniec lokaty dnia: " + endDate.toString() + ".\n"
                 + "Powiązane konto: \n" + associatedAccount.toString();
     }
+
+    @Override
+    public BigDecimal getDebit() {
+        return null;
+    }
+
+    @Override
+    public void setDebit(BigDecimal amount) {
+
+    }
 }

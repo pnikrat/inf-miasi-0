@@ -15,12 +15,26 @@ public class Account implements IProduct {
     private IInterestRate interestRateMechanism;
     private List<IOperation> operationHistory = new ArrayList<IOperation>();
 
+    /*
+    * Constructor with custom interest rate
+     */
     public Account(String accountNumber, Integer ownerId, IInterestRate interestRateMechanism) {
         this.accountNumber = accountNumber;
         this.balance = new BigDecimal("0.0").setScale(2, BigDecimal.ROUND_HALF_UP);
         this.creationDate = LocalDate.now();
         this.ownerId = ownerId;
         this.interestRateMechanism = interestRateMechanism;
+    }
+    /*
+    * Constructor with default interest rate
+     */
+    public Account(String accountNumber, Integer ownerId) {
+        this.accountNumber = accountNumber;
+        this.balance = BigDecimal.ZERO;
+        this.creationDate = LocalDate.now();
+        this.ownerId = ownerId;
+        this.interestRateMechanism = new MonthlyInterestRate(new BigDecimal("0.03")
+                .setScale(2, BigDecimal.ROUND_HALF_UP));
     }
 
     @Override
@@ -54,6 +68,14 @@ public class Account implements IProduct {
     @Override
     public BigDecimal getBalanceWithDebit() {
         return balance;
+    }
+
+    public BigDecimal getDebit() {
+        return null;
+    }
+
+    public void setDebit(BigDecimal amount) {
+        //do nothing on regular account
     }
 
     @Override

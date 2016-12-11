@@ -18,7 +18,6 @@ public class DebitAccount implements IProduct {
         this.decoratedAccount = decoratedAccount;
         this.maximumDebit = maximumDebit;
         this.currentDebit = BigDecimal.ZERO;
-        // TODO: Add debit logic
         CreateDebit createOperation = new CreateDebit(decoratedAccount, maximumDebit);
     }
 
@@ -49,15 +48,23 @@ public class DebitAccount implements IProduct {
 
     @Override
     public BigDecimal getBalance() {
-        //1500 + 300 - |-50|
-        //TODO: Rethink if I should have 2 getBalance methods?
-        return decoratedAccount.getBalanceWithDebit().add(maximumDebit.subtract(currentDebit.abs()));
+        return decoratedAccount.getBalance();
     }
 
     @Override
     public BigDecimal getBalanceWithDebit() {
         //1500 + 300 - |-50|
         return decoratedAccount.getBalanceWithDebit().add(maximumDebit.subtract(currentDebit.abs()));
+    }
+
+    @Override
+    public BigDecimal getDebit() {
+        return currentDebit;
+    }
+
+    @Override
+    public void setDebit(BigDecimal amount) {
+        currentDebit = amount;
     }
 
     @Override
