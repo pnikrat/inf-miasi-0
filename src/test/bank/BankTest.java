@@ -63,25 +63,25 @@ public class BankTest {
 
     @Test
     public void testBankOperationsContainsDepositOperationOnAccount() throws Exception {
-        assertTrue(tester.BankOperations.get(accountForOperationTesting).stream().filter(x -> x.getOperationTypeId()
+        assertTrue(tester.getBankOperations().get(accountForOperationTesting).stream().filter(x -> x.getOperationTypeId()
             .equals(1)).findFirst().isPresent());
     }
 
     @Test
     public void testBankOperationsContainsCreateTermDepositOperationOnAccount() throws Exception {
-        assertTrue(tester.BankOperations.get(accountForOperationTesting).stream().filter(x -> x.getOperationTypeId()
+        assertTrue(tester.getBankOperations().get(accountForOperationTesting).stream().filter(x -> x.getOperationTypeId()
             .equals(4)).findFirst().isPresent());
     }
 
     @Test
     public void testBankOperationsContainsCreateCreditOperationOnAccount() throws Exception {
-        assertTrue(tester.BankOperations.get(accountForOperationTesting).stream().filter(x -> x.getOperationTypeId()
+        assertTrue(tester.getBankOperations().get(accountForOperationTesting).stream().filter(x -> x.getOperationTypeId()
             .equals(6)).findFirst().isPresent());
     }
 
     @Test
     public void testBankOperationsContainsCreateDebitOperationOnAccount() throws Exception {
-        assertTrue(tester.BankOperations.get(accountForOperationTesting).stream().filter(x -> x.getOperationTypeId()
+        assertTrue(tester.getBankOperations().get(accountForOperationTesting).stream().filter(x -> x.getOperationTypeId()
             .equals(10)).findFirst().isPresent());
     }
 }

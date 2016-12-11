@@ -8,9 +8,8 @@ import java.util.*;
  * Created by student on 05.11.2016.
  */
 public class Bank implements IBank {
-    // TODO: Change these to private once reports are implemented
     private Map<String, IProduct> BankProducts = new HashMap<>();
-    public Map<IProduct, List<IOperation>> BankOperations = new HashMap<>();
+    private Map<IProduct, List<IOperation>> BankOperations = new HashMap<>();
 
     // TODO: Add method boolean executeOperation(IOperation) -> Bank should be central repository to manage operations
 
