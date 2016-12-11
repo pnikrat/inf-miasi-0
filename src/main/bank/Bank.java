@@ -30,7 +30,7 @@ public class Bank implements IBank {
     @Override
     public boolean createTermDeposit(IProduct associatedAccount, BigDecimal originalAmount,
                                   LocalDate endDate, String termDepositNumber, IInterestRate interestRateMechanism) {
-        if (!(associatedAccount.isBalancePositive(originalAmount))) //TODO: Check if cannot create termdeposit with debit!!
+        if (!(associatedAccount.isBalancePositive(originalAmount)))
             return false;
         TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, endDate,
                                                 termDepositNumber, interestRateMechanism);

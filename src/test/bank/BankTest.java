@@ -56,7 +56,6 @@ public class BankTest {
 
     @Test
     public void testBankProductsContainsNewDebitAccount() throws Exception {
-        //TODO: test for position of debit account in BankProducts!!
         assertFalse(tester.getBankProducts().get("1234") instanceof Account);
         assertTrue(tester.getBankProducts().get("1234") instanceof DebitAccount);
     }

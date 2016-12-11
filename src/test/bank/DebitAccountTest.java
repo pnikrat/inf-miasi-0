@@ -5,6 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 import static org.junit.Assert.*;
 
@@ -78,6 +79,23 @@ public class DebitAccountTest {
         Deposit tempOp = new Deposit(testBank.getBankProduct("1234"), testNumber2);
         assertEquals(764.56, testBank.getBankProduct("1234").getBalance().doubleValue(), 0.001);
         assertEquals(0.0, testBank.getBankProduct("1234").getDebit().doubleValue(), 0.001);
+    }
+
+    @Test
+    public void testCannotCreateTermDepositFromAccountOnDebit() throws Exception {
+        Withdraw tempWithdraw = new Withdraw(testBank.getBankProduct("1234"), testNumber3);
+        //should be -100 now
+        assertFalse(testBank.createTermDeposit(testBank.getBankProduct("1234"), testNumber2,
+                LocalDate.of(2020, 7, 23), "LOC:002"));
+    }
+
+    @Test
+    public void testCreditLowersDebitFirstThenAddsToRegularAccount() throws Exception {
+        Withdraw tempWithdraw = new Withdraw(testBank.getBankProduct("1234"), testNumber3);
+        //should be -100 now
+        testBank.createCredit(testBank.getBankProduct("1234"), testNumber2,
+                LocalDate.of(2020, 7, 23), "CRED:003");
+        assertEquals(764.56, testBank.getBankProduct("1234").getBalance().doubleValue(), 0.001);
     }
 
     //TODO: Add more tests - boundary cases and so on

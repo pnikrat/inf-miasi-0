@@ -50,7 +50,23 @@ public class CreateCredit implements IOperation {
 
     @Override
     public void executeOperation() {
-        associatedAccount.setBalance(associatedAccount.getBalance().add(creditAmount));
+        //associatedAccount.setBalance(associatedAccount.getBalance().add(creditAmount));
+
+        if (associatedAccount instanceof DebitAccount) { //possible debit
+            //depo 100$, have to lower debit for 50$ and add 50$ to regular acc
+            BigDecimal depositLeftAfterDebit = creditAmount.subtract(associatedAccount.getDebit().abs());
+            if (depositLeftAfterDebit.compareTo(BigDecimal.ZERO) > 0) { //still money left, add to regular acc
+                associatedAccount.setDebit(BigDecimal.ZERO);
+                associatedAccount.setBalance(associatedAccount.getBalance().add(depositLeftAfterDebit));
+            }
+            else if (depositLeftAfterDebit.compareTo(BigDecimal.ZERO) <= 0) {  //depo too low to cover whole debit
+                associatedAccount.setDebit(associatedAccount.getDebit().add(creditAmount));
+            }
+        }
+        else {
+            associatedAccount.setBalance(associatedAccount.getBalance().add(creditAmount));
+        }
+
         InterestCapitalisation amountToPaybackCapitalisation = new InterestCapitalisation(createdCredit);
         wasExecuted = true;
         associatedAccount.addOperationToHistory(this);
