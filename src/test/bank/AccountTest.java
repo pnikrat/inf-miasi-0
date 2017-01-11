@@ -51,7 +51,7 @@ public class AccountTest {
 
     @Test
     public void testLocalTransfers() throws Exception {
-        Transfer tempTransfer = new Transfer(tester, tester2, testNumber2);
+        Transfer tempTransfer = new Transfer(tester, tester2, testNumber2, false);
         assertEquals(635.44, tester.getBalance().doubleValue(), 0.001);
         assertEquals(2364.56, tester2.getBalance().doubleValue(), 0.001);
     }
@@ -90,7 +90,7 @@ public class AccountTest {
 
     @Test
     public void testOperationHistoryContainsTransferRecords() throws Exception {
-        Transfer tempTransfer = new Transfer(tester, tester2, testNumber2);
+        Transfer tempTransfer = new Transfer(tester, tester2, testNumber2, false);
         assertTrue(tester.getOperationHistory().stream().filter(x -> x.getOperationTypeId().equals(3))
                 .findFirst().isPresent());
         assertTrue(tester2.getOperationHistory().stream().filter(x -> x.getOperationTypeId().equals(3))

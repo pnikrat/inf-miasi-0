@@ -1,9 +1,6 @@
 package bank;
 
-import interfaces.IBank;
-import interfaces.IInterestRate;
-import interfaces.IOperation;
-import interfaces.IProduct;
+import interfaces.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -15,7 +12,7 @@ import java.util.*;
 public class Bank implements IBank {
     private Map<String, IProduct> BankProducts = new HashMap<>();
     private Map<IProduct, List<IOperation>> BankOperations = new HashMap<>();
-
+    private IKir mediator;
     // TODO: Add method boolean executeOperation(IOperation) -> Bank should be central repository to manage operations
 
     @Override
@@ -105,5 +102,16 @@ public class Bank implements IBank {
     @Override
     public Map<IProduct, List<IOperation>> getBankOperations() {
         return BankOperations;
+    }
+
+    @Override
+    public void subscribeToMediator(IKir mediatorToConnect) {
+        this.mediator = mediatorToConnect;
+        mediator.acceptNewNode(this);
+    }
+
+    @Override
+    public boolean executeKirTransfer(IOperation transfer) {
+        return mediator.executeInterBankTransfer(transfer);
     }
 }

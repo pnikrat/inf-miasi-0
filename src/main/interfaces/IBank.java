@@ -30,4 +30,7 @@ public interface IBank {
     List<IOperation> getListOfOperationsByProduct(IProduct product);
     List<IOperation> getListOfOperationsByProductNumber(String productNumber);
     Map<IProduct, List<IOperation>> getBankOperations();
+
+    void subscribeToMediator(IKir mediatorToConnect);
+    boolean executeKirTransfer(IOperation transfer);
 }

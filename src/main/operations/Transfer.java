@@ -19,8 +19,10 @@ public class Transfer implements IOperation {
     private IProduct transferOriginProduct;
     private IProduct transferTargetProduct;
     private BigDecimal transferAmount;
+    private boolean isinterBank;
 
-    public Transfer(IProduct transferOriginProduct, IProduct transferTargetProduct, BigDecimal transferAmount) {
+    public Transfer(IProduct transferOriginProduct, IProduct transferTargetProduct, BigDecimal transferAmount,
+                    boolean isInterbank) {
         if (transferOriginProduct instanceof Account && transferTargetProduct instanceof Account) {
             if (transferOriginProduct.isBalancePositive(transferAmount)) {
                 this.executionDate = LocalDate.now();
@@ -29,8 +31,9 @@ public class Transfer implements IOperation {
                 this.transferOriginProduct = transferOriginProduct;
                 this.transferTargetProduct = transferTargetProduct;
                 this.transferAmount = transferAmount;
-
-                executeOperation();
+                this.isinterBank = isInterbank;
+                if (!isinterBank)
+                    executeOperation();
             }
         }
     }
