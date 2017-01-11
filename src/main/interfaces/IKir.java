@@ -5,5 +5,5 @@ package interfaces;
  */
 public interface IKir {
     void acceptNewNode(IBank node);
-    boolean executeInterBankTransfer(IOperation transfer);
+    boolean executeInterBankTransfer(IOperation transfer, IProduct targetProduct);
 }

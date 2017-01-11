@@ -56,7 +56,7 @@ public class KirTest {
     @Test
     public void testDestinationBankReceivesMoney() throws Exception {
         boolean result = originBank.executeKirTransfer(new Transfer(originAccount,
-                destinationAccount, testNumber2, true));
+                destinationAccount, testNumber2, true), destinationAccount);
         assertTrue(result);
         assertEquals(864.56, destinationAccount.getBalance().doubleValue(), 0.001);
     }
@@ -64,7 +64,7 @@ public class KirTest {
     @Test
     public void testOriginBankTransfersMoney() throws Exception {
         boolean result = originBank.executeKirTransfer(new Transfer(originAccount,
-                destinationAccount, testNumber2, true));
+                destinationAccount, testNumber2, true), destinationAccount);
         assertTrue(result);
         assertEquals(635.44, originAccount.getBalance().doubleValue(), 0.001);
     }

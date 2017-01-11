@@ -1,6 +1,7 @@
 package bank;
 
 import interfaces.*;
+import org.omg.PortableServer.POAPackage.InvalidPolicy;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -111,7 +112,7 @@ public class Bank implements IBank {
     }
 
     @Override
-    public boolean executeKirTransfer(IOperation transfer) {
-        return mediator.executeInterBankTransfer(transfer);
+    public boolean executeKirTransfer(IOperation transfer, IProduct targetProduct) {
+        return mediator.executeInterBankTransfer(transfer, targetProduct);
     }
 }

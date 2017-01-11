@@ -32,5 +32,5 @@ public interface IBank {
     Map<IProduct, List<IOperation>> getBankOperations();
 
     void subscribeToMediator(IKir mediatorToConnect);
-    boolean executeKirTransfer(IOperation transfer);
+    boolean executeKirTransfer(IOperation transfer, IProduct targetProduct);
 }

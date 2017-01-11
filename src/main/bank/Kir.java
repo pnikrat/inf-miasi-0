@@ -3,6 +3,7 @@ package bank;
 import interfaces.IBank;
 import interfaces.IKir;
 import interfaces.IOperation;
+import interfaces.IProduct;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +21,13 @@ public class Kir implements IKir {
     }
 
     @Override
-    public boolean executeInterBankTransfer(IOperation transfer) {
+    public boolean executeInterBankTransfer(IOperation transfer, IProduct targetProduct) {
+        for (IBank x : bankNodes) {
+            if (x.getBankProduct(targetProduct.getProductNumber()) != null) {
+                transfer.executeOperation(); //??
+                return true;
+            }
+        }
         return false;
     }
 }
