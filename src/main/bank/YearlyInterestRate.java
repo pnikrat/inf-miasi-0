@@ -1,9 +1,11 @@
 package bank;
 
+import interfaces.IInterestRate;
+import interfaces.IProduct;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.IntSummaryStatistics;
 
 /**
  * Created by Przemek on 2016-11-22.

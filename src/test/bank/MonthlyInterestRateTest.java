@@ -1,5 +1,6 @@
 package bank;
 
+import operations.Deposit;
 import org.junit.Before;
 import org.junit.Test;
 

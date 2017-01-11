@@ -1,4 +1,6 @@
-package bank;
+package helpers;
+
+import interfaces.IOperation;
 
 import java.util.Comparator;
 

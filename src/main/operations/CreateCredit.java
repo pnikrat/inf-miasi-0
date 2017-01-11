@@ -1,4 +1,8 @@
-package bank;
+package operations;
+
+import bank.*;
+import interfaces.IOperation;
+import interfaces.IProduct;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

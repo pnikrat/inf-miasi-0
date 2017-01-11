@@ -1,11 +1,12 @@
 package bank;
 
+import operations.Deposit;
+import operations.EndTermDeposit;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Year;
 
 import static org.junit.Assert.*;
 

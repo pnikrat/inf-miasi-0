@@ -1,9 +1,10 @@
 package bank;
 
+import interfaces.IInterestRate;
+import interfaces.IProduct;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Period;
-import java.time.temporal.ChronoUnit;
 
 import static java.time.temporal.ChronoUnit.MONTHS;
 

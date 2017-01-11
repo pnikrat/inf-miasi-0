@@ -1,4 +1,8 @@
-package bank;
+package operations;
+
+import interfaces.IInterestRate;
+import interfaces.IOperation;
+import interfaces.IProduct;
 
 import java.time.LocalDate;
 

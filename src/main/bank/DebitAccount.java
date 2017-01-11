@@ -1,8 +1,13 @@
 package bank;
 
+import helpers.OperationComparator;
+import interfaces.IInterestRate;
+import interfaces.IOperation;
+import interfaces.IProduct;
+import operations.CreateDebit;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
