@@ -2,6 +2,7 @@ package operations;
 
 import bank.DebitAccount;
 import interfaces.IOperation;
+import interfaces.IOperationVisitor;
 import interfaces.IProduct;
 
 import java.math.BigDecimal;
@@ -66,5 +67,10 @@ public class Deposit implements IOperation {
             }
         wasExecuted = true;
         depositTargetProduct.addOperationToHistory(this);
+    }
+
+    @Override
+    public void accept(IOperationVisitor visitor) {
+        visitor.visit(this);
     }
 }

@@ -1,6 +1,7 @@
 package operations;
 
 import interfaces.IOperation;
+import interfaces.IOperationVisitor;
 import interfaces.IProduct;
 
 import java.math.BigDecimal;
@@ -68,5 +69,10 @@ public class Withdraw implements IOperation {
 
         wasExecuted = true;
         withdrawTargetProduct.addOperationToHistory(this);
+    }
+
+    @Override
+    public void accept(IOperationVisitor visitor) {
+        visitor.visit(this);
     }
 }

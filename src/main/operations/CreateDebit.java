@@ -1,6 +1,7 @@
 package operations;
 
 import interfaces.IOperation;
+import interfaces.IOperationVisitor;
 import interfaces.IProduct;
 
 import java.math.BigDecimal;
@@ -54,5 +55,10 @@ public class CreateDebit implements IOperation {
         wasExecuted = true;
         associatedAccount.addOperationToHistory(this);
 
+    }
+
+    @Override
+    public void accept(IOperationVisitor visitor) {
+        visitor.visit(this);
     }
 }

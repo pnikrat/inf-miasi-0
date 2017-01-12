@@ -3,6 +3,7 @@ package operations;
 import bank.*;
 import interfaces.IInterestRate;
 import interfaces.IOperation;
+import interfaces.IOperationVisitor;
 import interfaces.IProduct;
 
 import java.math.BigDecimal;
@@ -60,6 +61,11 @@ public class InterestCapitalisation implements IOperation {
             capitaliseCredit((Credit) productToCapitalise);
         wasExecuted = true;
         productToCapitalise.addOperationToHistory(this);
+    }
+
+    @Override
+    public void accept(IOperationVisitor visitor) {
+        visitor.visit(this);
     }
 
     private void capitaliseAccount(Account accountToCapitalise) {

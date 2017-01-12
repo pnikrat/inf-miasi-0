@@ -2,6 +2,7 @@ package operations;
 
 import bank.Account;
 import interfaces.IOperation;
+import interfaces.IOperationVisitor;
 import interfaces.IProduct;
 
 import java.math.BigDecimal;
@@ -65,5 +66,10 @@ public class Transfer implements IOperation {
         wasExecuted = true;
         transferOriginProduct.addOperationToHistory(this);
         transferTargetProduct.addOperationToHistory(this);
+    }
+
+    @Override
+    public void accept(IOperationVisitor visitor) {
+        visitor.visit(this);
     }
 }

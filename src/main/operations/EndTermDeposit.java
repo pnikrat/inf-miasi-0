@@ -2,6 +2,7 @@ package operations;
 
 import interfaces.IOperation;
 import bank.TermDeposit;
+import interfaces.IOperationVisitor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -61,5 +62,10 @@ public class EndTermDeposit implements IOperation {
         termDepositToEnd.setIsTermDepositActive(false);
         wasExecuted = true;
         termDepositToEnd.addOperationToHistory(this);
+    }
+
+    @Override
+    public void accept(IOperationVisitor visitor) {
+        visitor.visit(this);
     }
 }

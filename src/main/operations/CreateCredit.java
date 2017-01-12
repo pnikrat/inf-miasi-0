@@ -2,6 +2,7 @@ package operations;
 
 import bank.*;
 import interfaces.IOperation;
+import interfaces.IOperationVisitor;
 import interfaces.IProduct;
 
 import java.math.BigDecimal;
@@ -74,5 +75,10 @@ public class CreateCredit implements IOperation {
         InterestCapitalisation amountToPaybackCapitalisation = new InterestCapitalisation(createdCredit);
         wasExecuted = true;
         associatedAccount.addOperationToHistory(this);
+    }
+
+    @Override
+    public void accept(IOperationVisitor visitor) {
+        visitor.visit(this);
     }
 }

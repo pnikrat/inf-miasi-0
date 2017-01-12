@@ -1,6 +1,7 @@
 package operations;
 
 import interfaces.IOperation;
+import interfaces.IOperationVisitor;
 import interfaces.IProduct;
 import bank.TermDeposit;
 
@@ -56,5 +57,10 @@ public class CreateTermDeposit implements IOperation {
         associatedAccount.setBalance(associatedAccount.getBalance().subtract(termDepositAmount));
         wasExecuted = true;
         associatedAccount.addOperationToHistory(this);
+    }
+
+    @Override
+    public void accept(IOperationVisitor visitor) {
+        visitor.visit(this);
     }
 }

@@ -2,6 +2,7 @@ package operations;
 
 import interfaces.IInterestRate;
 import interfaces.IOperation;
+import interfaces.IOperationVisitor;
 import interfaces.IProduct;
 
 import java.time.LocalDate;
@@ -52,5 +53,10 @@ public class InterestMechanismChange implements IOperation {
         productToChangeMechanism.setInterestRateMechanism(newMechanism);
         wasExecuted = true;
         productToChangeMechanism.addOperationToHistory(this);
+    }
+
+    @Override
+    public void accept(IOperationVisitor visitor) {
+        visitor.visit(this);
     }
 }

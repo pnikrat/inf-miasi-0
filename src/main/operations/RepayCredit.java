@@ -2,6 +2,7 @@ package operations;
 
 import bank.Credit;
 import interfaces.IOperation;
+import interfaces.IOperationVisitor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -54,5 +55,10 @@ public class RepayCredit implements IOperation {
         creditToRepay.setIsCreditActive(false);
         wasExecuted = true;
         creditToRepay.addOperationToHistory(this);
+    }
+
+    @Override
+    public void accept(IOperationVisitor visitor) {
+        visitor.visit(this);
     }
 }

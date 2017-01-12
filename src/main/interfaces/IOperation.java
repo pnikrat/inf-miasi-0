@@ -26,5 +26,6 @@ public interface IOperation {
 
     void executeOperation();
 
+    void accept(IOperationVisitor visitor);
     //TODO rethink if finalAmount in TermDeposit should be calculated before end of termdeposit
 }
