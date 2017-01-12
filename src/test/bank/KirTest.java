@@ -10,6 +10,7 @@ import org.omg.PortableServer.POAPackage.InvalidPolicy;
 import java.math.BigDecimal;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -22,6 +23,7 @@ public class KirTest {
     private Bank destinationBank;
     private IProduct originAccount;
     private IProduct destinationAccount;
+    private IProduct notExistingAccount;
     private Kir mediator;
     private BigDecimal testNumber;
     private BigDecimal testNumber2;
@@ -35,6 +37,7 @@ public class KirTest {
         originAccount = originBank.getBankProduct("1234567");
         destinationBank.createAccount("4321", 56);
         destinationAccount = destinationBank.getBankProduct("4321");
+        notExistingAccount = new Account("00000", 9999);
 
         for (int i = 0 ; i < 5 ; i++) {
             uselessBank.createAccount("4567" + Integer.toString(i), i);
@@ -67,6 +70,22 @@ public class KirTest {
                 destinationAccount, testNumber2, true), destinationAccount);
         assertTrue(result);
         assertEquals(635.44, originAccount.getBalance().doubleValue(), 0.001);
+    }
+
+    @Test
+    public void testDestinationBankDoesNotReceiveMoney() throws Exception {
+        boolean result = originBank.executeKirTransfer(new Transfer(originAccount,
+                notExistingAccount, testNumber2, true), notExistingAccount);
+        assertFalse(result);
+        assertEquals(0.00, notExistingAccount.getBalance().doubleValue(), 0.001);
+    }
+
+    @Test
+    public void testOriginBankDoesNotTransferMoney() throws Exception {
+        boolean result = originBank.executeKirTransfer(new Transfer(originAccount,
+                notExistingAccount, testNumber2, true), notExistingAccount);
+        assertFalse(result);
+        assertEquals(1500.00, originAccount.getBalance().doubleValue(), 0.001);
     }
 
 }
