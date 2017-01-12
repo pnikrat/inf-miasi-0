@@ -4,6 +4,7 @@ import helpers.OperationComparator;
 import interfaces.IInterestRate;
 import interfaces.IOperation;
 import interfaces.IProduct;
+import interfaces.IProductVisitor;
 import operations.CreateCredit;
 import operations.RepayCredit;
 
@@ -139,6 +140,11 @@ public class Credit implements IProduct {
     public String toString() {
         return "Kredyt ID: " + creditNumber + ". Pożyczona kwota: " + borrowedAmount + "\n"
                 + "Powiązane konto: \n" + associatedAccount.toString();
+    }
+
+    @Override
+    public void accept(IProductVisitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

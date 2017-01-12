@@ -4,6 +4,7 @@ import helpers.OperationComparator;
 import interfaces.IInterestRate;
 import interfaces.IOperation;
 import interfaces.IProduct;
+import interfaces.IProductVisitor;
 import operations.CreateTermDeposit;
 
 import java.math.BigDecimal;
@@ -133,6 +134,11 @@ public class TermDeposit implements IProduct {
         return "Lokata ID: " + termDepositNumber + ". Założona dnia: " + creationDate.toString()
                 + " na kwotę: " + originalAmount + ". Koniec lokaty dnia: " + endDate.toString() + ".\n"
                 + "Powiązane konto: \n" + associatedAccount.toString();
+    }
+
+    @Override
+    public void accept(IProductVisitor visitor) {
+        visitor.visit(this);
     }
 
     @Override

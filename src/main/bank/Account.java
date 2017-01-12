@@ -4,6 +4,7 @@ import helpers.OperationComparator;
 import interfaces.IInterestRate;
 import interfaces.IOperation;
 import interfaces.IProduct;
+import interfaces.IProductVisitor;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -118,6 +119,11 @@ public class Account implements IProduct {
     public String toString() {
         return "Właściciel ID: " + ownerId + "\nNumer rachunku: " + accountNumber
                 + " Saldo: " + balance.toString();
+    }
+
+    @Override
+    public void accept(IProductVisitor visitor) {
+        visitor.visit(this);
     }
 
 }

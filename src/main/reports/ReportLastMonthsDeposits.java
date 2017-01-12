@@ -29,6 +29,8 @@ public class ReportLastMonthsDeposits implements IOperationVisitor {
         }
     }
 
+    public List<Deposit> getReportResult() { return lastMonthDeposits; }
+
     @Override
     public void visit(CreateCredit element) {
 

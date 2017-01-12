@@ -4,6 +4,7 @@ import helpers.OperationComparator;
 import interfaces.IInterestRate;
 import interfaces.IOperation;
 import interfaces.IProduct;
+import interfaces.IProductVisitor;
 import operations.CreateDebit;
 
 import java.math.BigDecimal;
@@ -107,5 +108,10 @@ public class DebitAccount implements IProduct {
         return "Właściciel ID: " + decoratedAccount.getOwnerId() + "\nNumer rachunku: "
                 + decoratedAccount.getProductNumber()
                 + " Saldo: " + decoratedAccount.getBalance().toString();
+    }
+
+    @Override
+    public void accept(IProductVisitor visitor) {
+        visitor.visit(this);
     }
 }

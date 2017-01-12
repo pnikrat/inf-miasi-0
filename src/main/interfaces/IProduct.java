@@ -32,5 +32,5 @@ public interface IProduct {
 
     String toString();
 
-
+    void accept(IProductVisitor visitor);
 }
