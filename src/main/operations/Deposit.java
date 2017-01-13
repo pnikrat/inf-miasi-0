@@ -39,6 +39,9 @@ public class Deposit implements IOperation {
         return executionDate;
     }
 
+    //ONLY FOR TESTING PURPOSES, DO NOT USE IN PRODUCTION
+    public void setExecutionDate(LocalDate date) { executionDate = date; }
+
     @Override
     public String getDescription() {
         return description;
