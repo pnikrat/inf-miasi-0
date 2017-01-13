@@ -22,8 +22,8 @@ public class ReportSumOfBankAssetsTest {
     public void setUp() throws Exception {
         testBank = new Bank();
         testBank.createAccount("123", 34);
-        Deposit testDepo = new Deposit(testBank.getBankProduct("123"),
-                new BigDecimal("2345.45").setScale(2, BigDecimal.ROUND_HALF_UP));
+        testBank.executeIOperation(new Deposit(testBank.getBankProduct("123"),
+                new BigDecimal("2345.45").setScale(2, BigDecimal.ROUND_HALF_UP)));
         testBank.createCredit(testBank.getBankProduct("123"),
                 new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP), LocalDate.of(2017, 2, 20), "CRED01");
         testBank.createTermDeposit(testBank.getBankProduct("123"),

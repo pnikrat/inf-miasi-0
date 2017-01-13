@@ -9,6 +9,9 @@ import java.util.Map;
  * Created by student on 05.11.2016.
  */
 public interface IBank {
+
+    boolean executeIOperation(IOperation operationToExecute);
+
     void createAccount(String accountNumber, Integer ownerId, IInterestRate interestRateMechanism);
     void createAccount(String accountNumber, Integer ownerId);
 

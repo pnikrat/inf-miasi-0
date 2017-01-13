@@ -28,8 +28,6 @@ public class CreateTermDeposit implements IOperation {
         this.associatedAccount = associatedAccount;
         this.createdTermDeposit = createdTermDeposit;
         this.termDepositAmount = termDepositAmount;
-
-        executeOperation();
     }
 
     @Override
@@ -53,10 +51,11 @@ public class CreateTermDeposit implements IOperation {
     }
 
     @Override
-    public void executeOperation() {
+    public boolean executeOperation() {
         associatedAccount.setBalance(associatedAccount.getBalance().subtract(termDepositAmount));
         wasExecuted = true;
         associatedAccount.addOperationToHistory(this);
+        return wasExecuted;
     }
 
     @Override

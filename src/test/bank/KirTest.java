@@ -1,5 +1,7 @@
 package bank;
 
+import interfaces.IBank;
+import interfaces.IKir;
 import interfaces.IProduct;
 import operations.Deposit;
 import operations.Transfer;
@@ -18,13 +20,12 @@ import static org.junit.Assert.assertTrue;
  */
 public class KirTest {
 
-    private Bank originBank;
-    private Bank uselessBank;
-    private Bank destinationBank;
+    private IBank originBank;
+    private IBank uselessBank;
+    private IBank destinationBank;
     private IProduct originAccount;
     private IProduct destinationAccount;
     private IProduct notExistingAccount;
-    private Kir mediator;
     private BigDecimal testNumber;
     private BigDecimal testNumber2;
 
@@ -46,20 +47,20 @@ public class KirTest {
             destinationBank.createAccount("9081456" + Integer.toString(i), i);
         }
 
-        mediator = new Kir();
+        IKir mediator = new Kir();
         originBank.subscribeToMediator(mediator);
         uselessBank.subscribeToMediator(mediator);
         destinationBank.subscribeToMediator(mediator);
 
         testNumber = new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP);
         testNumber2 = new BigDecimal("864.56").setScale(2, BigDecimal.ROUND_HALF_UP);
-        Deposit originDepo = new Deposit(originAccount, testNumber);
+        originBank.executeIOperation(new Deposit(originAccount, testNumber));
     }
 
     @Test
     public void testDestinationBankReceivesMoney() throws Exception {
         boolean result = originBank.executeKirTransfer(new Transfer(originAccount,
-                destinationAccount, testNumber2, true), destinationAccount);
+                destinationAccount, testNumber2), destinationAccount);
         assertTrue(result);
         assertEquals(864.56, destinationAccount.getBalance().doubleValue(), 0.001);
     }
@@ -67,7 +68,7 @@ public class KirTest {
     @Test
     public void testOriginBankTransfersMoney() throws Exception {
         boolean result = originBank.executeKirTransfer(new Transfer(originAccount,
-                destinationAccount, testNumber2, true), destinationAccount);
+                destinationAccount, testNumber2), destinationAccount);
         assertTrue(result);
         assertEquals(635.44, originAccount.getBalance().doubleValue(), 0.001);
     }
@@ -75,7 +76,7 @@ public class KirTest {
     @Test
     public void testDestinationBankDoesNotReceiveMoney() throws Exception {
         boolean result = originBank.executeKirTransfer(new Transfer(originAccount,
-                notExistingAccount, testNumber2, true), notExistingAccount);
+                notExistingAccount, testNumber2), notExistingAccount);
         assertFalse(result);
         assertEquals(0.00, notExistingAccount.getBalance().doubleValue(), 0.001);
     }
@@ -83,7 +84,7 @@ public class KirTest {
     @Test
     public void testOriginBankDoesNotTransferMoney() throws Exception {
         boolean result = originBank.executeKirTransfer(new Transfer(originAccount,
-                notExistingAccount, testNumber2, true), notExistingAccount);
+                notExistingAccount, testNumber2), notExistingAccount);
         assertFalse(result);
         assertEquals(1500.00, originAccount.getBalance().doubleValue(), 0.001);
     }

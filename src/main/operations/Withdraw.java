@@ -24,8 +24,6 @@ public class Withdraw implements IOperation {
         this.description = "OperationID: " + operationTypeId + " " + withdrawTargetProduct.toString();
         this.withdrawTargetProduct = withdrawTargetProduct;
         this.withdrawAmount = withdrawAmount;
-
-        executeOperation();
     }
 
     @Override
@@ -49,8 +47,7 @@ public class Withdraw implements IOperation {
     }
 
     @Override
-    public void executeOperation() {
-
+    public boolean executeOperation() {
         if (withdrawTargetProduct.getBalance().compareTo(withdrawAmount) >= 0) { //got 100$ wanna withdraw 80$
             withdrawTargetProduct.setBalance(withdrawTargetProduct.getBalance().subtract(withdrawAmount));
         }
@@ -63,12 +60,12 @@ public class Withdraw implements IOperation {
                 withdrawTargetProduct.setDebit(withdrawTargetProduct.getDebit().subtract(amountToBeSubtractedFromDebit));
             }
             else { //not enough money even with debit - return to avoid adding op to history and executing
-                return;
+                return wasExecuted;
             }
         }
-
         wasExecuted = true;
         withdrawTargetProduct.addOperationToHistory(this);
+        return wasExecuted;
     }
 
     @Override

@@ -20,23 +20,14 @@ public class Transfer implements IOperation {
     private IProduct transferOriginProduct;
     private IProduct transferTargetProduct;
     private BigDecimal transferAmount;
-    private boolean isinterBank;
 
-    public Transfer(IProduct transferOriginProduct, IProduct transferTargetProduct, BigDecimal transferAmount,
-                    boolean isInterbank) {
-        if (transferOriginProduct instanceof Account && transferTargetProduct instanceof Account) {
-            if (transferOriginProduct.isBalancePositive(transferAmount)) {
-                this.executionDate = LocalDate.now();
-                this.description = "OperationID: " + operationTypeId + " " + "\nZ konta: " + transferOriginProduct.toString()
-                                    + "\nNa konto: " + transferTargetProduct.toString();
-                this.transferOriginProduct = transferOriginProduct;
-                this.transferTargetProduct = transferTargetProduct;
-                this.transferAmount = transferAmount;
-                this.isinterBank = isInterbank;
-                if (!isinterBank)
-                    executeOperation();
-            }
-        }
+    public Transfer(IProduct transferOriginProduct, IProduct transferTargetProduct, BigDecimal transferAmount) {
+        this.executionDate = LocalDate.now();
+        this.description = "OperationID: " + operationTypeId + " " + "\nZ konta: " + transferOriginProduct.toString()
+                            + "\nNa konto: " + transferTargetProduct.toString();
+        this.transferOriginProduct = transferOriginProduct;
+        this.transferTargetProduct = transferTargetProduct;
+        this.transferAmount = transferAmount;
     }
 
     @Override
@@ -60,12 +51,17 @@ public class Transfer implements IOperation {
     }
 
     @Override
-    public void executeOperation() {
-        transferOriginProduct.setBalance(transferOriginProduct.getBalance().subtract(transferAmount));
-        transferTargetProduct.setBalance(transferTargetProduct.getBalance().add(transferAmount));
-        wasExecuted = true;
-        transferOriginProduct.addOperationToHistory(this);
-        transferTargetProduct.addOperationToHistory(this);
+    public boolean executeOperation() {
+        if (transferOriginProduct instanceof Account && transferTargetProduct instanceof Account) {
+            if (transferOriginProduct.isBalancePositive(transferAmount)) {
+                transferOriginProduct.setBalance(transferOriginProduct.getBalance().subtract(transferAmount));
+                transferTargetProduct.setBalance(transferTargetProduct.getBalance().add(transferAmount));
+                wasExecuted=true;
+                transferOriginProduct.addOperationToHistory(this);
+                transferTargetProduct.addOperationToHistory(this);
+            }
+        }
+        return wasExecuted;
     }
 
     @Override

@@ -3,6 +3,7 @@ package operations;
 import bank.Credit;
 import interfaces.IOperation;
 import interfaces.IOperationVisitor;
+import interfaces.IProduct;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -22,8 +23,6 @@ public class RepayCredit implements IOperation {
         this.executionDate = LocalDate.now();
         this.description = "Operation ID: " + operationTypeId + "\nZakończony kredyt: " + creditToRepay.toString();
         this.creditToRepay = creditToRepay;
-
-        executeOperation();
     }
 
     @Override
@@ -47,14 +46,19 @@ public class RepayCredit implements IOperation {
     }
 
     @Override
-    public void executeOperation() {
+    public boolean executeOperation() {
         BigDecimal repayAmount = creditToRepay.getAmountToPayback();
         BigDecimal accountsMoney = creditToRepay.getAssociatedAccount().getBalance();
-        creditToRepay.getAssociatedAccount().setBalance(accountsMoney.subtract(repayAmount));
+        if (accountsMoney.subtract(repayAmount).compareTo(BigDecimal.ZERO) >= 0) {
+            creditToRepay.getAssociatedAccount().setBalance(accountsMoney.subtract(repayAmount));
 
-        creditToRepay.setIsCreditActive(false);
-        wasExecuted = true;
-        creditToRepay.addOperationToHistory(this);
+            creditToRepay.setIsCreditActive(false);
+            wasExecuted = true;
+            creditToRepay.addOperationToHistory(this);
+            return wasExecuted;
+        }
+        else
+            return false;
     }
 
     @Override

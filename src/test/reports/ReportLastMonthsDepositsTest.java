@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.junit.Assert.*;
 
 /**
@@ -20,25 +19,36 @@ import static org.junit.Assert.*;
 public class ReportLastMonthsDepositsTest  {
     private IBank testBank;
     private ReportLastMonthsDeposits testReport;
-    private List<IOperation> expectedOps = new ArrayList<>();
+    private List<Deposit> expectedOps = new ArrayList<>();
+    private Deposit testDepo;
+    private Deposit testDepo2;
+    private Deposit testDepo3;
 
     @Before
     public void setUp() throws Exception {
         testBank = new Bank();
         testBank.createAccount("123", 34);
-        Deposit testDepo = new Deposit(testBank.getBankProduct("123"),
+
+        testDepo = new Deposit(testBank.getBankProduct("123"),
                 new BigDecimal("2345.45").setScale(2, BigDecimal.ROUND_HALF_UP));
+        testDepo.executeOperation();
+
         testBank.createCredit(testBank.getBankProduct("123"),
                 new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP), LocalDate.of(2018, 5, 12), "CRED01");
         testBank.createTermDeposit(testBank.getBankProduct("123"),
                 new BigDecimal("200.00").setScale(2, BigDecimal.ROUND_HALF_UP), LocalDate.of(2018, 2, 12), "DEPO02");
         testBank.createDebitAccount(testBank.getBankProduct("123"),
                 new BigDecimal("300.00").setScale(2, BigDecimal.ROUND_HALF_UP));
-        Deposit testDepo2 = new Deposit(testBank.getBankProduct("123"),
+
+        testDepo2 = new Deposit(testBank.getBankProduct("123"),
                 new BigDecimal("999.99").setScale(2, BigDecimal.ROUND_HALF_UP));
+        testDepo2.executeOperation();
+
         testBank.createAccount("345", 45);
-        Deposit testDepo3 = new Deposit(testBank.getBankProduct("345"),
+        testDepo3 = new Deposit(testBank.getBankProduct("345"),
                 new BigDecimal("888.88").setScale(2, BigDecimal.ROUND_HALF_UP));
+        testDepo3.executeOperation();
+
         testDepo.setExecutionDate(LocalDate.of(2016, 12, 22));
         testDepo2.setExecutionDate(LocalDate.of(2016,7,23));
         //testDepo3 left with now()
@@ -54,7 +64,12 @@ public class ReportLastMonthsDepositsTest  {
 
     @Test
     public void testReportReturnsCorrectListOfOperations() throws Exception {
-        assertEquals(expectedOps, testReport.getReportResult());
+        assertTrue(testReport.getReportResult().stream()
+                .filter(x -> x.getDescription().contains(testDepo.getDescription())).findFirst().isPresent());
+        assertTrue(testReport.getReportResult().stream()
+                .filter(x -> x.getDescription().contains(testDepo3.getDescription())).findFirst().isPresent());
+        assertFalse(testReport.getReportResult().stream()
+                .filter(x -> x.getDescription().contains(testDepo2.getDescription())).findFirst().isPresent());
     }
 
 }

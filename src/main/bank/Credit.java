@@ -37,7 +37,6 @@ public class Credit implements IProduct {
         this.creationDate = LocalDate.now();
         this.repaymentDate = repaymentDate;
         this.interestRateMechanism = interestRateMechanism;
-        CreateCredit createOperation = new CreateCredit(associatedAccount, this, borrowedAmount);
     }
 
     public Credit(IProduct associatedAccount, BigDecimal borrowedAmount, LocalDate repaymentDate,
@@ -49,7 +48,6 @@ public class Credit implements IProduct {
         this.creationDate = LocalDate.now();
         this.repaymentDate = repaymentDate;
         this.interestRateMechanism = new MonthlyInterestRate(new BigDecimal("0.03").setScale(2, BigDecimal.ROUND_HALF_UP));
-        CreateCredit createOperation = new CreateCredit(associatedAccount, this, borrowedAmount);
     }
 
     public IProduct getAssociatedAccount() { return associatedAccount; }
@@ -123,13 +121,13 @@ public class Credit implements IProduct {
         Collections.sort(operationHistory, new OperationComparator());
     }
 
-    public boolean repayCredit() {
+ /*   public boolean repayCredit() {
         if(associatedAccount.isBalancePositive(amountToPayback)) {
             RepayCredit repayOperation = new RepayCredit(this);
             return true;
         }
         return false;
-    }
+    } */
 
     @Override
     public boolean isBalancePositive(BigDecimal amount) {

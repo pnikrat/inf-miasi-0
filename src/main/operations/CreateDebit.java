@@ -26,8 +26,6 @@ public class CreateDebit implements IOperation {
                 + "\nStworzony debet dla konta: " + associatedAccount.toString();
         this.associatedAccount = associatedAccount;
         this.maximumDebit = maximumDebit;
-
-        executeOperation();
     }
 
     @Override
@@ -51,10 +49,10 @@ public class CreateDebit implements IOperation {
     }
 
     @Override
-    public void executeOperation() {
+    public boolean executeOperation() {
         wasExecuted = true;
         associatedAccount.addOperationToHistory(this);
-
+        return wasExecuted;
     }
 
     @Override

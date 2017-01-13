@@ -24,7 +24,6 @@ public class DebitAccount implements IProduct {
         this.decoratedAccount = decoratedAccount;
         this.maximumDebit = maximumDebit;
         this.currentDebit = BigDecimal.ZERO;
-        CreateDebit createOperation = new CreateDebit(decoratedAccount, maximumDebit);
     }
 
     @Override

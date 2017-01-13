@@ -25,8 +25,6 @@ public class InterestMechanismChange implements IOperation {
                 + "\nZmiana mechanizmu naliczania odsetek dla: " + productToChangeMechanism.toString();
         this.productToChangeMechanism = productToChangeMechanism;
         this.newMechanism = newMechanism;
-
-        executeOperation();
     }
     @Override
     public Integer getOperationTypeId() {
@@ -49,10 +47,11 @@ public class InterestMechanismChange implements IOperation {
     }
 
     @Override
-    public void executeOperation() {
+    public boolean executeOperation() {
         productToChangeMechanism.setInterestRateMechanism(newMechanism);
         wasExecuted = true;
         productToChangeMechanism.addOperationToHistory(this);
+        return wasExecuted;
     }
 
     @Override

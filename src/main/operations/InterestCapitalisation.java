@@ -27,8 +27,6 @@ public class InterestCapitalisation implements IOperation {
                 + "\nNaliczenie odsetek dla: " + productToCapitalise.toString();
         this.interestRateMechanism = productToCapitalise.getInterestRateMechanism();
         this.productToCapitalise = productToCapitalise;
-
-        executeOperation();
     }
 
     @Override
@@ -52,7 +50,7 @@ public class InterestCapitalisation implements IOperation {
     }
 
     @Override
-    public void executeOperation() {
+    public boolean executeOperation() {
         if(productToCapitalise instanceof Account)
             capitaliseAccount((Account) productToCapitalise);
         else if(productToCapitalise instanceof TermDeposit)
@@ -61,6 +59,7 @@ public class InterestCapitalisation implements IOperation {
             capitaliseCredit((Credit) productToCapitalise);
         wasExecuted = true;
         productToCapitalise.addOperationToHistory(this);
+        return wasExecuted;
     }
 
     @Override

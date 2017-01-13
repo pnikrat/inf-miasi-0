@@ -1,6 +1,8 @@
 package bank;
 
+import interfaces.IBank;
 import operations.Deposit;
+import operations.RepayCredit;
 import operations.Withdraw;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,47 +17,48 @@ import static org.junit.Assert.*;
  */
 public class CreditTest {
 
-    private Credit tester;
-    private Account baseAccountForTester;
+    private IBank testBank;
     private BigDecimal startingMoneyForBaseAccount;
     private BigDecimal testedBorrowedAmount;
-    private MonthlyInterestRate testRate;
-    private YearlyInterestRate testRate2;
 
     @Before
     public void setUp() throws Exception {
-        testRate = new MonthlyInterestRate(new BigDecimal("0.02").setScale(2, BigDecimal.ROUND_HALF_UP));
-        testRate2 = new YearlyInterestRate(new BigDecimal("0.06").setScale(2, BigDecimal.ROUND_HALF_UP));
-        baseAccountForTester = new Account("1234", 123, testRate);
+        testBank = new Bank();
+        MonthlyInterestRate testRate = new MonthlyInterestRate(new BigDecimal("0.02").setScale(2, BigDecimal.ROUND_HALF_UP));
+        YearlyInterestRate testRate2 = new YearlyInterestRate(new BigDecimal("0.06").setScale(2, BigDecimal.ROUND_HALF_UP));
+
+        testBank.createAccount("1234", 123, testRate);
         startingMoneyForBaseAccount = new BigDecimal("5000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-        Deposit testDepo = new Deposit(baseAccountForTester, startingMoneyForBaseAccount);
+        testBank.executeIOperation(new Deposit(testBank.getBankProduct("1234"), startingMoneyForBaseAccount));
 
         testedBorrowedAmount = new BigDecimal("2150.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-        tester = new Credit(baseAccountForTester, testedBorrowedAmount, LocalDate.of(2020, 7, 23), "CRED:001", testRate2);
+        testBank.createCredit(testBank.getBankProduct("1234"), testedBorrowedAmount,
+                LocalDate.of(2020, 7, 23), "CRED:001", testRate2);
     }
 
-    @Test
+/*    @Test
     public void testAmountToPaybackIsSetCorrectly() throws Exception {
-        tester.repayCredit();
-        assertEquals(2560.68, tester.getAmountToPayback().doubleValue(), 0.001);
+        testBank.executeIOperation(new RepayCredit((Credit)testBank.getBankProduct("CRED:001")));
+        assertEquals(2560.68, (Credit)testBank.getBankProduct("CRED:001").getAmountToPayback().doubleValue(), 0.001);
     }
-
+*/
     @Test
     public void testAccountReceivedCreditMoney() throws Exception {
-        assertEquals(startingMoneyForBaseAccount.add(testedBorrowedAmount), baseAccountForTester.getBalance());
+        assertEquals(startingMoneyForBaseAccount.add(testedBorrowedAmount),
+                testBank.getBankProduct("1234").getBalance());
     }
 
     @Test
     public void testRepayCreditWithNotEnoughMoneyOnAccount() throws Exception {
         //withdraw some money so that account has not enough money for repayment
-        Withdraw testWithdraw = new Withdraw(baseAccountForTester, startingMoneyForBaseAccount);
-        assertFalse(tester.repayCredit());
+        testBank.executeIOperation(new Withdraw(testBank.getBankProduct("1234"), startingMoneyForBaseAccount));
+        assertFalse(testBank.executeIOperation(new RepayCredit((Credit)testBank.getBankProduct("CRED:001"))));
     }
 
     @Test
     public void testRepayCreditWithEnoughMoneyOnAccountYearlyInterest() throws Exception {
-        assertTrue(tester.repayCredit());
-        assertEquals(4589.32, baseAccountForTester.getBalance().doubleValue(), 0.001);
+        assertTrue(testBank.executeIOperation(new RepayCredit((Credit)testBank.getBankProduct("CRED:001"))));
+        assertEquals(4589.32, testBank.getBankProduct("1234").getBalance().doubleValue(), 0.001);
     }
 
     @Test
@@ -68,15 +71,15 @@ public class CreditTest {
 
     @Test
     public void testCreditRepaymentIsAddedToOperationHistory() throws Exception {
-        tester.repayCredit();
-        assertTrue(tester.getOperationHistory().stream().filter(x -> x.getOperationTypeId().equals(7))
-                    .findFirst().isPresent());
+        testBank.executeIOperation(new RepayCredit((Credit)testBank.getBankProduct("CRED:001")));
+        assertTrue(testBank.getBankProduct("CRED:001").getOperationHistory().stream().
+                filter(x -> x.getOperationTypeId().equals(7)).findFirst().isPresent());
     }
 
     @Test
     public void testCreditCreationIsAddedToOperationHistory() throws Exception {
-        assertTrue(baseAccountForTester.getOperationHistory().stream().filter(x -> x.getOperationTypeId().equals(6))
-                .findFirst().isPresent());
+        assertTrue(testBank.getBankProduct("1234").getOperationHistory().stream()
+                .filter(x -> x.getOperationTypeId().equals(6)).findFirst().isPresent());
     }
 
 }

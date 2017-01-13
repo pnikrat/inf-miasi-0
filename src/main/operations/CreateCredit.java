@@ -29,8 +29,6 @@ public class CreateCredit implements IOperation {
         this.associatedAccount = associatedAccount;
         this.createdCredit = createdCredit;
         this.creditAmount = creditAmount;
-
-        executeOperation();
     }
 
     @Override
@@ -54,7 +52,7 @@ public class CreateCredit implements IOperation {
     }
 
     @Override
-    public void executeOperation() {
+    public boolean executeOperation() {
         //associatedAccount.setBalance(associatedAccount.getBalance().add(creditAmount));
 
         if (associatedAccount instanceof DebitAccount) { //possible debit
@@ -73,8 +71,10 @@ public class CreateCredit implements IOperation {
         }
 
         InterestCapitalisation amountToPaybackCapitalisation = new InterestCapitalisation(createdCredit);
+        amountToPaybackCapitalisation.executeOperation();
         wasExecuted = true;
         associatedAccount.addOperationToHistory(this);
+        return wasExecuted;
     }
 
     @Override

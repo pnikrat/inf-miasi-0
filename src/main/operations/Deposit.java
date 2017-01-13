@@ -25,8 +25,6 @@ public class Deposit implements IOperation {
         this.description = "OperationID: " + operationTypeId + " " + depositTargetProduct.toString();
         this.depositTargetProduct = depositTargetProduct;
         this.depositAmount = depositAmount;
-
-        executeOperation();
     }
 
     @Override
@@ -53,7 +51,7 @@ public class Deposit implements IOperation {
     }
 
     @Override
-    public void executeOperation() {
+    public boolean executeOperation() {
             if (depositTargetProduct instanceof DebitAccount) { //possible debit
                 //depo 100$, have to lower debit for 50$ and add 50$ to regular acc
                 BigDecimal depositLeftAfterDebit = depositAmount.subtract(depositTargetProduct.getDebit().abs());
@@ -70,6 +68,7 @@ public class Deposit implements IOperation {
             }
         wasExecuted = true;
         depositTargetProduct.addOperationToHistory(this);
+        return wasExecuted;
     }
 
     @Override

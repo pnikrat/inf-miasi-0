@@ -37,7 +37,6 @@ public class TermDeposit implements IProduct {
         this.creationDate = LocalDate.now();
         this.endDate = endDate;
         this.interestRateMechanism = interestRateMechanism;
-        CreateTermDeposit createOperation = new CreateTermDeposit(associatedAccount, this, originalAmount);
     }
 
     public TermDeposit(IProduct associatedAccount, BigDecimal originalAmount, LocalDate endDate,
@@ -50,7 +49,6 @@ public class TermDeposit implements IProduct {
         this.creationDate = LocalDate.now();
         this.endDate = endDate;
         this.interestRateMechanism = new MonthlyInterestRate(new BigDecimal("0.03").setScale(2, BigDecimal.ROUND_HALF_UP));
-        CreateTermDeposit createOperation = new CreateTermDeposit(associatedAccount, this, originalAmount);
     }
 
     public IProduct getAssociatedAccount() { return associatedAccount; }

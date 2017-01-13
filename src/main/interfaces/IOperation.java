@@ -24,7 +24,7 @@ public interface IOperation {
     String getDescription();
     boolean getWasExecuted();
 
-    void executeOperation();
+    boolean executeOperation();
 
     void accept(IOperationVisitor visitor);
     //TODO rethink if finalAmount in TermDeposit should be calculated before end of termdeposit

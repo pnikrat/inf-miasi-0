@@ -23,8 +23,6 @@ public class EndTermDeposit implements IOperation {
         this.description = "OperationID: " + operationTypeId
                 + "\nZakończona lokata: " + termDepositToEnd.toString();
         this.termDepositToEnd = termDepositToEnd;
-
-        executeOperation();
     }
 
     @Override
@@ -48,7 +46,7 @@ public class EndTermDeposit implements IOperation {
     }
 
     @Override
-    public void executeOperation() {
+    public boolean executeOperation() {
         BigDecimal accountsMoney = termDepositToEnd.getAssociatedAccount().getBalance();
         if (LocalDate.now().isAfter(termDepositToEnd.getEndDate())) {
             //get money with interest
@@ -62,6 +60,7 @@ public class EndTermDeposit implements IOperation {
         termDepositToEnd.setIsTermDepositActive(false);
         wasExecuted = true;
         termDepositToEnd.addOperationToHistory(this);
+        return wasExecuted;
     }
 
     @Override

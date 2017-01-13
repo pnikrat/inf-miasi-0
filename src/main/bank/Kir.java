@@ -24,8 +24,7 @@ public class Kir implements IKir {
     public boolean executeInterBankTransfer(IOperation transfer, IProduct targetProduct) {
         for (IBank x : bankNodes) {
             if (x.getBankProduct(targetProduct.getProductNumber()) != null) {
-                transfer.executeOperation(); //??
-                return true;
+                return transfer.executeOperation();
             }
         }
         return false;

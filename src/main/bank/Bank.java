@@ -1,6 +1,9 @@
 package bank;
 
 import interfaces.*;
+import operations.CreateCredit;
+import operations.CreateDebit;
+import operations.CreateTermDeposit;
 import org.omg.PortableServer.POAPackage.InvalidPolicy;
 
 import java.math.BigDecimal;
@@ -14,7 +17,11 @@ public class Bank implements IBank {
     private Map<String, IProduct> BankProducts = new HashMap<>();
     private Map<IProduct, List<IOperation>> BankOperations = new HashMap<>();
     private IKir mediator;
-    // TODO: Add method boolean executeOperation(IOperation) -> Bank should be central repository to manage operations
+
+    @Override
+    public boolean executeIOperation(IOperation operationToExecute) {
+        return operationToExecute.executeOperation();
+    }
 
     @Override
     public void createAccount(String accountNumber, Integer ownerId, IInterestRate interestRateMechanism) {
@@ -37,6 +44,8 @@ public class Bank implements IBank {
             return false;
         TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, endDate,
                                                 termDepositNumber, interestRateMechanism);
+        CreateTermDeposit createOperation = new CreateTermDeposit(associatedAccount, tempName, originalAmount);
+        executeIOperation(createOperation);
         BankProducts.put(termDepositNumber, tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
         return true;
@@ -49,6 +58,8 @@ public class Bank implements IBank {
             return false;
         TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, endDate,
                 termDepositNumber);
+        CreateTermDeposit createOperation = new CreateTermDeposit(associatedAccount, tempName, originalAmount);
+        executeIOperation(createOperation);
         BankProducts.put(termDepositNumber, tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
         return true;
@@ -59,6 +70,8 @@ public class Bank implements IBank {
                              LocalDate repaymentDate, String creditNumber, IInterestRate interestRateMechanism) {
         Credit tempName = new Credit(associatedAccount, borrowedAmount, repaymentDate,
                                         creditNumber, interestRateMechanism);
+        CreateCredit createOperation = new CreateCredit(associatedAccount, tempName, borrowedAmount);
+        executeIOperation(createOperation);
         BankProducts.put(creditNumber, tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
     }
@@ -68,6 +81,8 @@ public class Bank implements IBank {
                              LocalDate repaymentDate, String creditNumber) {
         Credit tempName = new Credit(associatedAccount, borrowedAmount, repaymentDate,
                                         creditNumber);
+        CreateCredit createOperation = new CreateCredit(associatedAccount, tempName, borrowedAmount);
+        executeIOperation(createOperation);
         BankProducts.put(creditNumber, tempName);
         BankOperations.put(tempName, tempName.getOperationHistory());
     }
@@ -75,9 +90,12 @@ public class Bank implements IBank {
     @Override
     public void createDebitAccount(IProduct decoratedAccount, BigDecimal maximumDebit) {
         DebitAccount tempName = new DebitAccount(decoratedAccount, maximumDebit);
+        CreateDebit createOperation = new CreateDebit(decoratedAccount, maximumDebit);
+        executeIOperation(createOperation);
         BankProducts.remove(decoratedAccount.getProductNumber());
         BankProducts.put(tempName.getProductNumber(), tempName);
-        // TODO: Delete from BankOperations or not? Probably not - historian
+        BankOperations.remove(decoratedAccount);
+        BankOperations.put(tempName, tempName.getOperationHistory());
     }
 
     @Override

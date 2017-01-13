@@ -1,5 +1,6 @@
 package bank;
 
+import interfaces.IBank;
 import operations.Deposit;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,19 +14,15 @@ import static org.junit.Assert.*;
  * Created by Przemek on 2016-11-13.
  */
 public class BankTest {
-
-    private Bank tester;
-    private Account accountForOperationTesting;
-    private BigDecimal testDebit1;
+    private IBank tester;
 
     @Before
     public void setUp() throws Exception {
         tester = new Bank();
         MonthlyInterestRate testRate = new MonthlyInterestRate(new BigDecimal("0.02").setScale(2, BigDecimal.ROUND_HALF_UP));
-        testDebit1 = new BigDecimal("300.00").setScale(2, BigDecimal.ROUND_HALF_UP);
+        BigDecimal testDebit1 = new BigDecimal("300.00").setScale(2, BigDecimal.ROUND_HALF_UP);
 
         tester.createAccount("1234", 1, testRate);
-        accountForOperationTesting = (Account) tester.getBankProduct("1234");
 
         tester.createCredit(tester.getBankProduct("1234"),
                 new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP),
@@ -33,11 +30,11 @@ public class BankTest {
         tester.createTermDeposit(tester.getBankProduct("1234"),
                 new BigDecimal("1000.00").setScale(2, BigDecimal.ROUND_HALF_UP),
                 LocalDate.of(2019, 7, 23), "LOC001", testRate);
-        tester.createDebitAccount(accountForOperationTesting, testDebit1);
+        tester.createDebitAccount(tester.getBankProduct("1234"), testDebit1);
 
 
         BigDecimal tempDepoAmount = new BigDecimal("5000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-        Deposit tempDepo = new Deposit(accountForOperationTesting, tempDepoAmount);
+        tester.executeIOperation(new Deposit(tester.getBankProduct("1234"), tempDepoAmount));
     }
 
     @Test
@@ -63,25 +60,25 @@ public class BankTest {
 
     @Test
     public void testBankOperationsContainsDepositOperationOnAccount() throws Exception {
-        assertTrue(tester.getBankOperations().get(accountForOperationTesting).stream().filter(x -> x.getOperationTypeId()
-            .equals(1)).findFirst().isPresent());
+        assertTrue(tester.getBankOperations().get(tester.getBankProduct("1234")).stream()
+                .filter(x -> x.getOperationTypeId().equals(1)).findFirst().isPresent());
     }
 
     @Test
     public void testBankOperationsContainsCreateTermDepositOperationOnAccount() throws Exception {
-        assertTrue(tester.getBankOperations().get(accountForOperationTesting).stream().filter(x -> x.getOperationTypeId()
-            .equals(4)).findFirst().isPresent());
+        assertTrue(tester.getBankOperations().get(tester.getBankProduct("1234")).stream()
+                .filter(x -> x.getOperationTypeId().equals(4)).findFirst().isPresent());
     }
 
     @Test
     public void testBankOperationsContainsCreateCreditOperationOnAccount() throws Exception {
-        assertTrue(tester.getBankOperations().get(accountForOperationTesting).stream().filter(x -> x.getOperationTypeId()
-            .equals(6)).findFirst().isPresent());
+        assertTrue(tester.getBankOperations().get(tester.getBankProduct("1234")).stream()
+                .filter(x -> x.getOperationTypeId().equals(6)).findFirst().isPresent());
     }
 
     @Test
     public void testBankOperationsContainsCreateDebitOperationOnAccount() throws Exception {
-        assertTrue(tester.getBankOperations().get(accountForOperationTesting).stream().filter(x -> x.getOperationTypeId()
-            .equals(10)).findFirst().isPresent());
+        assertTrue(tester.getBankOperations().get(tester.getBankProduct("1234")).stream()
+                .filter(x -> x.getOperationTypeId().equals(10)).findFirst().isPresent());
     }
 }
