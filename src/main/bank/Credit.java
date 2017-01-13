@@ -121,14 +121,6 @@ public class Credit implements IProduct {
         Collections.sort(operationHistory, new OperationComparator());
     }
 
- /*   public boolean repayCredit() {
-        if(associatedAccount.isBalancePositive(amountToPayback)) {
-            RepayCredit repayOperation = new RepayCredit(this);
-            return true;
-        }
-        return false;
-    } */
-
     @Override
     public boolean isBalancePositive(BigDecimal amount) {
         return false;

@@ -36,12 +36,13 @@ public class CreditTest {
                 LocalDate.of(2020, 7, 23), "CRED:001", testRate2);
     }
 
-/*    @Test
+    @Test
     public void testAmountToPaybackIsSetCorrectly() throws Exception {
-        testBank.executeIOperation(new RepayCredit((Credit)testBank.getBankProduct("CRED:001")));
-        assertEquals(2560.68, (Credit)testBank.getBankProduct("CRED:001").getAmountToPayback().doubleValue(), 0.001);
+        Credit tester = (Credit)testBank.getBankProduct("CRED:001");
+        testBank.executeIOperation(new RepayCredit(tester));
+        assertEquals(2560.68, tester.getAmountToPayback().doubleValue(), 0.001);
     }
-*/
+
     @Test
     public void testAccountReceivedCreditMoney() throws Exception {
         assertEquals(startingMoneyForBaseAccount.add(testedBorrowedAmount),

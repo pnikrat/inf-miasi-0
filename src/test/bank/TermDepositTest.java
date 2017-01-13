@@ -40,16 +40,17 @@ public class TermDepositTest {
         //assertFalse((TermDeposit)testBank.getBankProduct("LOCO:002").getIsTermDepositActive());
         assertEquals(startingMoneyForBaseAccount, testBank.getBankProduct("1234").getBalance());
     }
-/*
+
     @Test
     public void testEndTermDepositAfterPeriodWithYearlyCapitalisation() throws Exception {
         testBank.getBankProduct("LOCO:002").setCreationDate(LocalDate.of(2010, 7, 23));
-        (TermDeposit)testBank.getBankProduct("LOCO:002").setEndDate(LocalDate.of(2014, 8, 19));
-        EndTermDeposit endOperation = new EndTermDeposit(tester);
+        TermDeposit tester = (TermDeposit) testBank.getBankProduct("LOCO:002");
+        tester.setEndDate(LocalDate.of(2014, 8, 19));
+        testBank.executeIOperation(new EndTermDeposit(tester));
         assertFalse(tester.getIsTermDepositActive());
-        assertEquals(5962.81, baseAccountForTester.getBalance().doubleValue(), 0.001);
+        assertEquals(5962.81, testBank.getBankProduct("1234").getBalance().doubleValue(), 0.001);
     }
-*/
+
     @Test
     public void testEndTermDepositAfterPeriodWithMonthlyCapitalisation() throws Exception {
         //TODO Change Credit and TermDeposit to calculate amount to payback at repayment/end

@@ -51,6 +51,7 @@ public class EndTermDeposit implements IOperation {
         if (LocalDate.now().isAfter(termDepositToEnd.getEndDate())) {
             //get money with interest
             InterestCapitalisation capitalisation = new InterestCapitalisation(termDepositToEnd);
+            capitalisation.executeOperation();
             termDepositToEnd.getAssociatedAccount().setBalance(termDepositToEnd.getFinalAmount().add(accountsMoney));
         }
         else //get money without interest
