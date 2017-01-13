@@ -37,7 +37,8 @@ public class TermDepositTest {
     @Test
     public void testEndTermDepositBeforePeriod() throws Exception {
         testBank.executeIOperation(new EndTermDeposit((TermDeposit) testBank.getBankProduct("LOCO:002")));
-        //assertFalse((TermDeposit)testBank.getBankProduct("LOCO:002").getIsTermDepositActive());
+        TermDeposit tester = (TermDeposit) testBank.getBankProduct("LOCO:002");
+        assertFalse(tester.getIsTermDepositActive());
         assertEquals(startingMoneyForBaseAccount, testBank.getBankProduct("1234").getBalance());
     }
 
