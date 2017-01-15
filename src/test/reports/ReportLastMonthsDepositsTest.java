@@ -59,7 +59,8 @@ public class ReportLastMonthsDepositsTest  {
 
     @Test
     public void testReportReturnsCorrectNumberOfDeposits() throws Exception {
-        assertEquals(2, testReport.getReportResult().size());
+        //createCredit also uses Deposit operation
+        assertEquals(3, testReport.getReportResult().size());
     }
 
     @Test
