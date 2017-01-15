@@ -32,9 +32,7 @@ public class Bank implements IBank {
 
     @Override
     public void createAccount(String accountNumber, Integer ownerId) {
-        Account tempName = new Account(accountNumber, ownerId);
-        BankProducts.put(accountNumber, tempName);
-        BankOperations.put(tempName, tempName.getOperationHistory());
+        this.createAccount(accountNumber, ownerId, null);
     }
 
     @Override
@@ -54,15 +52,7 @@ public class Bank implements IBank {
     @Override
     public boolean createTermDeposit(IProduct associatedAccount, BigDecimal originalAmount,
                                      LocalDate endDate, String termDepositNumber) {
-        if (!(associatedAccount.isBalancePositive(originalAmount)))
-            return false;
-        TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, endDate,
-                termDepositNumber);
-        CreateTermDeposit createOperation = new CreateTermDeposit(associatedAccount, tempName, originalAmount);
-        executeIOperation(createOperation);
-        BankProducts.put(termDepositNumber, tempName);
-        BankOperations.put(tempName, tempName.getOperationHistory());
-        return true;
+        return this.createTermDeposit(associatedAccount, originalAmount, endDate, termDepositNumber, null);
     }
 
     @Override
@@ -79,12 +69,7 @@ public class Bank implements IBank {
     @Override
     public void createCredit(IProduct associatedAccount, BigDecimal borrowedAmount,
                              LocalDate repaymentDate, String creditNumber) {
-        Credit tempName = new Credit(associatedAccount, borrowedAmount, repaymentDate,
-                                        creditNumber);
-        CreateCredit createOperation = new CreateCredit(associatedAccount, tempName, borrowedAmount);
-        executeIOperation(createOperation);
-        BankProducts.put(creditNumber, tempName);
-        BankOperations.put(tempName, tempName.getOperationHistory());
+        this.createCredit(associatedAccount, borrowedAmount, repaymentDate, creditNumber, null);
     }
 
     @Override
