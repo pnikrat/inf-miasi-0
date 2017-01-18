@@ -1,10 +1,7 @@
 package operations;
 
 import bank.*;
-import interfaces.IInterestRate;
-import interfaces.IOperation;
-import interfaces.IOperationVisitor;
-import interfaces.IProduct;
+import interfaces.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -51,12 +48,10 @@ public class InterestCapitalisation implements IOperation {
 
     @Override
     public boolean executeOperation() {
-        if(productToCapitalise instanceof Account)
-            capitaliseAccount((Account) productToCapitalise);
-        else if(productToCapitalise instanceof TermDeposit)
-            capitaliseTermDeposit((TermDeposit) productToCapitalise);
-        else if(productToCapitalise instanceof Credit)
-            capitaliseCredit((Credit) productToCapitalise);
+        if(productToCapitalise instanceof IDebitable)
+            capitaliseAccount((IDebitable) productToCapitalise);
+        else if(productToCapitalise instanceof ICreditable)
+            capitaliseCreditable((ICreditable) productToCapitalise);
         wasExecuted = true;
         productToCapitalise.addOperationToHistory(this);
         return wasExecuted;
@@ -67,23 +62,16 @@ public class InterestCapitalisation implements IOperation {
         visitor.visit(this);
     }
 
-    private void capitaliseAccount(Account accountToCapitalise) {
+    private void capitaliseAccount(IDebitable accountToCapitalise) {
         BigDecimal currentAccountBalance = accountToCapitalise.getBalance();
         accountToCapitalise.setBalance(currentAccountBalance
                 .add(interestRateMechanism.capitalisation(accountToCapitalise)));
     }
 
-    private void capitaliseTermDeposit(TermDeposit termDepositToCapitalise) {
+    private void capitaliseCreditable(ICreditable creditableToCapitalise) {
         //BigDecimal originalAmount = termDepositToCapitalise.getBalance();
-        BigDecimal finalAmount = interestRateMechanism.calculateFinalValue(termDepositToCapitalise,
-                 termDepositToCapitalise.getEndDate());
-        termDepositToCapitalise.setBalance(finalAmount);
-    }
-
-    private void capitaliseCredit(Credit creditToCapitalise) {
-        //BigDecimal borrowedAmount = creditToCapitalise.getBalance();
-        BigDecimal amountToPayback = interestRateMechanism.calculateFinalValue(creditToCapitalise,
-                creditToCapitalise.getEndDate());
-        creditToCapitalise.setBalance(amountToPayback);
+        BigDecimal creditableFinalAmount = interestRateMechanism.calculateFinalValue(creditableToCapitalise,
+                creditableToCapitalise.getEndDate());
+        creditableToCapitalise.setBalance(creditableFinalAmount);
     }
 }

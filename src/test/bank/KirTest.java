@@ -24,9 +24,9 @@ public class KirTest {
     private IBank originBank;
     private IBank uselessBank;
     private IBank destinationBank;
-    private IProduct originAccount;
-    private IProduct destinationAccount;
-    private IProduct notExistingAccount;
+    private IDebitable originAccount;
+    private IDebitable destinationAccount;
+    private IDebitable notExistingAccount;
     private BigDecimal testNumber;
     private BigDecimal testNumber2;
 
@@ -36,9 +36,9 @@ public class KirTest {
         uselessBank = new Bank();
         destinationBank = new Bank();
         originBank.createAccount("1234567", 98);
-        originAccount = originBank.getBankProduct("1234567");
+        originAccount = (IDebitable) originBank.getBankProduct("1234567");
         destinationBank.createAccount("4321", 56);
-        destinationAccount = destinationBank.getBankProduct("4321");
+        destinationAccount = (IDebitable) destinationBank.getBankProduct("4321");
         notExistingAccount = new Account("00000", 9999);
 
         for (int i = 0 ; i < 5 ; i++) {

@@ -58,6 +58,21 @@ public class Credit implements ICreditable {
     }
 
     @Override
+    public void setBalance(BigDecimal amountToPayback) {
+        this.amountToPayback = amountToPayback;
+    }
+
+    @Override
+    public BigDecimal getBalance() {
+        return borrowedAmount;
+    }
+
+    @Override
+    public LocalDate getCreationDate() {
+        return creationDate;
+    }
+
+    @Override
     public void setInterestRateMechanism(IInterestRate interestRateMechanism) {
         this.interestRateMechanism = interestRateMechanism;
     }
@@ -73,28 +88,8 @@ public class Credit implements ICreditable {
     }
 
     @Override
-    public LocalDate getCreationDate() {
-        return creationDate;
-    }
-
-    @Override
     public LocalDate getEndDate() {
         return repaymentDate;
-    }
-
-    @Override
-    public BigDecimal getBalance() {
-        return borrowedAmount;
-    }
-
-    @Override
-    public void setBalance(BigDecimal amountToPayback) {
-        this.amountToPayback = amountToPayback;
-    }
-
-    @Override
-    public List<IOperation> getOperationHistory() {
-        return operationHistory;
     }
 
     @Override
@@ -105,18 +100,15 @@ public class Credit implements ICreditable {
         isCreditActive = value;
     }
 
-    public BigDecimal getAmountToPayback() {return amountToPayback; }
-
+    @Override
+    public List<IOperation> getOperationHistory() {
+        return operationHistory;
+    }
 
     @Override
     public void addOperationToHistory(IOperation operation) {
         operationHistory.add(operation);
         Collections.sort(operationHistory, new OperationComparator());
-    }
-
-    @Override
-    public boolean isBalancePositive(BigDecimal amount) {
-        return false;
     }
 
     @Override
@@ -129,4 +121,6 @@ public class Credit implements ICreditable {
     public void accept(IProductVisitor visitor) {
         visitor.visit(this);
     }
+
+    public BigDecimal getAmountToPayback() {return amountToPayback; }
 }

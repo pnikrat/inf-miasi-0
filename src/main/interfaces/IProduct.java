@@ -23,8 +23,6 @@ public interface IProduct {
     void setCreationDate(LocalDate date); //for testing purposes
     LocalDate getCreationDate();
 
-    boolean isBalancePositive(BigDecimal amount);
-
     String toString();
 
     void accept(IProductVisitor visitor);

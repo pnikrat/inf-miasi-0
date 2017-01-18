@@ -1,6 +1,7 @@
 package operations;
 
 import bank.Account;
+import interfaces.IDebitable;
 import interfaces.IOperation;
 import interfaces.IOperationVisitor;
 import interfaces.IProduct;
@@ -17,11 +18,11 @@ public class Transfer implements IOperation {
     private String description;
     private boolean wasExecuted = false;
 
-    private IProduct transferOriginProduct;
-    private IProduct transferTargetProduct;
+    private IDebitable transferOriginProduct;
+    private IDebitable transferTargetProduct;
     private BigDecimal transferAmount;
 
-    public Transfer(IProduct transferOriginProduct, IProduct transferTargetProduct, BigDecimal transferAmount) {
+    public Transfer(IDebitable transferOriginProduct, IDebitable transferTargetProduct, BigDecimal transferAmount) {
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId + " " + "\nZ konta: " + transferOriginProduct.toString()
                             + "\nNa konto: " + transferTargetProduct.toString();

@@ -58,6 +58,11 @@ public class TermDeposit implements ICreditable {
     }
 
     @Override
+    public void setBalance(BigDecimal finalAmount) {
+        this.finalAmount = finalAmount;
+    }
+
+    @Override
     public BigDecimal getBalance() {
         return originalAmount;
     }
@@ -78,13 +83,10 @@ public class TermDeposit implements ICreditable {
     }
 
     @Override
-    public void setBalance(BigDecimal finalAmount) {
-        this.finalAmount = finalAmount;
-    }
+    public void setCreationDate(LocalDate creationDate) {this.creationDate = creationDate;}
 
-    public BigDecimal getFinalAmount() {
-        return finalAmount;
-    }
+    @Override
+    public LocalDate getEndDate() { return endDate; }
 
     @Override
     public boolean getIsCreditableProductActive() { return isTermDepositActive; }
@@ -95,23 +97,9 @@ public class TermDeposit implements ICreditable {
     }
 
     @Override
-    public LocalDate getEndDate() { return endDate; }
-
-    //FOR TESTING PURPOSES, should never be used in production!!
-    public void setCreationDate(LocalDate creationDate) {this.creationDate = creationDate;}
-    public void setEndDate(LocalDate endDate) {this.endDate = endDate;}
-
-    @Override
     public List<IOperation> getOperationHistory() {
         return operationHistory;
     }
-
-
-    @Override
-    public boolean isBalancePositive(BigDecimal amount) {
-        return false;
-    }
-
 
     @Override
     public void addOperationToHistory(IOperation operation) {
@@ -130,4 +118,9 @@ public class TermDeposit implements ICreditable {
     public void accept(IProductVisitor visitor) {
         visitor.visit(this);
     }
+
+    public BigDecimal getFinalAmount() {
+        return finalAmount;
+    }
+    public void setEndDate(LocalDate endDate) {this.endDate = endDate;}
 }
