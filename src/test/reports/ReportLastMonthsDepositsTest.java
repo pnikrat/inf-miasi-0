@@ -36,9 +36,9 @@ public class ReportLastMonthsDepositsTest  {
                 new BigDecimal("2345.45").setScale(2, BigDecimal.ROUND_HALF_UP));
         testDepo.executeOperation();
 
-        testBank.createCredit(testBank.getBankProduct("123"),
+        testBank.createCredit((IDebitable) testBank.getBankProduct("123"),
                 new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP), LocalDate.of(2018, 5, 12), "CRED01");
-        testBank.createTermDeposit(testBank.getBankProduct("123"),
+        testBank.createTermDeposit((IDebitable) testBank.getBankProduct("123"),
                 new BigDecimal("200.00").setScale(2, BigDecimal.ROUND_HALF_UP), LocalDate.of(2018, 2, 12), "DEPO02");
         testBank.createDebitAccount(acc1,
                 new BigDecimal("300.00").setScale(2, BigDecimal.ROUND_HALF_UP));

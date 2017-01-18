@@ -83,7 +83,7 @@ public class DebitAccountTest {
     public void testCannotCreateTermDepositFromAccountOnDebit() throws Exception {
         testBank.executeIOperation(new Withdraw((IDebitable) testBank.getBankProduct("1234"), testNumber3));
         //should be -100 now
-        assertFalse(testBank.createTermDeposit(testBank.getBankProduct("1234"), testNumber2,
+        assertFalse(testBank.createTermDeposit((IDebitable) testBank.getBankProduct("1234"), testNumber2,
                 LocalDate.of(2020, 7, 23), "LOC:002"));
     }
 
@@ -91,7 +91,7 @@ public class DebitAccountTest {
     public void testCreditLowersDebitFirstThenAddsToRegularAccount() throws Exception {
         testBank.executeIOperation(new Withdraw((IDebitable) testBank.getBankProduct("1234"), testNumber3));
         //should be -100 now
-        testBank.createCredit(testBank.getBankProduct("1234"), testNumber2,
+        testBank.createCredit((IDebitable) testBank.getBankProduct("1234"), testNumber2,
                 LocalDate.of(2020, 7, 23), "CRED:003");
         assertEquals(764.56, testBank.getBankProduct("1234").getBalance().doubleValue(), 0.001);
     }

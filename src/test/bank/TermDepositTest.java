@@ -31,7 +31,7 @@ public class TermDepositTest {
         testBank.executeIOperation(new Deposit( (IDebitable) testBank.getBankProduct("1234"), startingMoneyForBaseAccount));
 
         testedTermDepositAmount = new BigDecimal("2000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-        testBank.createTermDeposit(testBank.getBankProduct("1234"),
+        testBank.createTermDeposit((IDebitable) testBank.getBankProduct("1234"),
                 testedTermDepositAmount, LocalDate.of(2020, 7, 23), "LOCO:002", testRate2);
     }
 

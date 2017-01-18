@@ -35,7 +35,7 @@ public class CreditTest {
         testBank.executeIOperation(new Deposit(acc1, startingMoneyForBaseAccount));
 
         testedBorrowedAmount = new BigDecimal("2150.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-        testBank.createCredit(testBank.getBankProduct("1234"), testedBorrowedAmount,
+        testBank.createCredit((IDebitable) testBank.getBankProduct("1234"), testedBorrowedAmount,
                 LocalDate.of(2020, 7, 23), "CRED:001", testRate2);
     }
 

@@ -36,46 +36,38 @@ public class Bank implements IBank {
     }
 
     @Override
-    public boolean createTermDeposit(IProduct associatedAccount, BigDecimal originalAmount,
+    public boolean createTermDeposit(IDebitable associatedAccount, BigDecimal originalAmount,
                                   LocalDate endDate, String termDepositNumber, IInterestRate interestRateMechanism) {
         if (!(associatedAccount.isBalancePositive(originalAmount)))
             return false;
         TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, endDate,
                                                 termDepositNumber, interestRateMechanism);
-        //TODO: temporary
-        if (associatedAccount instanceof IDebitable) {
-            CreateTermDeposit createOperation = new CreateTermDeposit((IDebitable) associatedAccount, tempName, originalAmount);
-            executeIOperation(createOperation);
-            BankProducts.put(termDepositNumber, tempName);
-            BankOperations.put(tempName, tempName.getOperationHistory());
-            return true;
-        }
-        return false;
+        CreateTermDeposit createOperation = new CreateTermDeposit(associatedAccount, tempName, originalAmount);
+        executeIOperation(createOperation);
+        BankProducts.put(termDepositNumber, tempName);
+        BankOperations.put(tempName, tempName.getOperationHistory());
+        return true;
     }
 
     @Override
-    public boolean createTermDeposit(IProduct associatedAccount, BigDecimal originalAmount,
+    public boolean createTermDeposit(IDebitable associatedAccount, BigDecimal originalAmount,
                                      LocalDate endDate, String termDepositNumber) {
         return this.createTermDeposit(associatedAccount, originalAmount, endDate, termDepositNumber, null);
     }
 
     @Override
-    public void createCredit(IProduct associatedAccount, BigDecimal borrowedAmount,
+    public void createCredit(IDebitable associatedAccount, BigDecimal borrowedAmount,
                              LocalDate repaymentDate, String creditNumber, IInterestRate interestRateMechanism) {
         Credit tempName = new Credit(associatedAccount, borrowedAmount, repaymentDate,
                                         creditNumber, interestRateMechanism);
-        //TODO temporary?
-        if (associatedAccount instanceof IDebitable) {
-            CreateCredit createOperation = new CreateCredit((IDebitable) associatedAccount, tempName, borrowedAmount);
-            executeIOperation(createOperation);
-            BankProducts.put(creditNumber, tempName);
-            BankOperations.put(tempName, tempName.getOperationHistory());
-        }
-
+        CreateCredit createOperation = new CreateCredit(associatedAccount, tempName, borrowedAmount);
+        executeIOperation(createOperation);
+        BankProducts.put(creditNumber, tempName);
+        BankOperations.put(tempName, tempName.getOperationHistory());
     }
 
     @Override
-    public void createCredit(IProduct associatedAccount, BigDecimal borrowedAmount,
+    public void createCredit(IDebitable associatedAccount, BigDecimal borrowedAmount,
                              LocalDate repaymentDate, String creditNumber) {
         this.createCredit(associatedAccount, borrowedAmount, repaymentDate, creditNumber, null);
     }

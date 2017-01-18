@@ -15,14 +15,14 @@ public interface IBank {
     void createAccount(String accountNumber, Integer ownerId, IInterestRate interestRateMechanism);
     void createAccount(String accountNumber, Integer ownerId);
 
-    boolean createTermDeposit(IProduct associatedAccount, BigDecimal originalAmount, LocalDate endDate,
+    boolean createTermDeposit(IDebitable associatedAccount, BigDecimal originalAmount, LocalDate endDate,
                            String termDepositNumber, IInterestRate interestRateMechanism);
-    boolean createTermDeposit(IProduct associatedAccount, BigDecimal originalAmount, LocalDate endDate,
+    boolean createTermDeposit(IDebitable associatedAccount, BigDecimal originalAmount, LocalDate endDate,
                               String termDepositNumber);
 
-    void createCredit(IProduct associatedAccount, BigDecimal borrowedAmount,
+    void createCredit(IDebitable associatedAccount, BigDecimal borrowedAmount,
                       LocalDate repaymentDate, String creditNumber, IInterestRate interestRateMechanism);
-    void createCredit(IProduct associatedAccount, BigDecimal borrowedAmount,
+    void createCredit(IDebitable associatedAccount, BigDecimal borrowedAmount,
                       LocalDate repaymentDate, String creditNumber);
 
     void createDebitAccount(IDebitable decoratedAccount, BigDecimal maximumDebit);
