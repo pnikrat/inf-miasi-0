@@ -1,5 +1,6 @@
 package operations;
 
+import interfaces.IDebitable;
 import interfaces.IOperation;
 import interfaces.IOperationVisitor;
 import interfaces.IProduct;
@@ -16,10 +17,10 @@ public class CreateDebit implements IOperation {
     private String description;
     private boolean wasExecuted = false;
 
-    private IProduct associatedAccount;
+    private IDebitable associatedAccount;
     private BigDecimal maximumDebit;
 
-    public CreateDebit(IProduct associatedAccount, BigDecimal maximumDebit) {
+    public CreateDebit(IDebitable associatedAccount, BigDecimal maximumDebit) {
 
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId

@@ -1,6 +1,7 @@
 package bank;
 
 import interfaces.IBank;
+import interfaces.IDebitable;
 import operations.Deposit;
 import org.junit.Before;
 import org.junit.Test;
@@ -15,6 +16,7 @@ import static org.junit.Assert.*;
  */
 public class BankTest {
     private IBank tester;
+    private IDebitable acc1;
 
     @Before
     public void setUp() throws Exception {
@@ -23,6 +25,7 @@ public class BankTest {
         BigDecimal testDebit1 = new BigDecimal("300.00").setScale(2, BigDecimal.ROUND_HALF_UP);
 
         tester.createAccount("1234", 1, testRate);
+        acc1 = (IDebitable) tester.getBankProduct("1234");
 
         tester.createCredit(tester.getBankProduct("1234"),
                 new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP),
@@ -30,11 +33,11 @@ public class BankTest {
         tester.createTermDeposit(tester.getBankProduct("1234"),
                 new BigDecimal("1000.00").setScale(2, BigDecimal.ROUND_HALF_UP),
                 LocalDate.of(2019, 7, 23), "LOC001", testRate);
-        tester.createDebitAccount(tester.getBankProduct("1234"), testDebit1);
+        tester.createDebitAccount(acc1, testDebit1);
 
 
         BigDecimal tempDepoAmount = new BigDecimal("5000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-        tester.executeIOperation(new Deposit(tester.getBankProduct("1234"), tempDepoAmount));
+        tester.executeIOperation(new Deposit(acc1, tempDepoAmount));
     }
 
     @Test

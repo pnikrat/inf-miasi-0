@@ -1,6 +1,8 @@
 package bank;
 
+import com.sun.xml.internal.bind.v2.model.core.ID;
 import interfaces.IBank;
+import interfaces.IDebitable;
 import operations.*;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +16,7 @@ import static org.junit.Assert.*;
  */
 public class AccountTest {
     private IBank testBank;
+    private IDebitable acc1;
     private BigDecimal testNumber;
     private BigDecimal testNumber2;
     private MonthlyInterestRate testRate;
@@ -28,24 +31,25 @@ public class AccountTest {
         testRate3 = new YearlyInterestRate(new BigDecimal("0.04").setScale(2, BigDecimal.ROUND_HALF_UP));
 
         testBank.createAccount("5678", 2, testRate);
+        acc1 = (IDebitable) testBank.getBankProduct("5678");
         testBank.createAccount("1234", 3, testRate2);
 
         testNumber = new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP);
         testNumber2 = new BigDecimal("864.56").setScale(2, BigDecimal.ROUND_HALF_UP);
 
-        testBank.executeIOperation(new Deposit(testBank.getBankProduct("5678"), testNumber));
-        testBank.executeIOperation(new Deposit(testBank.getBankProduct("1234"), testNumber));
+        testBank.executeIOperation(new Deposit((IDebitable) testBank.getBankProduct("5678"), testNumber));
+        testBank.executeIOperation(new Deposit((IDebitable) testBank.getBankProduct("1234"), testNumber));
     }
 
     @Test
     public void testProductDeposit() throws Exception {
-        testBank.executeIOperation(new Deposit(testBank.getBankProduct("5678"), testNumber2));
-        assertEquals(2364.56, testBank.getBankProduct("5678").getBalance().doubleValue(), 0.001);
+        testBank.executeIOperation(new Deposit(acc1, testNumber2));
+        assertEquals(2364.56, acc1.getBalance().doubleValue(), 0.001);
     }
 
     @Test
     public void testProductWithdrawal() throws Exception {
-        testBank.executeIOperation(new Withdraw(testBank.getBankProduct("5678"), testNumber2));
+        testBank.executeIOperation(new Withdraw(acc1, testNumber2));
         assertEquals(635.44, testBank.getBankProduct("5678").getBalance().doubleValue(), 0.001);
     }
 
@@ -85,7 +89,7 @@ public class AccountTest {
 
     @Test
     public void testOperationHistoryContainsWithdrawRecord() throws Exception {
-        testBank.executeIOperation(new Withdraw(testBank.getBankProduct("5678"), testNumber2));
+        testBank.executeIOperation(new Withdraw(acc1, testNumber2));
         assertTrue(testBank.getBankProduct("5678").getOperationHistory().stream()
                 .filter(x -> x.getOperationTypeId().equals(2))
                 .findFirst().isPresent());

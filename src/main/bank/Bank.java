@@ -42,11 +42,15 @@ public class Bank implements IBank {
             return false;
         TermDeposit tempName = new TermDeposit(associatedAccount, originalAmount, endDate,
                                                 termDepositNumber, interestRateMechanism);
-        CreateTermDeposit createOperation = new CreateTermDeposit(associatedAccount, tempName, originalAmount);
-        executeIOperation(createOperation);
-        BankProducts.put(termDepositNumber, tempName);
-        BankOperations.put(tempName, tempName.getOperationHistory());
-        return true;
+        //TODO: temporary
+        if (associatedAccount instanceof IDebitable) {
+            CreateTermDeposit createOperation = new CreateTermDeposit((IDebitable) associatedAccount, tempName, originalAmount);
+            executeIOperation(createOperation);
+            BankProducts.put(termDepositNumber, tempName);
+            BankOperations.put(tempName, tempName.getOperationHistory());
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -60,10 +64,14 @@ public class Bank implements IBank {
                              LocalDate repaymentDate, String creditNumber, IInterestRate interestRateMechanism) {
         Credit tempName = new Credit(associatedAccount, borrowedAmount, repaymentDate,
                                         creditNumber, interestRateMechanism);
-        CreateCredit createOperation = new CreateCredit(associatedAccount, tempName, borrowedAmount);
-        executeIOperation(createOperation);
-        BankProducts.put(creditNumber, tempName);
-        BankOperations.put(tempName, tempName.getOperationHistory());
+        //TODO temporary?
+        if (associatedAccount instanceof IDebitable) {
+            CreateCredit createOperation = new CreateCredit((IDebitable) associatedAccount, tempName, borrowedAmount);
+            executeIOperation(createOperation);
+            BankProducts.put(creditNumber, tempName);
+            BankOperations.put(tempName, tempName.getOperationHistory());
+        }
+
     }
 
     @Override
@@ -73,7 +81,7 @@ public class Bank implements IBank {
     }
 
     @Override
-    public void createDebitAccount(IProduct decoratedAccount, BigDecimal maximumDebit) {
+    public void createDebitAccount(IDebitable decoratedAccount, BigDecimal maximumDebit) {
         DebitAccount tempName = new DebitAccount(decoratedAccount, maximumDebit);
         CreateDebit createOperation = new CreateDebit(decoratedAccount, maximumDebit);
         executeIOperation(createOperation);

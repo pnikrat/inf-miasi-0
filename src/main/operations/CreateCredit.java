@@ -1,6 +1,7 @@
 package operations;
 
 import bank.*;
+import interfaces.IDebitable;
 import interfaces.IOperation;
 import interfaces.IOperationVisitor;
 import interfaces.IProduct;
@@ -17,11 +18,11 @@ public class CreateCredit implements IOperation {
     private String description;
     private boolean wasExecuted = false;
 
-    private IProduct associatedAccount;
+    private IDebitable associatedAccount;
     private Credit createdCredit;
     private BigDecimal creditAmount;
 
-    public CreateCredit(IProduct associatedAccount, Credit createdCredit, BigDecimal creditAmount) {
+    public CreateCredit(IDebitable associatedAccount, Credit createdCredit, BigDecimal creditAmount) {
 
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId

@@ -1,6 +1,7 @@
 package operations;
 
 import bank.DebitAccount;
+import interfaces.IDebitable;
 import interfaces.IOperation;
 import interfaces.IOperationVisitor;
 import interfaces.IProduct;
@@ -17,10 +18,10 @@ public class Deposit implements IOperation {
     private String description;
     private boolean wasExecuted = false;
 
-    private IProduct depositTargetProduct;
+    private IDebitable depositTargetProduct;
     private BigDecimal depositAmount;
 
-    public Deposit(IProduct depositTargetProduct, BigDecimal depositAmount) {
+    public Deposit(IDebitable depositTargetProduct, BigDecimal depositAmount) {
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId + " " + depositTargetProduct.toString();
         this.depositTargetProduct = depositTargetProduct;

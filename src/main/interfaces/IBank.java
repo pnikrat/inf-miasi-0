@@ -25,7 +25,7 @@ public interface IBank {
     void createCredit(IProduct associatedAccount, BigDecimal borrowedAmount,
                       LocalDate repaymentDate, String creditNumber);
 
-    void createDebitAccount(IProduct decoratedAccount, BigDecimal maximumDebit);
+    void createDebitAccount(IDebitable decoratedAccount, BigDecimal maximumDebit);
 
     IProduct getBankProduct(String productNumber);
     Map<String, IProduct> getBankProducts();

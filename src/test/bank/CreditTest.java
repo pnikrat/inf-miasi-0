@@ -1,6 +1,7 @@
 package bank;
 
 import interfaces.IBank;
+import interfaces.IDebitable;
 import operations.Deposit;
 import operations.RepayCredit;
 import operations.Withdraw;
@@ -18,6 +19,7 @@ import static org.junit.Assert.*;
 public class CreditTest {
 
     private IBank testBank;
+    private IDebitable acc1;
     private BigDecimal startingMoneyForBaseAccount;
     private BigDecimal testedBorrowedAmount;
 
@@ -28,8 +30,9 @@ public class CreditTest {
         YearlyInterestRate testRate2 = new YearlyInterestRate(new BigDecimal("0.06").setScale(2, BigDecimal.ROUND_HALF_UP));
 
         testBank.createAccount("1234", 123, testRate);
+        acc1 = (IDebitable) testBank.getBankProduct("1234");
         startingMoneyForBaseAccount = new BigDecimal("5000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-        testBank.executeIOperation(new Deposit(testBank.getBankProduct("1234"), startingMoneyForBaseAccount));
+        testBank.executeIOperation(new Deposit(acc1, startingMoneyForBaseAccount));
 
         testedBorrowedAmount = new BigDecimal("2150.00").setScale(2, BigDecimal.ROUND_HALF_UP);
         testBank.createCredit(testBank.getBankProduct("1234"), testedBorrowedAmount,
@@ -52,7 +55,7 @@ public class CreditTest {
     @Test
     public void testRepayCreditWithNotEnoughMoneyOnAccount() throws Exception {
         //withdraw some money so that account has not enough money for repayment
-        testBank.executeIOperation(new Withdraw(testBank.getBankProduct("1234"), startingMoneyForBaseAccount));
+        testBank.executeIOperation(new Withdraw(acc1, startingMoneyForBaseAccount));
         assertFalse(testBank.executeIOperation(new RepayCredit((Credit)testBank.getBankProduct("CRED:001"))));
     }
 

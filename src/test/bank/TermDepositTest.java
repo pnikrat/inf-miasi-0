@@ -1,6 +1,7 @@
 package bank;
 
 import interfaces.IBank;
+import interfaces.IDebitable;
 import operations.Deposit;
 import operations.EndTermDeposit;
 import org.junit.Before;
@@ -27,7 +28,7 @@ public class TermDepositTest {
 
         testBank.createAccount("1234", 91, testRate);
         startingMoneyForBaseAccount = new BigDecimal("5437.86").setScale(2, BigDecimal.ROUND_HALF_UP);
-        testBank.executeIOperation(new Deposit(testBank.getBankProduct("1234"), startingMoneyForBaseAccount));
+        testBank.executeIOperation(new Deposit( (IDebitable) testBank.getBankProduct("1234"), startingMoneyForBaseAccount));
 
         testedTermDepositAmount = new BigDecimal("2000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
         testBank.createTermDeposit(testBank.getBankProduct("1234"),

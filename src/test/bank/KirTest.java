@@ -1,6 +1,7 @@
 package bank;
 
 import interfaces.IBank;
+import interfaces.IDebitable;
 import interfaces.IKir;
 import interfaces.IProduct;
 import operations.Deposit;
@@ -54,7 +55,7 @@ public class KirTest {
 
         testNumber = new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP);
         testNumber2 = new BigDecimal("864.56").setScale(2, BigDecimal.ROUND_HALF_UP);
-        originBank.executeIOperation(new Deposit(originAccount, testNumber));
+        originBank.executeIOperation(new Deposit((IDebitable) originAccount, testNumber));
     }
 
     @Test

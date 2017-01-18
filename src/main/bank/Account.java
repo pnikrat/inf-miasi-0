@@ -1,10 +1,7 @@
 package bank;
 
 import helpers.OperationComparator;
-import interfaces.IInterestRate;
-import interfaces.IOperation;
-import interfaces.IProduct;
-import interfaces.IProductVisitor;
+import interfaces.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -13,7 +10,7 @@ import java.util.*;
 /**
  * Created by student on 05.11.2016.
  */
-public class Account implements IProduct {
+public class Account implements IDebitable {
     private final String accountNumber;
     private BigDecimal balance;
     private LocalDate creationDate;

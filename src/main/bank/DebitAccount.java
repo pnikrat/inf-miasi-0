@@ -1,10 +1,7 @@
 package bank;
 
 import helpers.OperationComparator;
-import interfaces.IInterestRate;
-import interfaces.IOperation;
-import interfaces.IProduct;
-import interfaces.IProductVisitor;
+import interfaces.*;
 import operations.CreateDebit;
 
 import java.math.BigDecimal;
@@ -15,12 +12,12 @@ import java.util.List;
 /**
  * Created by student on 10.12.2016.
  */
-public class DebitAccount implements IProduct {
-    private IProduct decoratedAccount;
+public class DebitAccount implements IDebitable {
+    private IDebitable decoratedAccount;
     private BigDecimal maximumDebit;
     private BigDecimal currentDebit;
 
-    public DebitAccount(IProduct decoratedAccount, BigDecimal maximumDebit) {
+    public DebitAccount(IDebitable decoratedAccount, BigDecimal maximumDebit) {
         this.decoratedAccount = decoratedAccount;
         this.maximumDebit = maximumDebit;
         this.currentDebit = BigDecimal.ZERO;

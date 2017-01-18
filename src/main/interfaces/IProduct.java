@@ -17,11 +17,6 @@ public interface IProduct {
     BigDecimal getBalance();
     void setBalance(BigDecimal amount);
 
-    BigDecimal getBalanceWithDebit();
-
-    BigDecimal getDebit();
-    void setDebit(BigDecimal amount);
-
     void setInterestRateMechanism(IInterestRate newMechanism);
     IInterestRate getInterestRateMechanism();
 

@@ -1,5 +1,6 @@
 package operations;
 
+import interfaces.IDebitable;
 import interfaces.IOperation;
 import interfaces.IOperationVisitor;
 import interfaces.IProduct;
@@ -17,11 +18,11 @@ public class CreateTermDeposit implements IOperation {
     private String description;
     private boolean wasExecuted = false;
 
-    private IProduct associatedAccount;
+    private IDebitable associatedAccount;
     private TermDeposit createdTermDeposit;
     private BigDecimal termDepositAmount;
 
-    public CreateTermDeposit(IProduct associatedAccount, TermDeposit createdTermDeposit, BigDecimal termDepositAmount) {
+    public CreateTermDeposit(IDebitable associatedAccount, TermDeposit createdTermDeposit, BigDecimal termDepositAmount) {
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId
                             + "\nStworzona lokata: " + createdTermDeposit.toString();

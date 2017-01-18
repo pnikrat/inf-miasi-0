@@ -2,6 +2,7 @@ package reports;
 
 import bank.Bank;
 import interfaces.IBank;
+import interfaces.IDebitable;
 import interfaces.IOperationVisitor;
 import interfaces.IProduct;
 import org.junit.Before;
@@ -27,7 +28,7 @@ public class ReportCreatedProductsTest {
                 new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP), LocalDate.of(2018, 5, 12), "CRED01");
         testBank.createTermDeposit(testBank.getBankProduct("123"),
                 new BigDecimal("200.00").setScale(2, BigDecimal.ROUND_HALF_UP), LocalDate.of(2018, 2, 12), "DEPO02");
-        testBank.createDebitAccount(testBank.getBankProduct("123"),
+        testBank.createDebitAccount((IDebitable) testBank.getBankProduct("123"),
                 new BigDecimal("300.00").setScale(2, BigDecimal.ROUND_HALF_UP));
         testReport = new ReportCreatedProducts(testBank);
     }

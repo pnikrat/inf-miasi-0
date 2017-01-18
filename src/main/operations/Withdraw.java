@@ -1,5 +1,6 @@
 package operations;
 
+import interfaces.IDebitable;
 import interfaces.IOperation;
 import interfaces.IOperationVisitor;
 import interfaces.IProduct;
@@ -16,10 +17,10 @@ public class Withdraw implements IOperation {
     private String description;
     private boolean wasExecuted = false;
 
-    private IProduct withdrawTargetProduct;
+    private IDebitable withdrawTargetProduct;
     private BigDecimal withdrawAmount;
 
-    public Withdraw(IProduct withdrawTargetProduct, BigDecimal withdrawAmount) {
+    public Withdraw(IDebitable withdrawTargetProduct, BigDecimal withdrawAmount) {
         this.executionDate = LocalDate.now();
         this.description = "OperationID: " + operationTypeId + " " + withdrawTargetProduct.toString();
         this.withdrawTargetProduct = withdrawTargetProduct;

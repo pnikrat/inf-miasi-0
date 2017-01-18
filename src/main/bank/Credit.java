@@ -89,11 +89,6 @@ public class Credit implements IProduct {
     }
 
     @Override
-    public BigDecimal getBalanceWithDebit() {
-        return borrowedAmount;
-    }
-
-    @Override
     public void setBalance(BigDecimal amountToPayback) {
         this.amountToPayback = amountToPayback;
     }
@@ -132,15 +127,5 @@ public class Credit implements IProduct {
     @Override
     public void accept(IProductVisitor visitor) {
         visitor.visit(this);
-    }
-
-    @Override
-    public BigDecimal getDebit() {
-        return null;
-    }
-
-    @Override
-    public void setDebit(BigDecimal amount) {
-
     }
 }

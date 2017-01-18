@@ -2,6 +2,7 @@ package reports;
 
 import bank.Bank;
 import interfaces.IBank;
+import interfaces.IDebitable;
 import operations.Deposit;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,13 +23,13 @@ public class ReportSumOfBankAssetsTest {
     public void setUp() throws Exception {
         testBank = new Bank();
         testBank.createAccount("123", 34);
-        testBank.executeIOperation(new Deposit(testBank.getBankProduct("123"),
+        testBank.executeIOperation(new Deposit((IDebitable) testBank.getBankProduct("123"),
                 new BigDecimal("2345.45").setScale(2, BigDecimal.ROUND_HALF_UP)));
         testBank.createCredit(testBank.getBankProduct("123"),
                 new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP), LocalDate.of(2017, 2, 20), "CRED01");
         testBank.createTermDeposit(testBank.getBankProduct("123"),
                 new BigDecimal("200.00").setScale(2, BigDecimal.ROUND_HALF_UP), LocalDate.of(2018, 2, 12), "DEPO02");
-        testBank.createDebitAccount(testBank.getBankProduct("123"),
+        testBank.createDebitAccount((IDebitable) testBank.getBankProduct("123"),
                 new BigDecimal("300.00").setScale(2, BigDecimal.ROUND_HALF_UP));
         testReport = new ReportSumOfBankAssets(testBank);
     }
