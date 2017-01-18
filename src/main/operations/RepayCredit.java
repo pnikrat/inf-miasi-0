@@ -52,7 +52,7 @@ public class RepayCredit implements IOperation {
         if (accountsMoney.subtract(repayAmount).compareTo(BigDecimal.ZERO) >= 0) {
             creditToRepay.getAssociatedAccount().setBalance(accountsMoney.subtract(repayAmount));
 
-            creditToRepay.setIsCreditActive(false);
+            creditToRepay.setIsCreditableProductActive(false);
             wasExecuted = true;
             creditToRepay.addOperationToHistory(this);
             return wasExecuted;

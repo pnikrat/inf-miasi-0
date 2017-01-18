@@ -58,7 +58,7 @@ public class EndTermDeposit implements IOperation {
             termDepositToEnd.getAssociatedAccount().setBalance(termDepositToEnd.getBalance().add(accountsMoney));
 
 
-        termDepositToEnd.setIsTermDepositActive(false);
+        termDepositToEnd.setIsCreditableProductActive(false);
         wasExecuted = true;
         termDepositToEnd.addOperationToHistory(this);
         return wasExecuted;

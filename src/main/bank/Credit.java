@@ -1,10 +1,7 @@
 package bank;
 
 import helpers.OperationComparator;
-import interfaces.IInterestRate;
-import interfaces.IOperation;
-import interfaces.IProduct;
-import interfaces.IProductVisitor;
+import interfaces.*;
 import operations.CreateCredit;
 import operations.RepayCredit;
 
@@ -17,8 +14,8 @@ import java.util.List;
 /**
  * Created by Przemek on 2016-11-13.
  */
-public class Credit implements IProduct {
-    private IProduct associatedAccount;
+public class Credit implements ICreditable {
+    private IDebitable associatedAccount;
     private String creditNumber;
     private BigDecimal borrowedAmount;
     private BigDecimal amountToPayback;
@@ -28,7 +25,7 @@ public class Credit implements IProduct {
     private boolean isCreditActive;
     private List<IOperation> operationHistory = new ArrayList<IOperation>();
 
-    public Credit(IProduct associatedAccount, BigDecimal borrowedAmount, LocalDate repaymentDate,
+    public Credit(IDebitable associatedAccount, BigDecimal borrowedAmount, LocalDate repaymentDate,
                   String creditNumber, IInterestRate interestRateMechanism) {
         this.isCreditActive = true;
         this.associatedAccount = associatedAccount;
@@ -42,12 +39,13 @@ public class Credit implements IProduct {
             this.interestRateMechanism = interestRateMechanism;
     }
 
-    public Credit(IProduct associatedAccount, BigDecimal borrowedAmount, LocalDate repaymentDate,
+    public Credit(IDebitable associatedAccount, BigDecimal borrowedAmount, LocalDate repaymentDate,
                   String creditNumber) {
         this(associatedAccount, borrowedAmount, repaymentDate, creditNumber, null);
     }
 
-    public IProduct getAssociatedAccount() { return associatedAccount; }
+    @Override
+    public IDebitable getAssociatedAccount() { return associatedAccount; }
 
     @Override
     public Integer getOwnerId() {
@@ -79,7 +77,8 @@ public class Credit implements IProduct {
         return creationDate;
     }
 
-    public LocalDate getRepaymentDate() {
+    @Override
+    public LocalDate getEndDate() {
         return repaymentDate;
     }
 
@@ -98,9 +97,11 @@ public class Credit implements IProduct {
         return operationHistory;
     }
 
-    public boolean getIsCreditActive() {return isCreditActive; }
+    @Override
+    public boolean getIsCreditableProductActive() {return isCreditActive; }
 
-    public void setIsCreditActive(boolean value) {
+    @Override
+    public void setIsCreditableProductActive(boolean value) {
         isCreditActive = value;
     }
 

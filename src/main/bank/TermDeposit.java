@@ -1,10 +1,7 @@
 package bank;
 
 import helpers.OperationComparator;
-import interfaces.IInterestRate;
-import interfaces.IOperation;
-import interfaces.IProduct;
-import interfaces.IProductVisitor;
+import interfaces.*;
 import operations.CreateTermDeposit;
 
 import java.math.BigDecimal;
@@ -16,8 +13,8 @@ import java.util.List;
 /**
  * Created by student on 05.11.2016.
  */
-public class TermDeposit implements IProduct {
-    private IProduct associatedAccount;
+public class TermDeposit implements ICreditable {
+    private IDebitable associatedAccount;
     private String termDepositNumber;
     private BigDecimal originalAmount;
     private BigDecimal finalAmount;
@@ -27,7 +24,7 @@ public class TermDeposit implements IProduct {
     private boolean isTermDepositActive;
     private List<IOperation> operationHistory = new ArrayList<IOperation>();
 
-    public TermDeposit(IProduct associatedAccount, BigDecimal originalAmount, LocalDate endDate,
+    public TermDeposit(IDebitable associatedAccount, BigDecimal originalAmount, LocalDate endDate,
                        String termDepositNumber, IInterestRate interestRateMechanism) {
         this.isTermDepositActive = true;
         this.associatedAccount = associatedAccount;
@@ -42,12 +39,13 @@ public class TermDeposit implements IProduct {
             this.interestRateMechanism = interestRateMechanism;
     }
 
-    public TermDeposit(IProduct associatedAccount, BigDecimal originalAmount, LocalDate endDate,
+    public TermDeposit(IDebitable associatedAccount, BigDecimal originalAmount, LocalDate endDate,
                        String termDepositNumber) {
         this(associatedAccount, originalAmount, endDate, termDepositNumber, null);
     }
 
-    public IProduct getAssociatedAccount() { return associatedAccount; }
+    @Override
+    public IDebitable getAssociatedAccount() { return associatedAccount; }
 
     @Override
     public Integer getOwnerId() {
@@ -88,12 +86,15 @@ public class TermDeposit implements IProduct {
         return finalAmount;
     }
 
-    public boolean getIsTermDepositActive() { return isTermDepositActive; }
+    @Override
+    public boolean getIsCreditableProductActive() { return isTermDepositActive; }
 
-    public void setIsTermDepositActive(boolean value) {
+    @Override
+    public void setIsCreditableProductActive(boolean value) {
         isTermDepositActive = value;
     }
 
+    @Override
     public LocalDate getEndDate() { return endDate; }
 
     //FOR TESTING PURPOSES, should never be used in production!!

@@ -83,7 +83,7 @@ public class InterestCapitalisation implements IOperation {
     private void capitaliseCredit(Credit creditToCapitalise) {
         //BigDecimal borrowedAmount = creditToCapitalise.getBalance();
         BigDecimal amountToPayback = interestRateMechanism.calculateFinalValue(creditToCapitalise,
-                creditToCapitalise.getRepaymentDate());
+                creditToCapitalise.getEndDate());
         creditToCapitalise.setBalance(amountToPayback);
     }
 }

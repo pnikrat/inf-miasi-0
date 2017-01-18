@@ -39,7 +39,7 @@ public class TermDepositTest {
     public void testEndTermDepositBeforePeriod() throws Exception {
         testBank.executeIOperation(new EndTermDeposit((TermDeposit) testBank.getBankProduct("LOCO:002")));
         TermDeposit tester = (TermDeposit) testBank.getBankProduct("LOCO:002");
-        assertFalse(tester.getIsTermDepositActive());
+        assertFalse(tester.getIsCreditableProductActive());
         assertEquals(startingMoneyForBaseAccount, testBank.getBankProduct("1234").getBalance());
     }
 
@@ -49,7 +49,7 @@ public class TermDepositTest {
         TermDeposit tester = (TermDeposit) testBank.getBankProduct("LOCO:002");
         tester.setEndDate(LocalDate.of(2014, 8, 19));
         testBank.executeIOperation(new EndTermDeposit(tester));
-        assertFalse(tester.getIsTermDepositActive());
+        assertFalse(tester.getIsCreditableProductActive());
         assertEquals(5962.81, testBank.getBankProduct("1234").getBalance().doubleValue(), 0.001);
     }
 
