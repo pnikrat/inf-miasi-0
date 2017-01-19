@@ -64,24 +64,24 @@ public class BankTest {
     @Test
     public void testBankOperationsContainsDepositOperationOnAccount() throws Exception {
         assertTrue(tester.getBankOperations().get(tester.getBankProduct("1234")).stream()
-                .filter(x -> x.getOperationTypeId().equals(1)).findFirst().isPresent());
+                .anyMatch(x -> x.getOperationTypeId().equals(1)));
     }
 
     @Test
     public void testBankOperationsContainsCreateTermDepositOperationOnAccount() throws Exception {
         assertTrue(tester.getBankOperations().get(tester.getBankProduct("1234")).stream()
-                .filter(x -> x.getOperationTypeId().equals(4)).findFirst().isPresent());
+                .anyMatch(x -> x.getOperationTypeId().equals(4)));
     }
 
     @Test
     public void testBankOperationsContainsCreateCreditOperationOnAccount() throws Exception {
         assertTrue(tester.getBankOperations().get(tester.getBankProduct("1234")).stream()
-                .filter(x -> x.getOperationTypeId().equals(6)).findFirst().isPresent());
+                .anyMatch(x -> x.getOperationTypeId().equals(6)));
     }
 
     @Test
     public void testBankOperationsContainsCreateDebitOperationOnAccount() throws Exception {
         assertTrue(tester.getBankOperations().get(tester.getBankProduct("1234")).stream()
-                .filter(x -> x.getOperationTypeId().equals(10)).findFirst().isPresent());
+                .anyMatch(x -> x.getOperationTypeId().equals(10)));
     }
 }

@@ -85,16 +85,14 @@ public class AccountTest {
     @Test
     public void testOperationHistoryContainsDepositRecord() throws Exception {
         assertTrue(testBank.getBankProduct("5678").getOperationHistory().stream()
-                .filter(x -> x.getOperationTypeId().equals(1))
-                .findFirst().isPresent());
+                .anyMatch(x -> x.getOperationTypeId().equals(1)));
     }
 
     @Test
     public void testOperationHistoryContainsWithdrawRecord() throws Exception {
         testBank.executeIOperation(new Withdraw(acc1, testNumber2));
         assertTrue(testBank.getBankProduct("5678").getOperationHistory().stream()
-                .filter(x -> x.getOperationTypeId().equals(2))
-                .findFirst().isPresent());
+                .anyMatch(x -> x.getOperationTypeId().equals(2)));
     }
 
     @Test
@@ -102,26 +100,22 @@ public class AccountTest {
         testBank.executeIOperation(new Transfer(acc1, acc2,
                 testNumber2));
         assertTrue(testBank.getBankProduct("5678").getOperationHistory().stream()
-                .filter(x -> x.getOperationTypeId().equals(3))
-                .findFirst().isPresent());
+                .anyMatch(x -> x.getOperationTypeId().equals(3)));
         assertTrue(testBank.getBankProduct("1234").getOperationHistory().stream()
-                .filter(x -> x.getOperationTypeId().equals(3))
-                .findFirst().isPresent());
+                .anyMatch(x -> x.getOperationTypeId().equals(3)));
     }
 
     @Test
     public void testOperationHistoryContainsInterestCapitalisationRecord() throws Exception {
         testBank.executeIOperation(new InterestCapitalisation(testBank.getBankProduct("5678")));
         assertTrue(testBank.getBankProduct("5678").getOperationHistory().stream()
-                .filter(x -> x.getOperationTypeId().equals(8))
-                .findFirst().isPresent());
+                .anyMatch(x -> x.getOperationTypeId().equals(8)));
     }
 
     @Test
     public void testOperationHistoryContainsInterestChangeRecord() throws Exception {
         testBank.executeIOperation(new InterestMechanismChange(testBank.getBankProduct("5678"), testRate3));
         assertTrue(testBank.getBankProduct("5678").getOperationHistory().stream()
-                .filter(x -> x.getOperationTypeId().equals(9))
-            .findFirst().isPresent());
+                .anyMatch(x -> x.getOperationTypeId().equals(9)));
     }
 }

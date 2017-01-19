@@ -62,18 +62,18 @@ public class ReportLastMonthsDepositsTest  {
 
     @Test
     public void testReportReturnsCorrectNumberOfDeposits() throws Exception {
-        //createCredit also uses Deposit operation
+        //createCredit also uses Deposit operation so 3 is expected
         assertEquals(3, testReport.getReportResult().size());
     }
 
     @Test
     public void testReportReturnsCorrectListOfOperations() throws Exception {
         assertTrue(testReport.getReportResult().stream()
-                .filter(x -> x.getDescription().contains(testDepo.getDescription())).findFirst().isPresent());
+                .anyMatch(x -> x.getDescription().contains(testDepo.getDescription())));
         assertTrue(testReport.getReportResult().stream()
-                .filter(x -> x.getDescription().contains(testDepo3.getDescription())).findFirst().isPresent());
+                .anyMatch(x -> x.getDescription().contains(testDepo3.getDescription())));
         assertFalse(testReport.getReportResult().stream()
-                .filter(x -> x.getDescription().contains(testDepo2.getDescription())).findFirst().isPresent());
+                .anyMatch(x -> x.getDescription().contains(testDepo2.getDescription())));
     }
 
 }

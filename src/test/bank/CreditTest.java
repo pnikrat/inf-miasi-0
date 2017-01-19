@@ -66,24 +66,16 @@ public class CreditTest {
     }
 
     @Test
-    public void testRepayCreditWithEnoughMoneyOnAccountMonthlyInterest() throws Exception {
-        //TODO Change Credit and TermDeposit to calculate amount to payback at repayment/end
-//        InterestMechanismChange tempChange = new InterestMechanismChange(tester, testRate);
-//        assertTrue(tester.repayCredit());
-//        assertEquals();
-    }
-
-    @Test
     public void testCreditRepaymentIsAddedToOperationHistory() throws Exception {
         testBank.executeIOperation(new RepayCredit((Credit)testBank.getBankProduct("CRED:001")));
         assertTrue(testBank.getBankProduct("CRED:001").getOperationHistory().stream().
-                filter(x -> x.getOperationTypeId().equals(7)).findFirst().isPresent());
+                anyMatch(x -> x.getOperationTypeId().equals(7)));
     }
 
     @Test
     public void testCreditCreationIsAddedToOperationHistory() throws Exception {
         assertTrue(testBank.getBankProduct("1234").getOperationHistory().stream()
-                .filter(x -> x.getOperationTypeId().equals(6)).findFirst().isPresent());
+                .anyMatch(x -> x.getOperationTypeId().equals(6)));
     }
 
 }

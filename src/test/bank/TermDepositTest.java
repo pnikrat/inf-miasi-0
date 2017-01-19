@@ -54,21 +54,16 @@ public class TermDepositTest {
     }
 
     @Test
-    public void testEndTermDepositAfterPeriodWithMonthlyCapitalisation() throws Exception {
-        //TODO Change Credit and TermDeposit to calculate amount to payback at repayment/end
-    }
-
-    @Test
     public void testCreateTermDepositOperationIsAddedToBaseAccountHistory() throws Exception {
         assertTrue(testBank.getBankProduct("1234").getOperationHistory().stream()
-                .filter(x -> x.getOperationTypeId().equals(4)).findFirst().isPresent());
+                .anyMatch(x -> x.getOperationTypeId().equals(4)));
     }
 
     @Test
     public void testEndTermDepositOperationIsAddedToHistory() throws Exception {
         testBank.executeIOperation(new EndTermDeposit((TermDeposit)testBank.getBankProduct("LOCO:002")));
         assertTrue(testBank.getBankProduct("LOCO:002").getOperationHistory().stream()
-                .filter(x -> x.getOperationTypeId().equals(5)).findFirst().isPresent());
+                .anyMatch(x -> x.getOperationTypeId().equals(5)));
     }
 
 }

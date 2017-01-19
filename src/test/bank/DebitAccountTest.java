@@ -95,6 +95,4 @@ public class DebitAccountTest {
                 LocalDate.of(2020, 7, 23), "CRED:003");
         assertEquals(764.56, testBank.getBankProduct("1234").getBalance().doubleValue(), 0.001);
     }
-
-    //TODO: Add more tests - boundary cases and so on
 }
