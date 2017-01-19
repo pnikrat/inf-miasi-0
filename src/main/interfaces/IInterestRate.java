@@ -16,5 +16,4 @@ public interface IInterestRate {
 
     BigDecimal capitalisation(IProduct currentProduct);
     BigDecimal calculateFinalValue(IProduct currentProduct, LocalDate endDate);
-    //BigDecimal calculateFinalValue(BigDecimal startingCapital, LocalDate startDate, LocalDate endDate);
 }

@@ -6,6 +6,7 @@ import interfaces.IKir;
 import interfaces.IProduct;
 import operations.Deposit;
 import operations.Transfer;
+import operations.Withdraw;
 import org.junit.Before;
 import org.junit.Test;
 import org.omg.PortableServer.POAPackage.InvalidPolicy;

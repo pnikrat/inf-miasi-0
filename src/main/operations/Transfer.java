@@ -53,7 +53,6 @@ public class Transfer implements IOperation {
 
     @Override
     public boolean executeOperation() {
-        if (transferOriginProduct instanceof Account && transferTargetProduct instanceof Account) {
             if (transferOriginProduct.isBalancePositive(transferAmount)) {
                 transferOriginProduct.setBalance(transferOriginProduct.getBalance().subtract(transferAmount));
                 transferTargetProduct.setBalance(transferTargetProduct.getBalance().add(transferAmount));
@@ -61,7 +60,6 @@ public class Transfer implements IOperation {
                 transferOriginProduct.addOperationToHistory(this);
                 transferTargetProduct.addOperationToHistory(this);
             }
-        }
         return wasExecuted;
     }
 

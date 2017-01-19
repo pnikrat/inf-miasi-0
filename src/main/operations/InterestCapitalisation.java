@@ -69,7 +69,6 @@ public class InterestCapitalisation implements IOperation {
     }
 
     private void capitaliseCreditable(ICreditable creditableToCapitalise) {
-        //BigDecimal originalAmount = termDepositToCapitalise.getBalance();
         BigDecimal creditableFinalAmount = interestRateMechanism.calculateFinalValue(creditableToCapitalise,
                 creditableToCapitalise.getEndDate());
         creditableToCapitalise.setBalance(creditableFinalAmount);
