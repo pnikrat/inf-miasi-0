@@ -89,6 +89,28 @@ public class Bank implements IBank {
     }
 
     @Override
+    public IDebitable getBankDebitable(String productNumber) {
+        for (IProduct x : BankProducts.values()) {
+            if (x instanceof IDebitable) {
+                if (x.getProductNumber().equals(productNumber))
+                    return (IDebitable)x;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ICreditable getBankCreditable(String productNumber) {
+        for (IProduct x : BankProducts.values()) {
+            if (x instanceof ICreditable) {
+                if (x.getProductNumber().equals(productNumber))
+                    return (ICreditable)x;
+            }
+        }
+        return null;
+    }
+
+    @Override
     public Map<String, IProduct> getBankProducts() {
         return BankProducts;
     }

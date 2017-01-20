@@ -28,25 +28,24 @@ public class TermDepositTest {
 
         testBank.createAccount("1234", 91, testRate);
         startingMoneyForBaseAccount = new BigDecimal("5437.86").setScale(2, BigDecimal.ROUND_HALF_UP);
-        testBank.executeIOperation(new Deposit( (IDebitable) testBank.getBankProduct("1234"), startingMoneyForBaseAccount));
+        testBank.executeIOperation(new Deposit(testBank.getBankDebitable("1234"), startingMoneyForBaseAccount));
 
         testedTermDepositAmount = new BigDecimal("2000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-        testBank.createTermDeposit((IDebitable) testBank.getBankProduct("1234"),
+        testBank.createTermDeposit(testBank.getBankDebitable("1234"),
                 testedTermDepositAmount, LocalDate.of(2020, 7, 23), "LOCO:002", testRate2);
     }
 
     @Test
     public void testEndTermDepositBeforePeriod() throws Exception {
-        testBank.executeIOperation(new EndTermDeposit((TermDeposit) testBank.getBankProduct("LOCO:002")));
-        TermDeposit tester = (TermDeposit) testBank.getBankProduct("LOCO:002");
-        assertFalse(tester.getIsCreditableProductActive());
+        testBank.executeIOperation(new EndTermDeposit((TermDeposit) testBank.getBankCreditable("LOCO:002")));
+        assertFalse(testBank.getBankCreditable("LOCO:002").getIsCreditableProductActive());
         assertEquals(startingMoneyForBaseAccount, testBank.getBankProduct("1234").getBalance());
     }
 
     @Test
     public void testEndTermDepositAfterPeriodWithYearlyCapitalisation() throws Exception {
         testBank.getBankProduct("LOCO:002").setCreationDate(LocalDate.of(2010, 7, 23));
-        TermDeposit tester = (TermDeposit) testBank.getBankProduct("LOCO:002");
+        TermDeposit tester = (TermDeposit) testBank.getBankCreditable("LOCO:002");
         tester.setEndDate(LocalDate.of(2014, 8, 19));
         testBank.executeIOperation(new EndTermDeposit(tester));
         assertFalse(tester.getIsCreditableProductActive());
@@ -61,7 +60,7 @@ public class TermDepositTest {
 
     @Test
     public void testEndTermDepositOperationIsAddedToHistory() throws Exception {
-        testBank.executeIOperation(new EndTermDeposit((TermDeposit)testBank.getBankProduct("LOCO:002")));
+        testBank.executeIOperation(new EndTermDeposit((TermDeposit)testBank.getBankCreditable("LOCO:002")));
         assertTrue(testBank.getBankProduct("LOCO:002").getOperationHistory().stream()
                 .anyMatch(x -> x.getOperationTypeId().equals(5)));
     }

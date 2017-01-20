@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
  */
 public class ReportLastMonthsDepositsTest  {
     private IBank testBank;
-    private IDebitable acc1;
     private ReportLastMonthsDeposits testReport;
     private List<Deposit> expectedOps = new ArrayList<>();
     private Deposit testDepo;
@@ -30,25 +29,24 @@ public class ReportLastMonthsDepositsTest  {
     public void setUp() throws Exception {
         testBank = new Bank();
         testBank.createAccount("123", 34);
-        acc1 = (IDebitable) testBank.getBankProduct("123");
 
-        testDepo = new Deposit(acc1,
+        testDepo = new Deposit(testBank.getBankDebitable("123"),
                 new BigDecimal("2345.45").setScale(2, BigDecimal.ROUND_HALF_UP));
         testDepo.executeOperation();
 
-        testBank.createCredit((IDebitable) testBank.getBankProduct("123"),
+        testBank.createCredit(testBank.getBankDebitable("123"),
                 new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP), LocalDate.of(2018, 5, 12), "CRED01");
-        testBank.createTermDeposit((IDebitable) testBank.getBankProduct("123"),
+        testBank.createTermDeposit(testBank.getBankDebitable("123"),
                 new BigDecimal("200.00").setScale(2, BigDecimal.ROUND_HALF_UP), LocalDate.of(2018, 2, 12), "DEPO02");
-        testBank.createDebitAccount(acc1,
+        testBank.createDebitAccount(testBank.getBankDebitable("123"),
                 new BigDecimal("300.00").setScale(2, BigDecimal.ROUND_HALF_UP));
 
-        testDepo2 = new Deposit(acc1,
+        testDepo2 = new Deposit(testBank.getBankDebitable("123"),
                 new BigDecimal("999.99").setScale(2, BigDecimal.ROUND_HALF_UP));
         testDepo2.executeOperation();
 
         testBank.createAccount("345", 45);
-        testDepo3 = new Deposit((IDebitable) testBank.getBankProduct("345"),
+        testDepo3 = new Deposit(testBank.getBankDebitable("345"),
                 new BigDecimal("888.88").setScale(2, BigDecimal.ROUND_HALF_UP));
         testDepo3.executeOperation();
 

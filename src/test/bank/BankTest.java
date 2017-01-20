@@ -16,7 +16,6 @@ import static org.junit.Assert.*;
  */
 public class BankTest {
     private IBank tester;
-    private IDebitable acc1;
 
     @Before
     public void setUp() throws Exception {
@@ -25,19 +24,17 @@ public class BankTest {
         BigDecimal testDebit1 = new BigDecimal("300.00").setScale(2, BigDecimal.ROUND_HALF_UP);
 
         tester.createAccount("1234", 1, testRate);
-        acc1 = (IDebitable) tester.getBankProduct("1234");
 
-        tester.createCredit((IDebitable) tester.getBankProduct("1234"),
+        tester.createCredit(tester.getBankDebitable("1234"),
                 new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP),
                 LocalDate.of(2020, 7, 23), "CRED001", testRate);
-        tester.createTermDeposit((IDebitable) tester.getBankProduct("1234"),
+        tester.createTermDeposit(tester.getBankDebitable("1234"),
                 new BigDecimal("1000.00").setScale(2, BigDecimal.ROUND_HALF_UP),
                 LocalDate.of(2019, 7, 23), "LOC001", testRate);
-        tester.createDebitAccount(acc1, testDebit1);
-
+        tester.createDebitAccount(tester.getBankDebitable("1234"), testDebit1);
 
         BigDecimal tempDepoAmount = new BigDecimal("5000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-        tester.executeIOperation(new Deposit(acc1, tempDepoAmount));
+        tester.executeIOperation(new Deposit(tester.getBankDebitable("1234"), tempDepoAmount));
     }
 
     @Test

@@ -19,7 +19,6 @@ import static org.junit.Assert.*;
 public class CreditTest {
 
     private IBank testBank;
-    private IDebitable acc1;
     private BigDecimal startingMoneyForBaseAccount;
     private BigDecimal testedBorrowedAmount;
 
@@ -30,18 +29,17 @@ public class CreditTest {
         YearlyInterestRate testRate2 = new YearlyInterestRate(new BigDecimal("0.06").setScale(2, BigDecimal.ROUND_HALF_UP));
 
         testBank.createAccount("1234", 123, testRate);
-        acc1 = (IDebitable) testBank.getBankProduct("1234");
         startingMoneyForBaseAccount = new BigDecimal("5000.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-        testBank.executeIOperation(new Deposit(acc1, startingMoneyForBaseAccount));
+        testBank.executeIOperation(new Deposit(testBank.getBankDebitable("1234"), startingMoneyForBaseAccount));
 
         testedBorrowedAmount = new BigDecimal("2150.00").setScale(2, BigDecimal.ROUND_HALF_UP);
-        testBank.createCredit((IDebitable) testBank.getBankProduct("1234"), testedBorrowedAmount,
+        testBank.createCredit(testBank.getBankDebitable("1234"), testedBorrowedAmount,
                 LocalDate.of(2020, 7, 23), "CRED:001", testRate2);
     }
 
     @Test
     public void testAmountToPaybackIsSetCorrectly() throws Exception {
-        Credit tester = (Credit)testBank.getBankProduct("CRED:001");
+        Credit tester = (Credit)testBank.getBankCreditable("CRED:001");
         testBank.executeIOperation(new RepayCredit(tester));
         assertEquals(2560.68, tester.getAmountToPayback().doubleValue(), 0.001);
     }
@@ -55,19 +53,19 @@ public class CreditTest {
     @Test
     public void testRepayCreditWithNotEnoughMoneyOnAccount() throws Exception {
         //withdraw some money so that account has not enough money for repayment
-        testBank.executeIOperation(new Withdraw(acc1, startingMoneyForBaseAccount));
-        assertFalse(testBank.executeIOperation(new RepayCredit((Credit)testBank.getBankProduct("CRED:001"))));
+        testBank.executeIOperation(new Withdraw(testBank.getBankDebitable("1234"), startingMoneyForBaseAccount));
+        assertFalse(testBank.executeIOperation(new RepayCredit((Credit)testBank.getBankCreditable("CRED:001"))));
     }
 
     @Test
     public void testRepayCreditWithEnoughMoneyOnAccountYearlyInterest() throws Exception {
-        assertTrue(testBank.executeIOperation(new RepayCredit((Credit)testBank.getBankProduct("CRED:001"))));
+        assertTrue(testBank.executeIOperation(new RepayCredit((Credit)testBank.getBankCreditable("CRED:001"))));
         assertEquals(4589.32, testBank.getBankProduct("1234").getBalance().doubleValue(), 0.001);
     }
 
     @Test
     public void testCreditRepaymentIsAddedToOperationHistory() throws Exception {
-        testBank.executeIOperation(new RepayCredit((Credit)testBank.getBankProduct("CRED:001")));
+        testBank.executeIOperation(new RepayCredit((Credit)testBank.getBankCreditable("CRED:001")));
         assertTrue(testBank.getBankProduct("CRED:001").getOperationHistory().stream().
                 anyMatch(x -> x.getOperationTypeId().equals(7)));
     }

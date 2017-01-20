@@ -28,6 +28,9 @@ public interface IBank {
     void createDebitAccount(IDebitable decoratedAccount, BigDecimal maximumDebit);
 
     IProduct getBankProduct(String productNumber);
+    IDebitable getBankDebitable(String productNumber);
+    ICreditable getBankCreditable(String productNumber);
+
     Map<String, IProduct> getBankProducts();
 
     List<IOperation> getListOfOperationsByProduct(IProduct product);

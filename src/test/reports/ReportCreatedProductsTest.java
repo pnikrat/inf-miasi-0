@@ -24,11 +24,11 @@ public class ReportCreatedProductsTest {
     public void setUp() throws Exception {
         testBank = new Bank();
         testBank.createAccount("123", 34);
-        testBank.createCredit((IDebitable) testBank.getBankProduct("123"),
+        testBank.createCredit(testBank.getBankDebitable("123"),
                 new BigDecimal("1500.00").setScale(2, BigDecimal.ROUND_HALF_UP), LocalDate.of(2018, 5, 12), "CRED01");
-        testBank.createTermDeposit((IDebitable) testBank.getBankProduct("123"),
+        testBank.createTermDeposit(testBank.getBankDebitable("123"),
                 new BigDecimal("200.00").setScale(2, BigDecimal.ROUND_HALF_UP), LocalDate.of(2018, 2, 12), "DEPO02");
-        testBank.createDebitAccount((IDebitable) testBank.getBankProduct("123"),
+        testBank.createDebitAccount(testBank.getBankDebitable("123"),
                 new BigDecimal("300.00").setScale(2, BigDecimal.ROUND_HALF_UP));
         testReport = new ReportCreatedProducts(testBank);
     }
